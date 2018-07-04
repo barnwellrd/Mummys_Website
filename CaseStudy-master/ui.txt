@@ -1,0 +1,176 @@
+
+Footerbar
+enter: enter 
+b. Go back
+
+1. Login
+2. Register
+3. Menu
+
+
+Login
+Enter Username
+Enter Password
+
+Register
+Enter Username
+Enter Password
+Reenter Password
+Enter address
+*display address*
+Is this correct? y/n
+Enter another address?
+Enter card
+*display card*
+Is this correct? y/n
+Enter another card?
+
+
+
+*******NORMAL USER*********
+
+
+Home
+1. Menu
+2. Order
+3. Account
+4. Store details
+5. Contact
+6. Logout
+
+Menu
+1. Rice
+...
+45. Burger
+
+ItemName
+*Display description*
+1. Enter quantity
+2. Go back
+
+Order
+*Display total price*
+1. View/edit order
+2. Submit order
+3. Clear order
+
+View/edit order
+1. Rice
+...
+7. Burger
+
+ItemName
+*Display description*
+Change quantity:
+
+Order type
+1. Pickup
+2. Delivery
+
+Choose Location
+1. Saved option #1
+2. Saved option #2
+...
+9. Add new location
+
+Choose payment method
+1. Card #1
+2. Card #2
+...
+8. Cash
+9. Add new card
+
+Tip
+1. %
+2. $
+
+Verify order
+*Display order items with price*
+*Display delivery fee*
+*Display tax*
+*Display tip*
+*Display total*
+*Display location*
+*Display card*
+1. Submit order
+2. Edit order
+3. Clear order
+
+
+
+
+
+
+Account
+1. Edit name
+2. Edit email
+3. Edit password
+4. Edit phone number
+5. Edit payment options
+6. Edit saved locations
+7. Orders
+
+
+Edit payment options
+1. Card #1
+2. Card #2
+...
+9. Add new card
+
+Edit location options
+1. Location #1
+2. Location #2
+...
+9. Add new location
+
+Orders
+1. Order #1 Active
+2. Order #2 Fufilled
+...
+99. Order #99 Fufilled
+
+Store Details
+*display store details*
+
+Contact
+*Print email*
+*Print phone number*
+
+
+
+************ADMIN*****************
+Admin
+1. change/add/delete cards
+2. change/add/delete combos
+3. change/add/delete delivery_methods
+4. change/add/delete delivery_statuses
+5. change/add/delete items
+6. change/add/delete item_types
+7. change/add/delete locations
+8. change/add/delete orders
+9. change/add/delete order_items
+10. change/add/delete specials
+11. change/add/delete stores
+12. change/add/delete time_slots
+13. change/add/delete users
+14. change/add/delete user_statuses
+
+
+
+
+************Manager*****************
+Manager
+1. change/add/delete cards
+2. change/add/delete combos
+3. change/add/delete delivery_methods
+4. change/add/delete delivery_statuses
+5. change/add/delete items
+6. change/add/delete item_types
+7. change/add/delete locations
+8. change/add/delete orders
+9. change/add/delete order_items
+10. change/add/delete specials
+11. change/add/delete stores
+12. change/add/delete time_slots
+13. change/add/delete users
+14. change/add/delete user_statuses

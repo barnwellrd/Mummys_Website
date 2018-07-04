@@ -1,0 +1,35 @@
+page list
+
+home 
+    lots of pictures showing food with descriptions
+    only new users see it, everyone else goes straight to menu or manager/admin page
+
+menu 
+    list of all items store sells
+    ability to add items to order
+
+order
+    can remove or change quantity of item
+    has total price
+    can place order which changes its status
+    can add a note to order with special requests
+
+store
+    show all details
+    display fancy map
+
+account
+    account settings
+    past orders
+    account details
+    current order status
+
+manager/admin
+    what sort of abilities do they have?
+    block abusive users
+    change/add/delete items
+    change/add/delete stores
+    change/add/delete specials
+    change/add/delete combos
+
+

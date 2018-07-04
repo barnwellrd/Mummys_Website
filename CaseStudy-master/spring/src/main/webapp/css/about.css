@@ -1,0 +1,26 @@
+#jumbotron{
+	background-image: url("about.jpg");
+	background-size: 100%;
+	width: 100%;
+	height: 40vh;
+}
+
+#title_container{
+    background: rgba(204, 204, 204, 0.8);
+	height: 15vh;
+	display:flex;
+}
+#title{
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	color: white;
+}
+section{
+	display: flex;
+	flex-flow: row;
+	justify-content: space-around; 
+}
+article{
+	width: 40%;
+}
