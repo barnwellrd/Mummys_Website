@@ -1,0 +1,6 @@
+add(class)
+deleteByID(String ID)
+getAll()
+getByID(String ID)
+update(class)
+

@@ -1,0 +1,35 @@
+#main_container{
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-content: center;
+}
+
+#section_container{
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-content: center;
+}
+#spacer{
+	height:15vh;
+}
+
+section{
+	width:50%;
+	height: 80%;
+	display:flex;
+	flex-flow: column;
+	justify-content: center;
+	align-content: center;
+}
+#form_container{
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-content: center;
+}

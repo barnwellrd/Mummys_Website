@@ -1,0 +1,12 @@
+#main_container{
+	display: flex;
+	flex-flow: column;
+}
+section{
+	display: flex;
+	flex-flow: row;
+	justify-content: space-around; 
+}
+article{
+	width: 40%;
+}
