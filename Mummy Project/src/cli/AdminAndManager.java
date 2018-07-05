@@ -110,7 +110,7 @@ public class AdminAndManager {
 	    	case 11:
 	    		optionsScreen("User Statuse");
 	    	case 12:
-	    		adminScreen();
+	    		Tiger.firstScreen();
 	    	case 13:
 	    		System.exit(0);
 	    }
