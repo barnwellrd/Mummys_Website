@@ -421,7 +421,83 @@ public class AdminAndManager {
         System.out.println("Updated " + name);
     }
     public static void alterUserScreen() {
-
+        System.out.println("Choose a user to alter (choose 0 to go to previous screen)");
+        Scanner sc = new Scanner(System.in);
+        UserService us = new UserService(con);
+        ArrayList<User> userList = us.getAll();
+        for(User user: userList){
+            System.out.println(user.getUserId()+","+user.getEmail());
+        }
+        System.out.print("Enter ID:");
+        String id = sc.next();
+        if(id.equals("0")){
+            return;
+        }
+        User user = us.getById(id);
+        alterUserFieldScreen(user);
+    }
+    public static void alterUserFieldScreen(User user){
+        UserService us = new UserService(con);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a field to modify");
+        System.out.println("1. User ID:"+user.getUserId());
+        System.out.println("2. First Name:"+user.getFirstName());
+        System.out.println("3. Last Name:"+user.getLastName());
+        System.out.println("4. Email:"+user.getEmail());
+        System.out.println("5. Password:"+user.getPassword());
+        System.out.println("6. Phone Number:"+user.getPhone());
+        System.out.println("7. Return to previous screen");
+        int option = sc.nextInt();
+        switch(option){
+            case 1:
+            {
+                System.out.println("Enter the new User Id");
+                String newId = sc.next();
+                user.setUserId(newId);
+                break;
+            }
+            case 2:
+            {
+                System.out.println("Enter the new name");
+                String newName = sc.next();
+                user.setFirstName(newName);
+                break;
+            }
+            case 3:
+            {
+                System.out.println("Enter the new name");
+                String newName = sc.next();
+                user.setLastName(newName);
+                break;
+            }
+            case 4:
+            {
+                System.out.println("Enter the new email");
+                String newEmail = sc.next();
+                user.setEmail(newEmail);
+                break;
+            }
+            case 5:
+            {
+                System.out.println("Enter the new password");
+                String newPassword = sc.next();
+                user.setPassword(newPassword);
+                break;
+            }
+            case 6:
+            {
+                System.out.println("Enter the new phone number");
+                String newNumber = sc.next();
+                user.setPhone(newNumber);
+                break;
+            }
+            case 7:
+            {
+                return;
+            }
+        }
+        us.update(user);
+        alterUserFieldScreen(user);
     }
 
     public static void addUserScreen(){
