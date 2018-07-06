@@ -53,23 +53,54 @@ public class AdminAndManager {
 	    			switch(option){
 	    				case 1:
 	    					alterCardScreen();
+                                                break;
 	    				case 2:
 	    					addCardScreen();
+                                                break;
 	    				case 3:
 	    					deleteCardScreen();
+                                                break;
 	    				case 4: 
 	    					adminScreen();
+                                                break;
 	    			}
 	    			break;
 	    		}
 	    	case 3:
                 {
-	    		optionsScreen("Delivery Method");
+	    		option = optionsScreen("Delivery Method");
+                        switch(option){
+                            case 1:
+                                alterDeliveryMethodScreen();
+                                break;
+                            case 2:
+                                addDeliveryMethodScreen();
+                                break;
+                            case 3:
+                                deleteDeliveryMethodScreen();
+                                break;
+                            case 4:
+                                adminScreen();
+                                break;
+                        }
                         break;
                 }
 	    	case 4:
                 {
-	    		optionsScreen("Delivery Statuse");
+	    		option = optionsScreen("Delivery Statuse");
+                        switch(option){
+                            case 1:
+                                alterDeliveryStatusScreen();
+                                break;
+                            case 2:
+                                addDeliveryStatusScreen();
+                                break;
+                            case 3:
+                                deleteDeliveryStatusScreen();
+                                break;
+                            case 4:
+                                adminScreen();
+                        }
                         break;
                 }
                 case 5:
@@ -88,49 +119,109 @@ public class AdminAndManager {
     				case 4:
     					adminScreen();
     					break;
-    				case 5:
-    					System.exit(0);
     			}
     			break;
 	    	}
 	    	case 6:
                 {
 	    		option = optionsScreen("Item Type");
+                        switch(option){
+                            case 1:
+                                alterItemTypeScreen();
+                                break;
+                            case 2:
+                                addItemTypeScreen();
+                                break;
+                            case 3:
+                                deleteItemTypeScreen();
+                                break;
+                            case 4:
+                                adminScreen();
+                                break;
+                        }
                         break;
                 }
 	    	case 7:
                 {
 	    		option = optionsScreen("Location");
+                        switch(option){
+                            case 1:
+                                alterLocationScreen();
+                                break;
+                            case 2:
+                                addLocationScreen();
+                                break;
+                            case 3:
+                                deleteLocationScreen();
+                                break;
+                            case 4:
+                                adminScreen();
+                                break;
+                        }
                         break;
                 }
                 case 8:
                 {
                         //Specialized menu so user can view filter pending orders
 	    		option = optionsScreen("Orders");
+                        switch(option){
+                            case 1:
+                                alterOrdersScreen();
+                                break;
+                            case 2:
+                                addOrdersScreen();
+                                break;
+                            case 3:
+                                deleteOrdersScreen();
+                                break;
+                            case 4:
+                                adminScreen();
+                                break;
+                        }
                         break;
                 }
 	    	case 9:
                 {
-	    		option = optionsScreen("Order Item");
-                        break;
+                    option = optionsScreen("Order Item");
+                    break;
                 }
 	    	case 10:
 	    	{
-	    		option = optionsScreen("User");
-	    		switch(option){
-	    			case 1:
-	    				System.out.println("not yet supported");
-	    			case 2:
-	    				addUserScreen();
-	    			case 3:
-	    				deleteUserScreen();
-	    		}
-	    		break;
+                    option = optionsScreen("User");
+                    switch(option){
+                        case 1:
+                            alterUserScreen();
+                            break;
+                        case 2:
+                            addUserScreen();
+                            break;
+                        case 3:
+                            deleteUserScreen();
+                            break;
+                        case 4:
+                            adminScreen();
+                            break;
+                    }
+                    break;
 	    	}
 	    	case 11:
                 {
-	    		option = optionsScreen("User Statuses");
-                        break;
+                    option = optionsScreen("User Statuses");
+                    switch(option){
+                        case 1:
+                            alterUserStatusScreen();
+                            break;
+                        case 2:
+                            addUserStatusScreen();
+                            break;
+                        case 3:
+                            deleteUserStatusScreen();
+                            break;
+                        case 4:
+                            adminScreen();
+                            break;
+                    }
+                    break;
                 }
                 case 12:
                 {
@@ -376,4 +467,58 @@ public class AdminAndManager {
 	    System.out.println(uArr.get(input-1).getFirstName() + "has been deleted");
 		
 	}
+        public static void alterDeliveryMethodScreen(){
+        
+        }
+        public static void addDeliveryMethodScreen(){
+        
+        }
+        public static void deleteDeliveryMethodScreen(){
+        
+        }
+        public static void alterDeliveryStatusScreen(){
+        
+        }
+        public static void addDeliveryStatusScreen(){
+        
+        }
+        public static void deleteDeliveryStatusScreen(){
+        
+        }
+        public static void alterItemTypeScreen(){
+        
+        }
+        public static void addItemTypeScreen(){
+        
+        }
+        public static void deleteItemTypeScreen(){
+        
+        }
+        public static void alterLocationScreen(){
+        
+        }
+        public static void addLocationScreen(){
+        
+        }
+        public static void deleteLocationScreen(){
+        
+        }
+        public static void alterOrdersScreen(){
+        
+        }
+        public static void addOrdersScreen(){
+        
+        }
+        public static void deleteOrdersScreen(){
+        
+        }
+        public static void alterUserStatusScreen(){
+        
+        }
+        public static void addUserStatusScreen(){
+        
+        }
+        public static void deleteUserStatusScreen(){
+        
+        }
 }
