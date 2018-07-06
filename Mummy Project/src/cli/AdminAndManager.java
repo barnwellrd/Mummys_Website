@@ -62,10 +62,16 @@ public class AdminAndManager {
 	    			break;
 	    		}
 	    	case 3:
+                {
 	    		optionsScreen("Delivery Method");
+                        break;
+                }
 	    	case 4:
+                {
 	    		optionsScreen("Delivery Statuse");
-	    	case 5:
+                        break;
+                }
+                case 5:
 	    	{
 	    		option = optionsScreen("Item");
     			switch(option){
@@ -87,13 +93,26 @@ public class AdminAndManager {
     			break;
 	    	}
 	    	case 6:
-	    		optionsScreen("Item Type");
+                {
+	    		option = optionsScreen("Item Type");
+                        break;
+                }
 	    	case 7:
-	    		optionsScreen("Location");
-	    	case 8:
-	    		optionsScreen("Order");
+                {
+	    		option = optionsScreen("Location");
+                        break;
+                }
+                case 8:
+                {
+                        //Specialized menu so user can view filter pending orders
+	    		option = orderOptionsScreen();
+                        break;
+                }
 	    	case 9:
-	    		optionsScreen("Order Item");
+                {
+	    		option = optionsScreen("Order Item");
+                        break;
+                }
 	    	case 10:
 	    	{
 	    		option = optionsScreen("User");
@@ -105,12 +124,17 @@ public class AdminAndManager {
 	    			case 3:
 	    				deleteUserScreen();
 	    		}
-	    			
+	    		break;
 	    	}
 	    	case 11:
-	    		optionsScreen("User Statuse");
+                {
+	    		option = optionsScreen("User Statuses");
+                        break;
+                }
 	    	case 12:
+                {
 	    		Tiger.firstScreen();
+                }
 	    	case 13:
 	    		System.exit(0);
 	    }
@@ -121,16 +145,29 @@ public class AdminAndManager {
 	
 	
 	public static int optionsScreen(String thing){
-		System.out.println("How would you like to alter " + thing);
-		ArrayList<String> options = new ArrayList<String>();
-		options.add("Alter");
-		options.add("Add");
-		options.add("Delete");
-		ServiceWrapper.printOptions(options);
-		Scanner sc = new Scanner(System.in);
+            System.out.println("How would you like to alter " + thing);
+            ArrayList<String> options = new ArrayList<String>();
+            options.add("Alter");
+            options.add("Add");
+            options.add("Delete");
+            ServiceWrapper.printOptions(options);
+            Scanner sc = new Scanner(System.in);
 	    int input = sc.nextInt();
-		return input;
+            return input;
 	}
+        
+        public static int orderOptionsScreen(){
+            System.out.println("How would you like to alter orders");
+            ArrayList<String> options = new ArrayList<String>();
+            options.add("Alter");
+            options.add("Display Pending Orders");
+            options.add("Add");
+            options.add("Delete");
+            ServiceWrapper.printOptions(options);
+            Scanner sc = new Scanner(System.in);
+            int input = sc.nextInt();
+            return input;
+        }
 
 	//Doesn't work
 	public static void addCardScreen(){
@@ -291,6 +328,9 @@ public class AdminAndManager {
 	    menServ.update(menUp);
 	    System.out.println("Updated " + name);
 	}
+        public static void alterUserScreen() {
+        
+        }
 
 	public static void addUserScreen(){
 		System.out.println("Add a User");
