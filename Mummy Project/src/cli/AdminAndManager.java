@@ -41,6 +41,7 @@ public class AdminAndManager {
 		options.add("Alter Order_items"); //Probably don't need this one
 		options.add("Alter Users");
 		options.add("Alter User Statuses");
+                options.add("Display Pending Orders");
 		ServiceWrapper.printOptions(options);
 		Scanner sc = new Scanner(System.in);
 	    int input = sc.nextInt();
@@ -105,7 +106,7 @@ public class AdminAndManager {
                 case 8:
                 {
                         //Specialized menu so user can view filter pending orders
-	    		option = orderOptionsScreen();
+	    		option = optionsScreen("Orders");
                         break;
                 }
 	    	case 9:
@@ -131,11 +132,17 @@ public class AdminAndManager {
 	    		option = optionsScreen("User Statuses");
                         break;
                 }
-	    	case 12:
+                case 12:
                 {
-	    		Tiger.firstScreen();
+                    displayPendingOrdersScreen();
+                    break;
                 }
 	    	case 13:
+                {
+                    //Returns to initial screen
+                    Tiger.firstScreen();
+                }
+	    	case 14:
 	    		System.exit(0);
 	    }
 	    
@@ -156,17 +163,12 @@ public class AdminAndManager {
             return input;
 	}
         
-        public static int orderOptionsScreen(){
-            System.out.println("How would you like to alter orders");
-            ArrayList<String> options = new ArrayList<String>();
-            options.add("Alter");
-            options.add("Display Pending Orders");
-            options.add("Add");
-            options.add("Delete");
-            ServiceWrapper.printOptions(options);
-            Scanner sc = new Scanner(System.in);
-            int input = sc.nextInt();
-            return input;
+        public static void displayPendingOrdersScreen()
+        {
+            Scanner sc =new Scanner(System.in);
+            System.out.println("Put orders here");
+            System.out.println("Press any key to exit");
+            sc.next();
         }
 
 	//Doesn't work
