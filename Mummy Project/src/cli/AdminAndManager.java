@@ -309,36 +309,72 @@ public class AdminAndManager {
     public static void alterCardScreen(){
         System.out.println("List of cards");
         CardService cs = new CardService(con);
-        ArrayList<Card> cl = cs.getAll();
+        ArrayList<Card> cardList = cs.getAll();
         int count=1;
-        for(Card c:cl){
-                System.out.println(count + ": " + c.getCardNumber());
-                count++;
+        int input = 0;
+        while(input < cardList.size()+1){
+            for(Card c:cardList){
+                    System.out.println(count + ": " + c.getCardNumber());
+                    count++;
+            }
+            System.out.println("Enter the number of the card you'd like to alter");
+            Scanner sc = new Scanner(System.in);
+            input = sc.nextInt();
+            if(input < cardList.size()+1){
+
+                Card card = cardList.get(input-1);
+
+                alterCardFieldScreen(card);
+            }
         }
-        System.out.println("Enter the number of the card you'd like to alter");
+    }
+    public static void alterCardFieldScreen(Card card){
         Scanner sc = new Scanner(System.in);
-        int input = sc.nextInt();
-
-        String cardId= cl.get(input-1).getCardId();
-        System.out.println("Enter id of user this card belongs to: ");
-        String userId= sc.next();
-        System.out.println("Enter Card number: ");
-        String cardNumber= sc.next();
-        System.out.println("Enter expiration year: ");
-        int year = sc.nextInt();
-        System.out.println("Enter expiration month: ");
-        int month = sc.nextInt();
-        System.out.println("Enter expiration date: ");
-        int day = sc.nextInt();
-        Date expiryDate= new Date(year, month, day);
-        System.out.println("Enter Security code: ");
-        String securityCode= sc.next();
-
-        Card c = new Card(cardId, userId, cardNumber, expiryDate, securityCode);
-
-        cs.update(c);
-        AdminAndManager aam = new AdminAndManager(con);
-        aam.adminScreen();
+        CardService cs = new CardService();
+        int option = 0;
+        while(option != 5){
+            System.out.println("Enter a field to alter");
+            System.out.println("1. ID of User:"+card.getUserId());
+            System.out.println("2. Card Number:"+card.getCardNumber());
+            System.out.println("3. Expiration date:"+card.getExpiryDate());
+            System.out.println("4. Security Code"+card.getSecurityCode());
+            System.out.println("5. Back to previous screen");
+            option = sc.nextInt();
+            switch(option){
+                case(1):
+                {
+                    System.out.print("Enter user ID:");
+                    String newId = sc.next();
+                    card.setUserId(newId);
+                    break;
+                }
+                case(2):
+                {
+                    System.out.print("Enter new Card Number:");
+                    String newNumber = sc.next();
+                    card.setCardNumber(newNumber);
+                    break;
+                }
+                case(3):
+                {
+                    System.out.println("Enter the new month:");
+                    int newMonth = sc.nextInt();
+                    System.out.println("Enter the new year:");
+                    int newYear = sc.nextInt();
+                    Date date = new Date(newYear, newMonth,1);
+                    card.setExpiryDate(date);
+                    break;
+                }
+                case(4) :
+                {
+                    System.out.println("Enter the security code:");
+                    String newCode = sc.next();
+                    card.setSecurityCode(newCode);
+                    break;
+                }                
+            }
+        }
+        cs.update(card);
     }
 	
     public static void addItemScreen(){
@@ -439,65 +475,55 @@ public class AdminAndManager {
     public static void alterUserFieldScreen(User user){
         UserService us = new UserService(con);
         Scanner sc = new Scanner(System.in);
-        System.out.println("Choose a field to modify");
-        System.out.println("1. User ID:"+user.getUserId());
-        System.out.println("2. First Name:"+user.getFirstName());
-        System.out.println("3. Last Name:"+user.getLastName());
-        System.out.println("4. Email:"+user.getEmail());
-        System.out.println("5. Password:"+user.getPassword());
-        System.out.println("6. Phone Number:"+user.getPhone());
-        System.out.println("7. Return to previous screen");
-        int option = sc.nextInt();
-        switch(option){
-            case 1:
-            {
-                System.out.println("Enter the new User Id");
-                String newId = sc.next();
-                user.setUserId(newId);
-                break;
-            }
-            case 2:
-            {
-                System.out.println("Enter the new name");
-                String newName = sc.next();
-                user.setFirstName(newName);
-                break;
-            }
-            case 3:
-            {
-                System.out.println("Enter the new name");
-                String newName = sc.next();
-                user.setLastName(newName);
-                break;
-            }
-            case 4:
-            {
-                System.out.println("Enter the new email");
-                String newEmail = sc.next();
-                user.setEmail(newEmail);
-                break;
-            }
-            case 5:
-            {
-                System.out.println("Enter the new password");
-                String newPassword = sc.next();
-                user.setPassword(newPassword);
-                break;
-            }
-            case 6:
-            {
-                System.out.println("Enter the new phone number");
-                String newNumber = sc.next();
-                user.setPhone(newNumber);
-                break;
-            }
-            case 7:
-            {
-                return;
+        int option =0;
+        while(option!=6){
+            System.out.println("Choose a field to modify");
+            System.out.println("1. First Name:"+user.getFirstName());
+            System.out.println("2. Last Name:"+user.getLastName());
+            System.out.println("3. Email:"+user.getEmail());
+            System.out.println("4. Password:"+user.getPassword());
+            System.out.println("5. Phone Number:"+user.getPhone());
+            System.out.println("6. Return to previous screen");
+            option = sc.nextInt();
+            switch(option){
+                case 1:
+                {
+                    System.out.println("Enter the new name");
+                    String newName = sc.next();
+                    user.setFirstName(newName);
+                    break;
+                }
+                case 2:
+                {
+                    System.out.println("Enter the new name");
+                    String newName = sc.next();
+                    user.setLastName(newName);
+                    break;
+                }
+                case 3:
+                {
+                    System.out.println("Enter the new email");
+                    String newEmail = sc.next();
+                    user.setEmail(newEmail);
+                    break;
+                }
+                case 4:
+                {
+                    System.out.println("Enter the new password");
+                    String newPassword = sc.next();
+                    user.setPassword(newPassword);
+                    break;
+                }
+                case 5:
+                {
+                    System.out.println("Enter the new phone number");
+                    String newNumber = sc.next();
+                    user.setPhone(newNumber);
+                    break;
+                }
             }
         }
         us.update(user);
-        alterUserFieldScreen(user);
     }
 
     public static void addUserScreen(){
