@@ -39,18 +39,22 @@ public class Tiger{
 	}
 	
 	public static void firstScreen(){
-		System.out.println(" __  __ _                     _ _        _____       __     \n|  \\/  (_)                   (_| )      / ____|     / _|    \n| \\  / |_ _ __ ___  _ __ ___  _|/ ___  | |     __ _| |_ ___ \n| |\\/| | | '_ ` _ \\| '_ ` _ \\| | / __| | |    / _` |  _/ _ \\\n| |  | | | | | | | | | | | | | | \\__ \\ | |___| (_| | ||  __/\n|_|  |_|_|_| |_| |_|_| |_| |_|_| |___/  \\_____\\__,_|_| \\___|");
-		ArrayList<String> options = new ArrayList<String>();
-		options.add("Login");
-		options.add("Register");
-		options.add("Quit");
-		int count = 0;
-		for(String option : options) {
-			count++;
-			System.out.println(count + ". " + option);
-		}
-		
-	    int input = sc.nextInt();
+            System.out.println(" __  __ _                     _ _        _____       __     \n|  \\/  (_)                   (_| )      / ____|     / _|    \n| \\  / |_ _ __ ___  _ __ ___  _|/ ___  | |     __ _| |_ ___ \n| |\\/| | | '_ ` _ \\| '_ ` _ \\| | / __| | |    / _` |  _/ _ \\\n| |  | | | | | | | | | | | | | | \\__ \\ | |___| (_| | ||  __/\n|_|  |_|_|_| |_| |_|_| |_| |_|_| |___/  \\_____\\__,_|_| \\___|");
+            ArrayList<String> options = new ArrayList<String>();
+            options.add("Login");
+            options.add("Register");
+            options.add("Quit");
+            int count = 0;
+            for(String option : options) {
+                    count++;
+                    System.out.println(count + ". " + option);
+            }
+            
+            while(!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.next();
+            }
+            int input = sc.nextInt();
 	    switch(input){
     		case 1:
     			loginScreen();
@@ -59,36 +63,43 @@ public class Tiger{
     		case 3:
     			System.out.println("Goodbye");
     			System.exit(0);
-    		case 4:
+                default:
+                        System.out.println("Please enter one of the options.");
+                        firstScreen();
+    		/*case 4:
     			AdminAndManager aam = new AdminAndManager(con);
-    			aam.adminScreen();
+    			aam.adminScreen(); */
 	    }
 
 	}
 		
 	public static void loginScreen(){
-		System.out.println("\n*Login*");
-		System.out.println("Enter email:");
+            System.out.println("\n*Login*");
+            System.out.println("Enter email:");
 	    String email = sc.next();
-		System.out.println("Enter password:");
-	    String password = sc.next();
+            System.out.println("Enter password:");
+            String password = sc.next();
 	    
-		UserService us = new UserService(con);
-		User candidate = us.getByEmail(email);
-		if(candidate == null){
-			System.out.println("Wrong email");
-			firstScreen();
-		}
-		if(password.equals(candidate.getPassword())){
-			currentUser = candidate;
-			currentOrder = new Order();
-			currentOrder.setOrder_id(Double.toString(Math.random()* 10001));
-			currentOrder.setUser_id(currentUser.getUserId());
-			currentOrder.setDelivery_status_id("0");
-			//currentOrder.setCard_id();
-			StoreService ss = new StoreService(con);
-			currentStore = ss.getById("0");
-	    	homeScreen();
+            UserService us = new UserService(con);
+            User candidate = us.getByEmail(email);
+            if(candidate == null){
+                    System.out.println("Wrong email");
+                    firstScreen();
+            }
+            if(password.equals(candidate.getPassword())){
+                if(candidate.getUserStatusId().equals("5")) {
+                    AdminAndManager aam = new AdminAndManager(con);
+                    aam.adminScreen();
+                }
+                currentUser = candidate;
+                currentOrder = new Order();
+                currentOrder.setOrder_id(Double.toString(Math.random()* 10001));
+                currentOrder.setUser_id(currentUser.getUserId());
+                currentOrder.setDelivery_status_id("0");
+                //currentOrder.setCard_id();
+                StoreService ss = new StoreService(con);
+                currentStore = ss.getById("0");
+                homeScreen();
 	    }
 	    else{
 	    	System.out.println("Wrong email or password");
@@ -132,10 +143,10 @@ public class Tiger{
 	    if(password.equals(passwordConfirm)){
 	    	System.out.println("Registered");
 	    	currentUser = sw.register(first, last, phone, email, password);
-			currentOrder = new Order();
-			currentOrder.setOrder_id(Double.toString(Math.random()* 10001));
-			currentOrder.setUser_id(currentUser.getUserId());
-			currentOrder.setDelivery_status_id("0");
+                currentOrder = new Order();
+                currentOrder.setOrder_id(Double.toString(Math.random()* 10001));
+                currentOrder.setUser_id(currentUser.getUserId());
+                currentOrder.setDelivery_status_id("0");
 	    	homeScreen();
 	    }else{
 	    	System.out.println("Mismatching passwords, try again");
