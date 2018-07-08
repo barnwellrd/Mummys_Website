@@ -55,6 +55,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         switch (input) {
             case 1:
                 loginScreen();
@@ -175,6 +176,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
 
         if (input == 1) {
             menuScreen();
@@ -209,6 +211,7 @@ public class Tiger {
         }
         
         int input = sc.nextInt();
+        sc.nextLine();
         if (input == menus.size() + 1) {
             homeScreen();
         } else {
@@ -227,6 +230,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         if (input == 1) {
             itemQuantityScreen(menu);
         } else if (input == 2) {
@@ -242,6 +246,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         for (int i = 0; i < input; i++) {
             currentOrder.addItem_id(menu.getId());
         }
@@ -268,6 +273,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         if (input == 1 && confirm()) {
             currentOrder = new Order();
             currentOrder.setOrder_id(Double.toString(Math.random() * 10001));
@@ -306,6 +312,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         if (input == 1) {
             int newTip = Integer.parseInt(editString());
             currentOrder.setTip(newTip);
@@ -354,6 +361,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         if (input == items.size()) {
             homeScreen();
         } else if (input == items.size() + 1) {
@@ -371,6 +379,7 @@ public class Tiger {
 		System.out.println("2. Go Back");
 		Scanner sc = new Scanner(System.in);
 	    int input = sc.nextInt();
+        sc.nextLine();
 	    if(input==1) itemQuantityScreen(menu);
 	    else if(input==2) System.exit(0);*/
     }
@@ -413,6 +422,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         if (input == 1) {
             String newFirstName = editString();
             currentUser.setFirstName(newFirstName);
@@ -483,6 +493,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         if (input == orders.size()) {
             homeScreen();
         } else {
@@ -503,6 +514,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         if (input == 1 && confirm()) {
             currentOrder = order;
             //TODO find out what the status id this thing needs is
@@ -531,6 +543,7 @@ public class Tiger {
             sc.nextLine();
         }
         int input = sc.nextInt();
+        sc.nextLine();
         if (input == 1) {
             return true;
         }
