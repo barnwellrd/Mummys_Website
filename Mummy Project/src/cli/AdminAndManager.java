@@ -42,9 +42,7 @@ public class AdminAndManager {
         options.add("Alter Users");
         options.add("Alter User Statuses");
         options.add("Display Pending Orders");
-        ServiceWrapper.printOptions(options);
-        Scanner sc = new Scanner(System.in);
-        int input = sc.nextInt();
+        int input = choiceScreen(options);
         int option = 0;
         switch(input){
             case 1:
