@@ -251,13 +251,35 @@ public class AdminAndManager {
         options.add("Delete");
         ServiceWrapper.printOptions(options);
         Scanner sc = new Scanner(System.in);
+        while(!sc.hasNextInt()){
+            System.out.println("Enter a valid option");
+            sc.next();
+        }
         int input = sc.nextInt();
+        return input;
+    }
+    //This class does input validation automatically
+    public static int choiceScreen(ArrayList<String> options){
+        Scanner sc = new Scanner(System.in);
+        int input = 0;
+        while(input > options.size()+1 || input<1){
+            ServiceWrapper.printOptions(options);
+       
+            while(!sc.hasNextInt()){
+                System.out.println("Enter a valid option");
+                sc.next();
+            }
+            input = sc.nextInt();
+            if(input > options.size()+1 || input <1){
+                System.out.println("Enter a valid option");
+            }
+        }
         return input;
     }
         
     public static void displayPendingOrdersScreen()
     {
-        Scanner sc =new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.println("Put orders here");
         System.out.println("Press any key to exit");
         sc.next();
@@ -294,36 +316,38 @@ public class AdminAndManager {
         System.out.println("List of cards");
         CardService cs = new CardService(con);
         ArrayList<Card> cl = cs.getAll();
-            int count=1;
+        ArrayList<String> options = new ArrayList<>();
+        int input = 0;
         for(Card c:cl){
-            System.out.println(count + ": " + c.getCardNumber());
-            count++;
+            options.add(c.getCardNumber());
         }
         System.out.println("Select card you'd like to delete");
-        Scanner sc = new Scanner(System.in);
-        int input = sc.nextInt();
-        cs.deleteById(cl.get(input-1).getCardId());
-        System.out.println("Deleted Card");	
+        input = choiceScreen(options);
+        //If it isn't going back
+        if(input < cl.size()+1){
+            cs.deleteById(cl.get(input-1).getCardId());
+            System.out.println("Deleted Card");
+        }
     }
 	
     public static void alterCardScreen(){
         System.out.println("List of cards");
         CardService cs = new CardService(con);
         ArrayList<Card> cardList = cs.getAll();
-        int count=1;
+        Scanner sc = new Scanner(System.in);
         int input = 0;
-        while(input < cardList.size()+1){
-            for(Card c:cardList){
-                    System.out.println(count + ": " + c.getCardNumber());
-                    count++;
-            }
-            System.out.println("Enter the number of the card you'd like to alter");
-            Scanner sc = new Scanner(System.in);
-            input = sc.nextInt();
+        ArrayList <String> options = new ArrayList();
+        for(Card c:cardList){
+            options.add(c.getCardNumber());
+        }
+        
+        while(input != cardList.size()+1){
+            
+            System.out.println("Choose card to alter:");
+            input = choiceScreen(options);
+            
             if(input < cardList.size()+1){
-
                 Card card = cardList.get(input-1);
-
                 alterCardFieldScreen(card);
             }
         }
@@ -331,47 +355,53 @@ public class AdminAndManager {
     public static void alterCardFieldScreen(Card card){
         Scanner sc = new Scanner(System.in);
         CardService cs = new CardService();
-        int option = 0;
-        while(option != 5){
+        ArrayList<String>options= new ArrayList<String>();
+        options.add("Card Number:"+card.getCardNumber());
+        options.add("Expiration Date:"+card.getExpiryDate());
+        options.add("Security Code:"+card.getSecurityCode());
+        int input = 0;
+        while(input != 4){
             System.out.println("Enter a field to alter");
-            System.out.println("1. ID of User:"+card.getUserId());
-            System.out.println("2. Card Number:"+card.getCardNumber());
-            System.out.println("3. Expiration date:"+card.getExpiryDate());
-            System.out.println("4. Security Code"+card.getSecurityCode());
-            System.out.println("5. Back to previous screen");
-            option = sc.nextInt();
-            switch(option){
+            input = choiceScreen(options);
+            switch(input){
                 case(1):
-                {
-                    System.out.print("Enter user ID:");
-                    String newId = sc.next();
-                    card.setUserId(newId);
-                    break;
-                }
-                case(2):
                 {
                     System.out.print("Enter new Card Number:");
                     String newNumber = sc.next();
                     card.setCardNumber(newNumber);
                     break;
                 }
-                case(3):
+                case(2):
                 {
                     System.out.println("Enter the new month:");
+                    while(!sc.hasNextInt()){
+                        System.out.println("Enter a valid integer month");
+                        sc.next();
+                    }
                     int newMonth = sc.nextInt();
                     System.out.println("Enter the new year:");
+                    while(!sc.hasNextInt()){
+                        System.out.println("Enter a valid integer year");
+                        sc.next();
+                    }
                     int newYear = sc.nextInt();
                     Date date = new Date(newYear, newMonth,1);
                     card.setExpiryDate(date);
                     break;
                 }
-                case(4) :
+                case(3) :
                 {
                     System.out.println("Enter the security code:");
                     String newCode = sc.next();
                     card.setSecurityCode(newCode);
                     break;
-                }                
+                }
+                case(4) :
+                {
+                    break;
+                }
+                default :
+                    System.out.println("Enter a valid option");
             }
         }
         cs.update(card);
@@ -457,7 +487,7 @@ public class AdminAndManager {
         System.out.println("Updated " + name);
     }
     public static void alterUserScreen() {
-        System.out.println("Choose a user to alter (choose 0 to go to previous screen)");
+        System.out.println("Choose a user to alter");
         Scanner sc = new Scanner(System.in);
         UserService us = new UserService(con);
         ArrayList<User> userList = us.getAll();
@@ -475,17 +505,17 @@ public class AdminAndManager {
     public static void alterUserFieldScreen(User user){
         UserService us = new UserService(con);
         Scanner sc = new Scanner(System.in);
-        int option =0;
-        while(option!=6){
+        ArrayList<String> options = new ArrayList<String>();
+        options.add("First Name:"+user.getFirstName());
+        options.add("Last Name:"+user.getLastName());
+        options.add("Email:"+user.getEmail());
+        options.add("Password:"+user.getPassword());
+        options.add("Phone Number:"+user.getPhone());
+        int input = 0;
+        while(input!=6){
             System.out.println("Choose a field to modify");
-            System.out.println("1. First Name:"+user.getFirstName());
-            System.out.println("2. Last Name:"+user.getLastName());
-            System.out.println("3. Email:"+user.getEmail());
-            System.out.println("4. Password:"+user.getPassword());
-            System.out.println("5. Phone Number:"+user.getPhone());
-            System.out.println("6. Return to previous screen");
-            option = sc.nextInt();
-            switch(option){
+            input = choiceScreen(options);
+            switch(input){
                 case 1:
                 {
                     System.out.println("Enter the new name");
