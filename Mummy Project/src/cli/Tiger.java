@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-
 import domain.Menu;
 import domain.Order;
 import domain.Store;
