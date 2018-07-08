@@ -1,0 +1,22 @@
+Instructions:
+
+	-initial setup (Never made the DB)
+		- update [GITHUB_REPOSITORY_HOME_PATH] in database_creation.sql to you github repository path
+		- run database_creation.sql in oracle 'Run SQL" or SQL Developer
+			- copy/paste contents and run query
+		- connect to db_uSpring in SQL Developer
+			- U: DB_uSpring
+			- P: pass
+		- open a worksheet to DB_uSpring,
+		- Copy/paste 'table_insert_procedure_creation.sql' and run query
+			- this should create all the tables, insert dummy data, and stored procedures
+			
+			
+			
+	- Resetting existing database
+		- connect to DB_uSpring in SQL Developer
+		- Open worksheet to DB_uSpring database
+		- run or copy/paste 'drop.sql'  and run query
+			- this should drop all original tables
+		- run or copy/paste 'table_insert_procedure_creation.sql' and run query
+			- this should create all the tables, insert dummy data, and stored procedures
