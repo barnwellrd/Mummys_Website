@@ -470,6 +470,16 @@ public class AdminAndManager {
         ServiceWrapper.printMenuItems(menus);
         Scanner sc = new Scanner(System.in);
         int input = sc.nextInt();
+        //check for wrong entery
+        while(input > menus.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == menus.size() + 1){
+            return;
+        }
+        
         Menu men = menus.get(input-1);
         MenuServices menServ = new MenuServices(con);
         System.out.println("Enter item name: ");
