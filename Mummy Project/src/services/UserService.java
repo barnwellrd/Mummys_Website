@@ -28,7 +28,8 @@ public class UserService implements Service<User>{
 			String email = user.getEmail();
 			String password = user.getPassword();
 			String userStatusId = user.getUserStatusId();
-			
+			//String sql = "{call sp_insert_user(";
+                        //sql = sql+userId+",'"+firstName+"','"+lastName+"','"+phone+"','"+email+"','"+password+"','"+userStatusId+"')}";
 			CallableStatement oCSF = connection.prepareCall("{call sp_insert_user(?,?,?,?,?,?,?)}");
 			oCSF.setString(1, userId);
 			oCSF.setString(2, firstName);
@@ -37,7 +38,7 @@ public class UserService implements Service<User>{
 			oCSF.setString(5, email);
 			oCSF.setString(6, password);
 			oCSF.setString(7, userStatusId);
-			
+			//System.out.println(oCSF);
 			oCSF.execute();
 			oCSF.close();
 			return true;

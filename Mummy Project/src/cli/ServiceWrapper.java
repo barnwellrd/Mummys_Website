@@ -14,6 +14,7 @@ import domain.*;
 import services.MenuServices;
 import services.OrderService;
 import services.UserService;
+import services.LocationService;
 
 public class ServiceWrapper {
 	
@@ -58,6 +59,15 @@ public class ServiceWrapper {
 		
 	}
 	
+        public static void printLocations(ArrayList<Location> locs){
+		int count = 0;
+		for(Location loc: locs){
+			count++;
+			//System.out.println(count + ". " + loc.getUserLocation(loc));
+		}
+		System.out.println(++count + ". Go Back");
+	}
+        
 	public static void printMenuItems(ArrayList<Menu> menus){
 		int count = 0;
 		for(Menu menu: menus){

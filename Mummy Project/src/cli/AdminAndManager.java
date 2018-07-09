@@ -13,11 +13,13 @@ import domain.Menu;
 import domain.Order;
 import domain.Store;
 import domain.User;
+import domain.Location;
 import services.CardService;
 import services.MenuServices;
 import services.OrderService;
 import services.StoreService;
 import services.UserService;
+import services.LocationService;
 
 public class AdminAndManager {
 	
@@ -89,7 +91,26 @@ public class AdminAndManager {
 	    	case 6:
 	    		optionsScreen("Item Type");
 	    	case 7:
-	    		optionsScreen("Location");
+                    {
+	    		option = optionsScreen("Location");
+    			switch(option){
+    				case 1:
+    					//alterLocationScreen();
+    					break;
+    				case 2:
+    					addLocationScreen();
+    					break;
+    				case 3:
+    					deleteLocationScreen();
+    					break;
+    				case 4:
+    					adminScreen();
+    					break;
+    				case 5:
+    					System.exit(0);
+    			}
+    			break;
+	    	}
 	    	case 8:
 	    		optionsScreen("Order");
 	    	case 9:
@@ -291,30 +312,75 @@ public class AdminAndManager {
 	    menServ.update(menUp);
 	    System.out.println("Updated " + name);
 	}
+        
+//        public static void alterLocationScreen() {
+//            
+//        }
+        
+        public static void addLocationScreen() {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Add a Location");
+            System.out.println("\nEnter location id: ");
+	    String locationId= sc.next();
+	    System.out.println("\nEnter street name: ");
+	    String street= sc.next();
+            System.out.println("\nEnter city name: ");
+            String city = sc.next();
+            System.out.println("\nEnter country name: ");
+            String country=sc.next();
+            System.out.println("\nEnter state name: ");
+            String state= sc.next();
+            System.out.println("\nEnter zip code: ");
+            String zip= sc.next();
+
+            Location loc = new Location(locationId, street, city, country, state, zip);
+            LocationService locServ = new LocationService(con);
+            locServ.add(loc);
+            System.out.println("\n" + locationId + " added to database\n");
+            AdminAndManager aam = new AdminAndManager(con);
+            aam.adminScreen();
+        }
+        
+        public static void deleteLocationScreen() {
+            System.out.println("Choose a location to delete");
+            LocationService ls = new LocationService(con);
+            ArrayList<Location> locs = ls.getAll();
+            ServiceWrapper.printLocations(locs);
+            Scanner sc = new Scanner(System.in);
+	    int input = sc.nextInt();
+	    if(input == locs.size() + 1)
+	    	return;
+	    if(input == locs.size()+2)
+	    	System.exit(0);
+            
+	    LocationService locServ = new LocationService(con);
+	    locServ.deleteById(locs.get(input-1).getLocationId());
+	    System.out.println("Deleted " + locs.get(input-1).getCity());
+        }
 
 	public static void addUserScreen(){
-		System.out.println("Add a User");
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter user id: ");
+            System.out.println("Add a User");
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Enter user id: ");
 	    String userId = sc.next();
 	    System.out.println("Enter first name: ");
-		String firstName = sc.next();
-		System.out.println("Enter last name: ");
-		String lastName = sc.next();
-		System.out.println("Enter email: ");
-		String email = sc.next();
-		System.out.println("Enter password: ");
-		String password = sc.next();
-		System.out.println("Enter status id: ");
-		String userStatusId = sc.next();
-		System.out.println("Enter location id: ");
-		String locationId = sc.next();
-		User u = new User(userId, firstName, lastName, email, password, userStatusId, locationId);
-		UserService us = new UserService(con);
-		us.add(u);
+            String firstName = sc.next();
+            System.out.println("Enter last name: ");
+            String lastName = sc.next();
+            System.out.println("Enter email: ");
+            String email = sc.next();
+            System.out.println("Enter password: ");
+            String password = sc.next();
+            System.out.println("Enter status id: ");
+            String userStatusId = sc.next();
+            System.out.println("Enter location id: ");
+            String locationId = sc.next();
+            User u = new User(userId, firstName, lastName, email, password, userStatusId, locationId);
+            UserService us = new UserService(con);
+            us.add(u);
 		
-		AdminAndManager aam = new AdminAndManager(con);
-		aam.adminScreen();
+            AdminAndManager aam = new AdminAndManager(con);
+            aam.adminScreen();
 	}
 	
 	public static void deleteUserScreen() {
