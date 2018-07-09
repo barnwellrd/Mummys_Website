@@ -9,7 +9,7 @@ import java.sql.Statement;
 import org.junit.Test;
 
 import domain.Menu;
-import services.DeliveryStatus;
+import domain.DeliveryStatus;
 import services.DeliveryStatusService;
 import services.MenuServices;
 

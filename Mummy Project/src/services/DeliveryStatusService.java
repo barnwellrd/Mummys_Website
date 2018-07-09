@@ -1,5 +1,6 @@
 package services;
 
+import domain.DeliveryStatus;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,8 +23,8 @@ public class DeliveryStatusService {
 	public void add(DeliveryStatus deliveryStatus){
 		try{
 			CallableStatement statement = connection.prepareCall("{call AddDeliveryStatus(?, ?)}");
-			statement.setString(1, deliveryStatus.getDelivery_status_id());
-			statement.setString(2, deliveryStatus.getDelivery_status());
+			statement.setString(1, deliveryStatus.getDeliveryStatusId());
+			statement.setString(2, deliveryStatus.getDeliveryStatus());
 			statement.execute();
 			statement.close();
 			
@@ -39,8 +40,8 @@ public class DeliveryStatusService {
 		try{
 			PreparedStatement preparedStatement = connection.prepareStatement(statement);
 			
-			preparedStatement.setString(1, deliveryStatus.getDelivery_status());
-			preparedStatement.setString(2, deliveryStatus.getDelivery_status_id());
+			preparedStatement.setString(1, deliveryStatus.getDeliveryStatus());
+			preparedStatement.setString(2, deliveryStatus.getDeliveryStatusId());
 			preparedStatement.executeUpdate();
 		
 		} catch (SQLException e) {

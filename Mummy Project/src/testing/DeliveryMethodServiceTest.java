@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import services.DeliveryMethod;
+import domain.DeliveryMethod;
 import services.DeliveryMethodService;
-import services.DeliveryStatus;
+import domain.DeliveryStatus;
 import services.DeliveryStatusService;
 
 public class DeliveryMethodServiceTest extends DatabaseTestMethods{
