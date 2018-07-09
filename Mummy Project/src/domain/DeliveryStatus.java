@@ -2,43 +2,60 @@ package domain;
 
 public class DeliveryStatus {
 	
-	int delivery_status_id;
-	String delivery_status;
-	
-	
-	
+	String deliveryStatusId;
+	String deliveryStatus;
+
 	public DeliveryStatus() {
 		super();
 	}
 
-	public DeliveryStatus(int delivery_status_id, String delivery_status) {
+	public DeliveryStatus(String deliveryStatusId, String deliveryStatus) {
 		super();
-		this.delivery_status_id = delivery_status_id;
-		this.delivery_status = delivery_status;
+		this.deliveryStatusId = deliveryStatusId;
+		this.deliveryStatus = deliveryStatus;
 	}
 
 	@Override
 	public String toString() {
-		return "DeliveryStatus [delivery_status_id=" + delivery_status_id + ", delivery_status=" + delivery_status
-				+ "]";
+		return "DeliveryStatus [deliveryStatusID=" + deliveryStatusId + 
+                        ", deliveryStatus=" + deliveryStatus+ "]";
 	}
 
-	public int getDelivery_status_id() {
-		return delivery_status_id;
+	public String getDeliveryStatusId() {
+		return deliveryStatusId;
 	}
 
-	public void setDelivery_status_id(int delivery_status_id) {
-		this.delivery_status_id = delivery_status_id;
+	public void setDeliveryStatusId(String deliveryStatusId) {
+		this.deliveryStatusId = deliveryStatusId;
 	}
 
-	public String getDelivery_status() {
-		return delivery_status;
+	public String getDeliveryStatus() {
+		return deliveryStatus;
 	}
 
-	public void setDelivery_status(String delivery_status) {
-		this.delivery_status = delivery_status;
+	public void setDeliveryStatus(String deliveryStatus) {
+		this.deliveryStatus = deliveryStatus;
 	}
 	
-	
-	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DeliveryStatus other = (DeliveryStatus) obj;
+		if (deliveryStatus == null) {
+			if (other.deliveryStatus != null)
+				return false;
+		} else if (!deliveryStatus.equals(other.deliveryStatus))
+			return false;
+		if (deliveryStatusId == null) {
+			if (other.deliveryStatusId != null)
+				return false;
+		} else if (!deliveryStatusId.equals(other.deliveryStatusId))
+			return false;
+		return true;
+	}
 }

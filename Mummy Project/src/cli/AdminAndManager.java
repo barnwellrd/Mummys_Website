@@ -13,7 +13,11 @@ import domain.Menu;
 import domain.Order;
 import domain.Store;
 import domain.User;
+import domain.DeliveryMethod;
+import domain.DeliveryStatus;
 import services.CardService;
+import services.DeliveryMethodService;
+import services.DeliveryStatusService;
 import services.MenuServices;
 import services.OrderService;
 import services.StoreService;
@@ -597,22 +601,76 @@ public class AdminAndManager {
 
     }
     public static void alterDeliveryMethodScreen(){
-
+        DeliveryMethodService dms = new DeliveryMethodService(con);
+        ArrayList<DeliveryMethod> dmList = dms.getAll();
+        ArrayList<String> options = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a method");
+        for(DeliveryMethod dm:dmList){
+            options.add(dm.getDeliveryMethod());
+        }
+        int input = choiceScreen(options);
+        if(input < dmList.size()){
+            DeliveryMethod deliveryMethod = dmList.get(input);
+            System.out.println("Enter the new method:");
+            String newMethod = sc.next();
+            deliveryMethod.setDeliveryMethod(newMethod);
+            dms.update(deliveryMethod);
+        }
     }
     public static void addDeliveryMethodScreen(){
 
     }
     public static void deleteDeliveryMethodScreen(){
-
+        DeliveryMethodService dms = new DeliveryMethodService(con);
+        ArrayList<DeliveryMethod> dmList = dms.getAll();
+        ArrayList<String> options = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a method");
+        for(DeliveryMethod dm:dmList){
+            options.add(dm.getDeliveryMethod());
+        }
+        int input = choiceScreen(options);
+        if(input < dmList.size()){
+            dms.deleteById(dmList.get(input).getDeliveryMethodId());
+            System.out.println("Method deleted");
+        }
     }
     public static void alterDeliveryStatusScreen(){
-
+        DeliveryStatusService dss = new DeliveryStatusService(con);
+        ArrayList<DeliveryStatus> dsList = dss.getAll();
+        ArrayList<String> options = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a method");
+        for(DeliveryStatus ds:dsList){
+            options.add(ds.getDeliveryStatus());
+        }
+        int input = choiceScreen(options);
+        if(input < dsList.size()){
+            DeliveryStatus deliveryStatus = dsList.get(input);
+            System.out.println("Enter the new method:");
+            String newMethod = sc.next();
+            deliveryStatus.setDeliveryStatus(newMethod);
+            dss.update(deliveryStatus);
+        }
     }
     public static void addDeliveryStatusScreen(){
 
     }
     public static void deleteDeliveryStatusScreen(){
-
+        DeliveryStatusService dss = new DeliveryStatusService(con);
+        ArrayList<DeliveryStatus> dsList = dss.getAll();
+        ArrayList<String> options = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a status");
+        for(DeliveryStatus deliveryStatus:dsList){
+            options.add(deliveryStatus.getDeliveryStatus());
+        }
+        int input = choiceScreen(options);
+        if(input < dsList.size()){
+            dss.deleteByID(dsList.get(input).getDeliveryStatusId());
+            System.out.println("Status deleted");
+        }
     }
     public static void alterItemTypeScreen(){
 

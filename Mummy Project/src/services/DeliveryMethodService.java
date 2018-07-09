@@ -1,5 +1,6 @@
 package services;
 
+import domain.DeliveryMethod;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,8 +26,8 @@ public class DeliveryMethodService implements Service<DeliveryMethod>{
 	public boolean add(DeliveryMethod deliveryMethod){
 		try{
 			CallableStatement statement = connection.prepareCall("{call AddDeliveryMethod(?, ?)}");
-			statement.setString(1, deliveryMethod.getDelivery_method_id());
-			statement.setString(2, deliveryMethod.getDelivery_method());
+			statement.setString(1, deliveryMethod.getDeliveryMethodId());
+			statement.setString(2, deliveryMethod.getDeliveryMethod());
 			statement.execute();
 			statement.close();
 			return true;
@@ -44,8 +45,8 @@ public class DeliveryMethodService implements Service<DeliveryMethod>{
 		try{
 			PreparedStatement preparedStatement = connection.prepareStatement(statement);
 			
-			preparedStatement.setString(1, deliveryMethod.getDelivery_method());
-			preparedStatement.setString(2, deliveryMethod.getDelivery_method_id());
+			preparedStatement.setString(1, deliveryMethod.getDeliveryMethod());
+			preparedStatement.setString(2, deliveryMethod.getDeliveryMethodId());
 			preparedStatement.executeUpdate();
 		
 		} catch (SQLException e) {

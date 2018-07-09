@@ -2,37 +2,35 @@ package domain;
 
 public class DeliveryMethod {
 
-	int delivery_method_id;
-	String delivery_method;
-	
-	
+	String deliveryMethodId;
+	String deliveryMethod;
 	
 	public DeliveryMethod() {
 		super();
 	}
 
-	public DeliveryMethod(int delivery_method_id, String delivery_method) {
+	public DeliveryMethod(String deliveryMethodId, String deliveryMethod) {
 		super();
-		this.delivery_method_id = delivery_method_id;
-		this.delivery_method = delivery_method;
+		this.deliveryMethodId = deliveryMethodId;
+		this.deliveryMethod = deliveryMethod;
 	}
 	
 	@Override
 	public String toString() {
-		return "DeliveryMethod [delivery_method_id=" + delivery_method_id + ", delivery_method=" + delivery_method
-				+ "]";
+		return "DeliveryMethod [deliveryMethodId=" + deliveryMethodId + 
+                        ", deliveryMethod=" + deliveryMethod + "]";
 	}
-	public int getDelivery_method_id() {
-		return delivery_method_id;
+	public String getDeliveryMethodId() {
+		return deliveryMethodId;
 	}
-	public void setDelivery_method_id(int delivery_method_id) {
-		this.delivery_method_id = delivery_method_id;
+	public void setDeliveryMethodId(String deliveryMethodId) {
+		this.deliveryMethodId = deliveryMethodId;
 	}
-	public String getDelivery_method() {
-		return delivery_method;
+	public String getDeliveryMethod() {
+		return deliveryMethod;
 	}
-	public void setDelivery_method(String delivery_method) {
-		this.delivery_method = delivery_method;
+	public void setDeliveryMethod(String deliveryMethod) {
+		this.deliveryMethod = deliveryMethod;
 	}
 	
 	

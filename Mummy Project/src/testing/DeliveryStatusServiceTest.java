@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import services.DeliveryStatus;
+import domain.DeliveryStatus;
 import services.DeliveryStatusService;
 
 public class DeliveryStatusServiceTest extends DatabaseTestMethods{
@@ -46,8 +46,8 @@ public class DeliveryStatusServiceTest extends DatabaseTestMethods{
 		
 		dss.add(ds);
 		
-		ds.setDelivery_status_id("7");
-		ds.setDelivery_status("Money");
+		ds.setDeliveryStatusId("7");
+		ds.setDeliveryStatus("Money");
 		dss.update(ds);
 		Statement statement;
 		try {
