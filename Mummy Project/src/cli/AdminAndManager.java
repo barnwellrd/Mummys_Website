@@ -338,13 +338,12 @@ public class AdminAndManager {
         ArrayList<Card> cardList = cs.getAll();
         Scanner sc = new Scanner(System.in);
         int input = 0;
-        ArrayList <String> options = new ArrayList();
-        for(Card c:cardList){
-            options.add(c.getCardNumber());
-        }
         
         while(input != cardList.size()+1){
-            
+            ArrayList <String> options = new ArrayList();
+            for(Card c:cardList){
+                options.add(c.getCardNumber());
+            }  
             System.out.println("Choose card to alter:");
             input = choiceScreen(options);
             
@@ -357,23 +356,36 @@ public class AdminAndManager {
     public static void alterCardFieldScreen(Card card){
         Scanner sc = new Scanner(System.in);
         CardService cs = new CardService();
-        ArrayList<String>options= new ArrayList<String>();
-        options.add("Card Number:"+card.getCardNumber());
-        options.add("Expiration Date:"+card.getExpiryDate());
-        options.add("Security Code:"+card.getSecurityCode());
         int input = 0;
-        while(input != 4){
+        while(input != 5){
+            ArrayList<String>options= new ArrayList<String>();
+            options.add("Card ID:"+card.getCardId());
+            options.add("Card Number:"+card.getCardNumber());
+            options.add("Expiration Date:"+card.getExpiryDate());
+            options.add("Security Code:"+card.getSecurityCode());
             System.out.println("Enter a field to alter");
             input = choiceScreen(options);
             switch(input){
                 case(1):
+                {
+                    String oldId = card.getCardId();
+                    System.out.println("Enter a new id");
+                    String newId = sc.next();
+                    card.setCardId(newId);
+                    //You have to delete first beacuse in case where 
+                    //the user enters the original ID the entry would be deleted.
+                    cs.deleteById(oldId);
+                    cs.add(card);
+                    break;
+                }
+                case(2):
                 {
                     System.out.print("Enter new Card Number:");
                     String newNumber = sc.next();
                     card.setCardNumber(newNumber);
                     break;
                 }
-                case(2):
+                case(3):
                 {
                     System.out.println("Enter the new month:");
                     while(!sc.hasNextInt()){
@@ -391,19 +403,13 @@ public class AdminAndManager {
                     card.setExpiryDate(date);
                     break;
                 }
-                case(3) :
+                case(4) :
                 {
                     System.out.println("Enter the security code:");
                     String newCode = sc.next();
                     card.setSecurityCode(newCode);
                     break;
                 }
-                case(4) :
-                {
-                    break;
-                }
-                default :
-                    System.out.println("Enter a valid option");
             }
         }
         cs.update(card);
@@ -507,50 +513,70 @@ public class AdminAndManager {
     public static void alterUserFieldScreen(User user){
         UserService us = new UserService(con);
         Scanner sc = new Scanner(System.in);
-        ArrayList<String> options = new ArrayList<String>();
-        options.add("First Name:"+user.getFirstName());
-        options.add("Last Name:"+user.getLastName());
-        options.add("Email:"+user.getEmail());
-        options.add("Password:"+user.getPassword());
-        options.add("Phone Number:"+user.getPhone());
+        
         int input = 0;
-        while(input!=6){
+        while(input!=8){
+            ArrayList<String> options = new ArrayList<String>();
+            options.add("ID:"+user.getUserId());
+            options.add("First Name:"+user.getFirstName());
+            options.add("Last Name:"+user.getLastName());
+            options.add("Email:"+user.getEmail());
+            options.add("Password:"+user.getPassword());
+            options.add("Phone Number:"+user.getPhone());
+            options.add("User Status ID:"+user.getUserStatusId());
             System.out.println("Choose a field to modify");
             input = choiceScreen(options);
             switch(input){
                 case 1:
                 {
-                    System.out.println("Enter the new name");
-                    String newName = sc.next();
-                    user.setFirstName(newName);
+                    String oldId = user.getUserId();
+                    System.out.println("Enter a new ID");
+                    String newId = sc.next();
+                    user.setUserId(newId);
+                    us.deleteById(oldId);
+                    us.add(user);
                     break;
                 }
                 case 2:
                 {
                     System.out.println("Enter the new name");
                     String newName = sc.next();
-                    user.setLastName(newName);
+                    user.setFirstName(newName);
                     break;
                 }
                 case 3:
+                {
+                    System.out.println("Enter the new name");
+                    String newName = sc.next();
+                    user.setLastName(newName);
+                    break;
+                }
+                case 4:
                 {
                     System.out.println("Enter the new email");
                     String newEmail = sc.next();
                     user.setEmail(newEmail);
                     break;
                 }
-                case 4:
+                case 5:
                 {
                     System.out.println("Enter the new password");
                     String newPassword = sc.next();
                     user.setPassword(newPassword);
                     break;
                 }
-                case 5:
+                case 6:
                 {
                     System.out.println("Enter the new phone number");
                     String newNumber = sc.next();
                     user.setPhone(newNumber);
+                    break;
+                }
+                case 7:
+                {
+                    System.out.println("Enter the new user status ID");
+                    String newStatusId = sc.next();
+                    user.setUserStatusId(newStatusId);
                     break;
                 }
             }
@@ -619,7 +645,16 @@ public class AdminAndManager {
         }
     }
     public static void addDeliveryMethodScreen(){
-
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Add a DeliveryMethod");
+        System.out.println("Enter a Delivery Method ID");
+        String id = sc.next();
+        System.out.println("Enter a Delivery Method Name");
+        String name = sc.next();
+        DeliveryMethod deliveryMethod = new DeliveryMethod(id,name);
+        DeliveryMethodService dms = new DeliveryMethodService();
+        dms.add(deliveryMethod);
+        System.out.println("Added new Delivery Method");
     }
     public static void deleteDeliveryMethodScreen(){
         DeliveryMethodService dms = new DeliveryMethodService(con);
@@ -655,7 +690,16 @@ public class AdminAndManager {
         }
     }
     public static void addDeliveryStatusScreen(){
-
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Add a Delivery Status");
+        System.out.println("Enter a Delivery Status ID");
+        String id = sc.next();
+        System.out.println("Enter a Delivery Status Name");
+        String name = sc.next();
+        DeliveryStatus deliveryStatus = new DeliveryStatus(id,name);
+        DeliveryStatusService dss = new DeliveryStatusService();
+        dss.add(deliveryStatus);
+        System.out.println("Added new Delivery Status");
     }
     public static void deleteDeliveryStatusScreen(){
         DeliveryStatusService dss = new DeliveryStatusService(con);
