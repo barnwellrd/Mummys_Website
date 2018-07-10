@@ -48,16 +48,17 @@ public class LocationService implements Service<Location>{
 		}
         }
                 	public boolean addl(Location location){		
-		try{
-								
+		try{			
 			//con.setAutoCommit(false);
-			PreparedStatement preStmt = con.prepareStatement("insert into locations values(?,?,?,?,?,?)");
+			PreparedStatement preStmt = con.prepareStatement("insert into locations values(?,?,?,?,?,?,?,?)");
 			preStmt.setString(1, location.getLocationId());
-			preStmt.setString(2, location.getStreet());
-			preStmt.setString(3, location.getCity());
-			preStmt.setString(4, location.getState());
-			preStmt.setString(5, location.getCountry());
-			preStmt.setString(6, location.getZip());
+                        preStmt.setString(2, location.getUser_id());
+                        preStmt.setDouble(3, location.getTax_rate());
+			preStmt.setString(4, location.getStreet());
+			preStmt.setString(5, location.getCity());
+			preStmt.setString(6, location.getState());
+			preStmt.setString(7, location.getCountry());
+			preStmt.setString(8, location.getZip());
 			preStmt.executeUpdate(); //Data is not yet committed
 			System.out.println("Inserted");
 			return true;

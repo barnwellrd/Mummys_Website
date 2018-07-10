@@ -102,6 +102,30 @@ public class UserService implements Service<User>{
 		
 		return user;
 	}
+        
+        	public boolean userExist(String id){
+		User user = null;
+		boolean ue = false;
+		try{
+			Statement usersSt = connection.createStatement();
+			ResultSet usersRs = usersSt.executeQuery("Select * from Users where user_id = " + id);
+			
+                        
+			if(usersRs.next()){
+                            return ue = true;
+                        }else {
+                            return ue = false;
+                
+                        }
+                        
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+                  
+		}
+                if(!ue){
+                    return false;
+                }else return true;
+	}
 	
 	public User getByEmail(String email){
 		User user = null;

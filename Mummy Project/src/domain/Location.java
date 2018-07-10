@@ -38,6 +38,22 @@ public class Location {
 		this.zip = zip;
 	}
 
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public double getTax_rate() {
+        return tax_rate;
+    }
+
+    public void setTax_rate(double tax_rate) {
+        this.tax_rate = tax_rate;
+    }
+
 	public String getLocationId() {
 		return locationId;
 	}

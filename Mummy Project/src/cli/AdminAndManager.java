@@ -16,6 +16,7 @@ import domain.User;
 import domain.DeliveryMethod;
 import domain.DeliveryStatus;
 import domain.Location;
+import static java.sql.Types.NULL;
 import services.CardService;
 import services.DeliveryMethodService;
 import services.DeliveryStatusService;
@@ -778,15 +779,19 @@ public class AdminAndManager {
     public static void addLocationScreen(){
         System.out.println("Add a location");
         Scanner sc = new Scanner(System.in);
+        
+        System.out.println("\nEnter user id: ");
+        String user_id= sc.next();
+        UserService us = new UserService(con);
+        while(!us.userExist(user_id)){
+            System.out.println("USER ID DOES NOT EXIST! Enter the user ID again: ");
+            user_id= sc.next();
+        }
+      
         System.out.println("\nEnter location id: ");
         String location_id= sc.next();
-        /*
-        System.out.println("\nEnter user id: ");
-        sc.nextLine();
-        String user_id= sc.nextLine();
-        System.out.println("\nEnter tax rate): ");
+        System.out.println("\nEnter tax rate [0-100]: ");
         double tax_rate = sc.nextDouble();
-        */
         System.out.println("\nEnter a street: ");
         sc.nextLine();
         String street= sc.nextLine();
@@ -799,7 +804,7 @@ public class AdminAndManager {
         System.out.println("\nEnter a zip: ");
         String zip= sc.next();
 
-        Location loc = new Location(location_id, street, city, state, country, zip);
+        Location loc = new Location(location_id, user_id, tax_rate, street, city, state, country, zip);
         LocationService locServ = new LocationService(con);
         locServ.addl(loc);
         System.out.println("\n" + location_id + " added to database\n");
