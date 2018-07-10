@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 import domain.*;
 import java.text.DecimalFormat;
 
@@ -61,9 +60,13 @@ public class ServiceWrapper {
 	
 	public static void printMenuItems(ArrayList<Menu> menus){
 		int count = 0;
+             
 		for(Menu menu: menus){
 			count++;
-			System.out.println(count + ". $" + menu.getName()+ " " + menu.getPrice());
+                        String formattedString = String.format("%.02f", menu.getPrice());
+			System.out.println(count +"."+ menu.getName()+" - $"+ formattedString+ "\n "+menu.getDescription());
+                        
+                       // System.out.println(df.format(menu.getPrice()));
 		}
 		System.out.println(++count + ". Go Back");
 	}
@@ -107,10 +110,11 @@ public class ServiceWrapper {
 
 	public double calculateTotalPrice(ArrayList<String> item_ids) {
 		double total = 0;
-                DecimalFormat df = new DecimalFormat("#.##");      
 		ServiceWrapper sw = new ServiceWrapper(con);
 		ArrayList<Menu> items = sw.getMenuItems(item_ids);
 		for(Menu item: items){
+            String formattedString = String.format("%.02f", item.getPrice());
+
 			total += item.getPrice();
 		}
 		return total;

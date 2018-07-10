@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Objects;
+
 public class Menu {
 	String id;
 	String name;
@@ -92,7 +94,7 @@ public class Menu {
 	public String toString() {
 		return "Menu [id=" + id + ", name=" + name + ", vegetarian=" + vegetarian + ", description=" + description
 				+ ", type=" + type + ", slot_ID=" + slot_ID + ", photo=" + photo + ", price=" + price + "]";
-	}
+        }
 
 
 	@Override

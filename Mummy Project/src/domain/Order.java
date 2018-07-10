@@ -158,6 +158,10 @@ public class Order {
 				+ "]";
 	}
 
+    public void setTotal_price(String f, float f0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 	
 
 	
