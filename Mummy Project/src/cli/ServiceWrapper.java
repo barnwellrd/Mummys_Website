@@ -66,7 +66,7 @@ public class ServiceWrapper {
 		}
 		System.out.println(++count + ". Go Back");
 	}
-
+     
 	public static void printOrders(ArrayList<Order> orders){
 		int count = 0;
 		for(Order order: orders){
@@ -113,6 +113,14 @@ public class ServiceWrapper {
 		}
 		return total;
 	}
-
-
+        
+        public static void printLocations(ArrayList<Location> locations){
+		int count = 0;
+		for(Location location: locations){
+			count++;
+			System.out.println(count+". "+ location.toString());
+		}
+		System.out.println(++count + ". Go Back");
+	}
+        
 }

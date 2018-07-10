@@ -8,14 +8,29 @@ public class Location {
 	String country;
 	String state;
 	String zip;
+        
+        String user_id;
+        double tax_rate;
 	
 	public Location() {
 		super();
 	}
 	
-	public Location(String locationId, String street, String city, String country, String state, String zip) {
+	public Location(String locationId, String street, String city, String state, String country, String zip) {
 		super();
 		this.locationId = locationId;
+		this.street = street;
+		this.city = city;
+		this.country = country;
+		this.state = state;
+		this.zip = zip;
+	}
+        
+        	public Location(String locationId,String user_id, double tax_rate, String street, String city, String state, String country, String zip) {
+		super();
+		this.locationId = locationId;
+                this.user_id = user_id;
+                this.tax_rate = tax_rate;
 		this.street = street;
 		this.city = city;
 		this.country = country;
@@ -71,14 +86,11 @@ public class Location {
 		this.zip = zip;
 	}
 
-	@Override
-	public String toString() {
-		return "Locations [locationId=" + locationId + ", street=" + street + ", city=" + city + ", country="
-				+ country + ", state=" + state + ", zip=" + zip + "]";
-	}
-	
-	
-	
+    @Override
+    public String toString() {
+        return "Location{" + "locationId=" + locationId + ", street=" + street + ", city=" + city + ", state=" + state + ", country=" + country + ", zip=" + zip + '}';
+    }
+
 	
 }
 

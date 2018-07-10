@@ -15,9 +15,11 @@ import domain.Store;
 import domain.User;
 import domain.DeliveryMethod;
 import domain.DeliveryStatus;
+import domain.Location;
 import services.CardService;
 import services.DeliveryMethodService;
 import services.DeliveryStatusService;
+import services.LocationService;
 import services.MenuServices;
 import services.OrderService;
 import services.StoreService;
@@ -504,7 +506,7 @@ public class AdminAndManager {
         menServ.update(menUp);
         System.out.println("Updated " + name);
     }
-    public static void alterUserScreen() {
+        public static void alterUserScreen() {
         System.out.println("Choose a user to alter");
         Scanner sc = new Scanner(System.in);
         UserService us = new UserService(con);
@@ -727,7 +729,7 @@ public class AdminAndManager {
         }
     }
     public static void alterItemTypeScreen(){
-
+        
     }
     public static void addItemTypeScreen(){
 
@@ -736,13 +738,90 @@ public class AdminAndManager {
 
     }
     public static void alterLocationScreen(){
-
+        System.out.println("Choose an location to alter");
+        LocationService ls = new LocationService(con);
+        ArrayList<Location> locations = ls.getAll();
+        
+        ServiceWrapper.printLocations(locations);
+        Scanner sc = new Scanner(System.in);
+        int input = sc.nextInt();
+        //check for wrong entery
+        while(input > locations.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == locations.size() + 1){
+            return;
+        }
+        
+        Location loc = locations.get(input-1);
+        LocationService locServ = new LocationService(con);
+        System.out.println("Enter location ID: ");
+        sc.nextLine();
+        String locationId= sc.nextLine();
+        System.out.println("Enter street: ");
+        String street= sc.nextLine();
+        System.out.println("Enter city: ");
+        String city= sc.next();
+        System.out.println("Enter state: ");
+        String state= sc.next();
+        System.out.println("Enter country: ");
+        String country = sc.next();
+        System.out.println("Enter zip: ");
+        String zip = sc.next();
+        
+        Location locUp = new Location(locationId,  street, city,  state, country, zip);
+        locServ.update(locUp);
+        System.out.println("Updated location ID: " + locationId);
     }
     public static void addLocationScreen(){
+        System.out.println("Add a location");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\nEnter location id: ");
+        String location_id= sc.next();
+        /*
+        System.out.println("\nEnter user id: ");
+        sc.nextLine();
+        String user_id= sc.nextLine();
+        System.out.println("\nEnter tax rate): ");
+        double tax_rate = sc.nextDouble();
+        */
+        System.out.println("\nEnter a street: ");
+        sc.nextLine();
+        String street= sc.nextLine();
+        System.out.println("\nEnter a city: ");
+        String city= sc.next();
+        System.out.println("\nEnter a state: ");
+        String state= sc.next();
+        System.out.println("\nEnter a country: ");
+        String country= sc.next();
+        System.out.println("\nEnter a zip: ");
+        String zip= sc.next();
 
+        Location loc = new Location(location_id, street, city, state, country, zip);
+        LocationService locServ = new LocationService(con);
+        locServ.addl(loc);
+        System.out.println("\n" + location_id + " added to database\n");
+        AdminAndManager aam = new AdminAndManager(con);
+        aam.adminScreen();
     }
     public static void deleteLocationScreen(){
+        System.out.println("Choose an item to delete");
+        LocationService ls = new LocationService(con);
+        ArrayList<Location> locations = ls.getAll();
+        
+        ServiceWrapper.printLocations(locations);
+        Scanner sc = new Scanner(System.in);
+        int input = sc.nextInt();
+        if(input == locations.size() + 1)
+            return;
+        if(input == locations.size()+2)
+            System.exit(0);
+        LocationService locServ = new LocationService(con);
 
+        locServ.deleteById(locations.get(input-1).getLocationId());
+        System.out.println("Deleted " + locations.get(input-1).toString());
     }
     public static void alterOrdersScreen(){
 
