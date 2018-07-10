@@ -59,8 +59,10 @@ public class Tiger {
         switch (input) {
             case 1:
                 loginScreen();
+                break;
             case 2:
                 registerScreen();
+                break;
             case 3:
                 System.out.println("Goodbye");
                 System.exit(0);
@@ -170,32 +172,40 @@ public class Tiger {
             count++;
             System.out.println(count + ". " + option);
         }
-
-        while (!sc.hasNextInt()) {
+        boolean isOk = true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
             System.out.println("Please type in a number.");
             sc.nextLine();
-        }
-        int input = sc.nextInt();
-        sc.nextLine();
-
-        if (input == 1) {
-            menuScreen();
-        }
-        if (input == 2) {
-            currentOrderScreen();
-        }
-        if (input == 3) {
-            accountScreen();
-        }
-        if (input == 4) {
-            storeDetailsScreen();
-        }
-        if (input == 5) {
-            firstScreen();
-        }
-        if (input == 6) {
-            System.out.println("Goodbye");
-            System.exit(0);
+            }
+            int input = sc.nextInt();
+            if((input<1) || (input>options.size())) {
+                System.out.println("Please type in the right value.");
+                sc.nextLine();
+                continue;
+            }
+            sc.nextLine();
+            switch(input) {
+                case 1:
+                    menuScreen();
+                    break;
+                case 2:
+                    currentOrderScreen();
+                    break;
+                case 3:
+                    accountScreen();
+                    break;
+                case 4:
+                    storeDetailsScreen();
+                    break;
+                case 5:
+                    firstScreen();
+                    break;
+                case 6:
+                    System.out.println("Goodbye");
+                    System.exit(0);
+            }
+            isOk=false;
         }
     }
 
@@ -205,17 +215,25 @@ public class Tiger {
         ArrayList<Menu> menus = ms.getAll();
         ServiceWrapper.printMenuItems(menus);
         
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        boolean isOk = true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
+            if((input<1) || (input>(menus.size()+1))) {
+                System.out.println("Please type in the right value.");
+                sc.nextLine();
+                continue;
+            }
             sc.nextLine();
-        }
-        
-        int input = sc.nextInt();
-        sc.nextLine();
-        if (input == menus.size() + 1) {
-            homeScreen();
-        } else {
-            menuItemScreen(menus.get(input - 1));
+            if (input == menus.size() + 1) {
+                homeScreen();
+            } else {
+                menuItemScreen(menus.get(input - 1));
+            }
+            isOk=false;
         }
     }
 
@@ -225,28 +243,47 @@ public class Tiger {
         System.out.println("$" + menu.getPrice());
         System.out.println("1. Enter Quantity");
         System.out.println("2. Go Back");
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        
+        boolean isOk = true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
+            if((input<1) || (input>2)) {
+                System.out.println("Please type in the right value.");
+                sc.nextLine();
+                continue;
+            }
             sc.nextLine();
-        }
-        int input = sc.nextInt();
-        sc.nextLine();
-        if (input == 1) {
-            itemQuantityScreen(menu);
-        } else if (input == 2) {
-            menuScreen();
+            if (input == 1) {
+                itemQuantityScreen(menu);
+            } else if (input == 2) {
+                menuScreen();
+            }
+            isOk=false;
         }
     }
     //TODO finish this
 
     public static void itemQuantityScreen(Menu menu) {
         System.out.println("Enter Quantity");
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        int input=0;
+        boolean isOk = true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            input = sc.nextInt();
+            if(input<=0) {
+                System.out.println("Quantity must be greater than 0.");
+            } else
+                isOk=false;
             sc.nextLine();
         }
-        int input = sc.nextInt();
-        sc.nextLine();
+        
         for (int i = 0; i < input; i++) {
             currentOrder.addItem_id(menu.getId());
         }
@@ -268,28 +305,37 @@ public class Tiger {
         System.out.println("3. Edit Order");
         System.out.println("4. Submit Order");
         System.out.println("5. Go Back");
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        boolean isOk = true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
+            if((input<1) || (input>5)) {
+                System.out.println("Please type in the right value.");
+                sc.nextLine();
+                continue;
+            }
             sc.nextLine();
-        }
-        int input = sc.nextInt();
-        sc.nextLine();
-        if (input == 1 && confirm()) {
-            currentOrder = new Order();
-            currentOrder.setOrder_id(Double.toString(Math.random() * 10001));
-            currentOrder.setUser_id(currentUser.getUserId());
-            currentOrder.setDelivery_status_id("0");
-        }
-        if (input == 2) {
-            viewEditOrderItems(currentOrder);
-        }
-        if (input == 3) {
-            editOrder(currentOrder);
-        }
-        if (input == 4 && confirm()) {
-            sw.submitOrder(currentOrder);
-        } else if (input == 5) {
-            homeScreen();
+            if (input == 1 && confirm()) {
+                currentOrder = new Order();
+                currentOrder.setOrder_id(Double.toString(Math.random() * 10001));
+                currentOrder.setUser_id(currentUser.getUserId());
+                currentOrder.setDelivery_status_id("0");
+                homeScreen();
+            } else if (input == 2) {
+                viewEditOrderItems(currentOrder);
+            } else if (input == 3) {
+                editOrder(currentOrder);
+            } else if (input == 4 && confirm()) {
+                sw.submitOrder(currentOrder);
+            } else if (input == 5) {
+                homeScreen();
+            } else {
+                currentOrderScreen();
+            }
+            isOk=false;
         }
     }
 
@@ -307,40 +353,44 @@ public class Tiger {
             count++;
             System.out.println(count + ". " + option);
         }
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        boolean isOk=true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
+            
+            if((input<1) || (input>options.size())) {
+                System.out.println("Please type in the right value.");
+                sc.nextLine();
+                continue;
+            }
             sc.nextLine();
-        }
-        int input = sc.nextInt();
-        sc.nextLine();
-        if (input == 1) {
-            int newTip = Integer.parseInt(editString());
-            currentOrder.setTip(newTip);
-            System.out.println("Tip Changed to: $" + newTip);
-        }
-        if (input == 2) {
-            int newDelivery_timestamp = Integer.parseInt(editString());
-            currentOrder.setDelivery_timestamp(newDelivery_timestamp);
-            System.out.println("Delivery Time Changed to: " + newDelivery_timestamp);
-        }
-        if (input == 3) {
-            String newInstructions = editString();
-            currentOrder.setInstuctions(newInstructions);
-            System.out.println("Instructions Changed to: " + newInstructions);
-        }
-        if (input == 4) {
-            String newDelivery_method = editString();
-            currentOrder.setDelivery_method_id(newDelivery_method);
-            System.out.println("Delivery Method Changed to: " + newDelivery_method);
-        }
-        if (input == 5) {
-            String newStore = editString();
-            currentOrder.setStore_id(newStore);
-            System.out.println("Delivery Method Changed to: " + newStore);
-        }
-
-        if (input == 6) {
-            homeScreen();
+            if (input == 1) {
+                int newTip = Integer.parseInt(editString());
+                currentOrder.setTip(newTip);
+                System.out.println("Tip Changed to: $" + newTip);
+            } else if (input == 2) {
+                int newDelivery_timestamp = Integer.parseInt(editString());
+                currentOrder.setDelivery_timestamp(newDelivery_timestamp);
+                System.out.println("Delivery Time Changed to: " + newDelivery_timestamp);
+            } else if (input == 3) {
+                String newInstructions = editString();
+                currentOrder.setInstuctions(newInstructions);
+                System.out.println("Instructions Changed to: " + newInstructions);
+            } else if (input == 4) {
+                String newDelivery_method = editString();
+                currentOrder.setDelivery_method_id(newDelivery_method);
+                System.out.println("Delivery Method Changed to: " + newDelivery_method);
+            } else if (input == 5) {
+                String newStore = editString();
+                currentOrder.setStore_id(newStore);
+                System.out.println("Delivery Method Changed to: " + newStore);
+            } else if (input == 6) {
+                homeScreen();
+            }
+            isOk=false;
         }
 
         currentOrderScreen();
@@ -356,18 +406,21 @@ public class Tiger {
             System.out.println("No items");
         }
         ServiceWrapper.printMenuItems(items);
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        boolean isOk=true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
             sc.nextLine();
-        }
-        int input = sc.nextInt();
-        sc.nextLine();
-        if (input == items.size()) {
-            homeScreen();
-        } else if (input == items.size() + 1) {
-            currentOrderScreen();
-        } else {
-            orderItemScreen(items.get(input));
+            if(input == items.size()+1) {
+                currentOrderScreen();
+                isOk=false;
+            }
+            else {
+                System.out.println("Please type in a valid number to go back.");
+            }
         }
     }
 
@@ -417,50 +470,50 @@ public class Tiger {
             count++;
             System.out.println(count + ". " + option);
         }
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        boolean isOk=true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
             sc.nextLine();
+            if((input<0) || (input>options.size())) {
+                System.out.println("Please type in the right number.");
+                continue;
+            }
+            if (input == 1) {
+                String newFirstName = editString();
+                currentUser.setFirstName(newFirstName);
+                System.out.println("First Name Changed to: " + newFirstName);
+            } else if (input == 2) {
+                String newLastName = editString();
+                currentUser.setLastName(newLastName);
+                System.out.println("Last Name Changed to: " + newLastName);
+            } else if (input == 3) {
+                String newEmail = editString();
+                currentUser.setEmail(newEmail);
+                System.out.println("Email Changed to: " + newEmail);
+            } else if (input == 4) {
+                String newPassword = editString();
+                currentUser.setPassword(newPassword);
+                System.out.println("Password Changed to: " + newPassword);
+            } else if (input == 5) {
+                String newPhoneNumber = editString();
+                currentUser.setPhone(newPhoneNumber);
+                System.out.println("Phone Number Changed to: " + newPhoneNumber);
+            } else if (input == 6) {
+                editCards();
+            } else if (input == 7) {
+                editLocations();
+            } else if (input == 8) {
+                allOrdersScreen();
+            } else if (input == 9) {
+                homeScreen();
+            }
+            isOk=false;
         }
-        int input = sc.nextInt();
-        sc.nextLine();
-        if (input == 1) {
-            String newFirstName = editString();
-            currentUser.setFirstName(newFirstName);
-            System.out.println("First Name Changed to: " + newFirstName);
-        }
-        if (input == 2) {
-            String newLastName = editString();
-            currentUser.setLastName(newLastName);
-            System.out.println("Last Name Changed to: " + newLastName);
-        }
-        if (input == 3) {
-            String newEmail = editString();
-            currentUser.setEmail(newEmail);
-            System.out.println("Email Changed to: " + newEmail);
-        }
-        if (input == 4) {
-            String newPassword = editString();
-            currentUser.setPassword(newPassword);
-            System.out.println("Password Changed to: " + newPassword);
-        }
-        if (input == 5) {
-
-            String newPhoneNumber = editString();
-            currentUser.setPhone(newPhoneNumber);
-            System.out.println("Phone Number Changed to: " + newPhoneNumber);
-        }
-        if (input == 6) {
-            editCards();
-        }
-        if (input == 7) {
-            editLocations();
-        }
-        if (input == 8) {
-            allOrdersScreen();
-        }
-        if (input == 9) {
-            homeScreen();
-        }
+        
 
         UserService us = new UserService(con);
         us.update(currentUser);
@@ -488,17 +541,28 @@ public class Tiger {
         OrderService os = new OrderService(con);
         ArrayList<Order> orders = os.getUserOrders(currentUser.getUserId());
         ServiceWrapper.printOrders(orders);
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        boolean isOk=true;
+        System.out.println("Here are all the orders.");
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
+            //System.out.println(input);
             sc.nextLine();
+            if((input<0) || (input>orders.size())) {
+                System.out.println("Please type in the right number.");
+                continue;
+            }
+            if (input == orders.size()) {
+                homeScreen();
+            } else {
+                oldOrderScreen(orders.get(input));
+            }
+            isOk=false;
         }
-        int input = sc.nextInt();
-        sc.nextLine();
-        if (input == orders.size()) {
-            homeScreen();
-        } else {
-            oldOrderScreen(orders.get(input));
-        }
+        
     }
 
     public static void oldOrderScreen(Order order) {
@@ -509,18 +573,27 @@ public class Tiger {
         System.out.println("Status: " + order.getDelivery_status_id());
         System.out.println("1. Reorder");
         System.out.println("2. Go Back");
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        boolean isOk=true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
             sc.nextLine();
-        }
-        int input = sc.nextInt();
-        sc.nextLine();
-        if (input == 1 && confirm()) {
-            currentOrder = order;
-            //TODO find out what the status id this thing needs is
-            currentOrder.setDelivery_status_id("1");
-        } else if (input == 2) {
-            accountScreen();
+            if((input<1) || (input>2)) {
+                System.out.println("Please type in the right number.");
+                continue;
+            }
+            if (input == 1 && confirm()) {
+                currentOrder = order;
+                //TODO find out what the status id this thing needs is
+                currentOrder.setDelivery_status_id("1");
+            } else if (input == 2) {
+                accountScreen();
+            } else {
+                allOrdersScreen();
+            }
         }
     }
 
@@ -538,15 +611,22 @@ public class Tiger {
         System.out.println("\n1*Confirm*");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        while (!sc.hasNextInt()) {
-            System.out.println("Please type in a number.");
+        boolean isOk=true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
             sc.nextLine();
+            if (input == 1) {
+                return true;
+            } else if(input==2) {
+                return false;
+            } else {
+                System.out.println("Please type either 1 or 2.");
+            }
         }
-        int input = sc.nextInt();
-        sc.nextLine();
-        if (input == 1) {
-            return true;
-        }
-        return false;
+        return true;
     }
 }
