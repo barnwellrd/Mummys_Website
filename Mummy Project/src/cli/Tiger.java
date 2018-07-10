@@ -297,7 +297,8 @@ public class Tiger {
         System.out.println("Delivered: " + currentOrder.getDelivery_timestamp());
         ServiceWrapper sw = new ServiceWrapper(con);
         currentOrder.setTotal_price((float) sw.calculateTotalPrice(currentOrder.getItem_ids()));
-        System.out.println("Total price: $" + currentOrder.getTotal_price());
+        String formattedString = String.format("%.02f", currentOrder.getTotal_price());
+	System.out.println("Total price: $" +formattedString);        
         System.out.println("Method: " + currentOrder.getDelivery_method_id());
         System.out.println("Status: " + currentOrder.getDelivery_status_id());
         System.out.println("1. Cancel");
