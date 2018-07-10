@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 
 import domain.*;
+import java.text.DecimalFormat;
 
 
 import services.MenuServices;
@@ -62,7 +63,9 @@ public class ServiceWrapper {
 		int count = 0;
 		for(Menu menu: menus){
 			count++;
-			System.out.println(count + ". $" + menu.getPrice() + " " + menu.getName());
+                        String formattedString = String.format("%.02f", menu.getPrice());
+			System.out.println(count +"."+ menu.getName()+" - $"+ formattedString+ "\n "+menu.getDescription());
+                       // System.out.println(df.format(menu.getPrice()));
 		}
 		System.out.println(++count + ". Go Back");
 	}
@@ -104,8 +107,8 @@ public class ServiceWrapper {
 		return items;
 	}
 
-	public int calculateTotalPrice(ArrayList<String> item_ids) {
-		int total = 0;
+	public double calculateTotalPrice(ArrayList<String> item_ids) {
+		double total = 0;
 		ServiceWrapper sw = new ServiceWrapper(con);
 		ArrayList<Menu> items = sw.getMenuItems(item_ids);
 		for(Menu item: items){
