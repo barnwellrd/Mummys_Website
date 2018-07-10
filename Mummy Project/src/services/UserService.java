@@ -124,7 +124,8 @@ public class UserService implements Service<User>{
 		}
                 if(!ue){
                     return false;
-                }else return true;
+                }else
+                    return true;
 	}
 	
 	public User getByEmail(String email){

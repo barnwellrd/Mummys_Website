@@ -790,6 +790,12 @@ public class AdminAndManager {
       
         System.out.println("\nEnter location id: ");
         String location_id= sc.next();
+        LocationService ls= new LocationService(con);
+        while(!ls.locationIdExist(location_id)){
+            System.out.println("LOCATION ID EXISTS! Enter a different location ID: ");
+            location_id= sc.next();
+        }
+        
         System.out.println("\nEnter tax rate [0-100]: ");
         double tax_rate = sc.nextDouble();
         System.out.println("\nEnter a street: ");
