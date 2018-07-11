@@ -202,5 +202,26 @@ public class LocationService implements Service<Location>{
 		}
 		return locations;
 	}
+        
+        public boolean locationIdExist(String id){
+            Location location = null;
+            boolean ls = false;
+            try{
+                Statement locationsSt = connection.createStatement();
+                ResultSet locationsRs = locationsSt.executeQuery("Select * from Locations where location_id = " + id);
+                if(locationsRs.next()){
+                    return ls = false;
+                }else {
+                    return ls = true;
+                }
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+            if(!ls){
+                return true;
+            }else
+                return false;
+         }
+        
 	
 }

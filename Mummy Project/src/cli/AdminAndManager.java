@@ -735,6 +735,15 @@ public class AdminAndManager {
         Scanner sc = new Scanner(System.in);
         System.out.println("Choose a location to alter");
         int input = sc.nextInt();
+        //check for wrong entery
+        while(input > locs.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == locs.size() + 1){
+            return;
+        }
         Location loc = locs.get(input-1);
         LocationService locServ = new LocationService(con);
         System.out.println("Alter a Location");
@@ -762,10 +771,21 @@ public class AdminAndManager {
     public static void addLocationScreen(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Add a Location");
-        System.out.println("\nEnter location id: ");
-        String locationId= sc.next();
         System.out.println("\nEnter user id: ");
         String userId= sc.next();
+        UserService us = new UserService(con);
+        while(!us.userExist(userId)){
+            System.out.println("USER ID DOES NOT EXIST! Enter the user ID again: ");
+            userId= sc.next();
+        }
+      
+        System.out.println("\nEnter location id: ");
+        String locationId= sc.next();
+        LocationService ls= new LocationService(con);
+        while(!ls.locationIdExist(locationId)){
+            System.out.println("LOCATION ID EXISTS! Enter a different location ID: ");
+            locationId= sc.next();
+        }
         System.out.println("\nEnter tax rate: ");
         String taxRate= sc.next();
         System.out.println("\nEnter street name: ");
@@ -794,11 +814,14 @@ public class AdminAndManager {
         Scanner sc = new Scanner(System.in);
         System.out.println("Choose a location to delete");
         int input = sc.nextInt();
-
+        if(input == locs.size() + 1)
+            return;
+        if(input == locs.size()+2)
+            System.exit(0);
         LocationService locServ = new LocationService(con);
         String idToDel = (locs.get(input-1)).getLocationId();
         locServ.delById(idToDel);
-        System.out.println("Location successfully deleted!");
+        System.out.println("Location successfully deleted! " + locs.get(input-1).toString());
     }
     
     public static void alterOrdersScreen(){
