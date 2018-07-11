@@ -96,7 +96,7 @@ public class Tiger {
             }
             currentUser = candidate;
             currentOrder = new Order();
-            currentOrder.setOrder_id(Double.toString(Math.random() * 10001));
+            currentOrder.setOrder_id("1"); // just assign it order id of 1 for now.
             currentOrder.setUser_id(currentUser.getUserId());
             currentOrder.setDelivery_status_id("0");
             //currentOrder.setCard_id();
@@ -321,7 +321,7 @@ public class Tiger {
             sc.nextLine();
             if (input == 1 && confirm()) {
                 currentOrder = new Order();
-                currentOrder.setOrder_id(Double.toString(Math.random() * 10001));
+                currentOrder.setOrder_id("1"); // set id=1 for now
                 currentOrder.setUser_id(currentUser.getUserId());
                 currentOrder.setDelivery_status_id("0");
                 homeScreen();
@@ -331,6 +331,12 @@ public class Tiger {
                 editOrder(currentOrder);
             } else if (input == 4 && confirm()) {
                 sw.submitOrder(currentOrder);
+                System.out.println("Order Complete");
+                currentOrder = new Order();
+                currentOrder.setOrder_id("1"); // set id=1 for now
+                currentOrder.setUser_id(currentUser.getUserId());
+                currentOrder.setDelivery_status_id("0");
+                homeScreen();
             } else if (input == 5) {
                 homeScreen();
             } else {
@@ -344,7 +350,7 @@ public class Tiger {
         System.out.println("\n*Edit Order*");
         ArrayList<String> options = new ArrayList<String>();
         options.add("Edit Tip");
-        options.add("Edit delivery time");
+       // options.add("Edit delivery time");
         options.add("Edit Instructions");
         options.add("Edit Delivery Method");
         options.add("Edit Store");
@@ -369,26 +375,60 @@ public class Tiger {
             }
             sc.nextLine();
             if (input == 1) {
-                int newTip = Integer.parseInt(editString());
+                float newTip=0;
+                String s = editString();
+                try 
+                {
+                    newTip = Float.valueOf(s.trim()).floatValue();
+                }
+                catch (NumberFormatException nfe) 
+                {
+                    System.err.println("NumberFormatException: " + nfe.getMessage());
+                }
+               // int newTip = Integer.parseInt(editString());
                 currentOrder.setTip(newTip);
                 System.out.println("Tip Changed to: $" + newTip);
             } else if (input == 2) {
-                int newDelivery_timestamp = Integer.parseInt(editString());
-                currentOrder.setDelivery_timestamp(newDelivery_timestamp);
-                System.out.println("Delivery Time Changed to: " + newDelivery_timestamp);
-            } else if (input == 3) {
                 String newInstructions = editString();
                 currentOrder.setInstuctions(newInstructions);
                 System.out.println("Instructions Changed to: " + newInstructions);
-            } else if (input == 4) {
-                String newDelivery_method = editString();
+            } else if (input == 3) {
+                System.out.println("Pick one of the options below.");
+                System.out.println("1. Deliver Food");
+                System.out.println("2. Pick up");
+                System.out.println("3. Dine in");
+                boolean isOk1=true;
+                int input2=0;
+                while(isOk1) {
+                    while(!sc.hasNextInt()) {
+                        System.out.println("Please type in a number.");
+                        sc.nextLine();
+                    }
+                    input2=sc.nextInt();
+                    if((input2<1) ||(input2>3)) {
+                        System.out.println("Please type in a valid option.");
+                        sc.nextLine();
+                        continue;
+                    }
+                    isOk1=false;
+                }
+                sc.nextLine();
+                if(input2==1) {
+                    // ask the user for delivery time
+                    System.out.println("Pick a delivery time.");
+                    int newDelivery_timestamp = Integer.parseInt(editString());
+                    currentOrder.setDelivery_timestamp(newDelivery_timestamp);
+                    System.out.println("Delivery Time Changed to: " + newDelivery_timestamp);
+                }
+                String newDelivery_method = Integer.toString(input2);
+                //String newDelivery_method = editString();
                 currentOrder.setDelivery_method_id(newDelivery_method);
                 System.out.println("Delivery Method Changed to: " + newDelivery_method);
-            } else if (input == 5) {
+            } else if (input == 4) {
                 String newStore = editString();
                 currentOrder.setStore_id(newStore);
                 System.out.println("Delivery Method Changed to: " + newStore);
-            } else if (input == 6) {
+            } else if (input == 5) {
                 homeScreen();
             }
             isOk=false;
@@ -630,4 +670,61 @@ public class Tiger {
         }
         return true;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //ricky was here-----why????
 }
