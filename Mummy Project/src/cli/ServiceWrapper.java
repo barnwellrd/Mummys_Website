@@ -123,4 +123,13 @@ public class ServiceWrapper {
 		System.out.println(++count + ". Go Back");
 	}
         
+        public static void printItemType(ArrayList<ItemType> items){
+		int count = 0;
+		for(ItemType item: items){
+			count++;
+			System.out.println(count+". "+ item.toString());
+		}
+		System.out.println(++count + ". Go Back");
+	}
+        
 }

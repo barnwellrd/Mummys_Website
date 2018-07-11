@@ -15,11 +15,13 @@ import domain.Store;
 import domain.User;
 import domain.DeliveryMethod;
 import domain.DeliveryStatus;
+import domain.ItemType;
 import domain.Location;
 import static java.sql.Types.NULL;
 import services.CardService;
 import services.DeliveryMethodService;
 import services.DeliveryStatusService;
+import services.ItemTypeService;
 import services.LocationService;
 import services.MenuServices;
 import services.OrderService;
@@ -730,7 +732,36 @@ public class AdminAndManager {
         }
     }
     public static void alterItemTypeScreen(){
+        System.out.println("Choose an item type to alter");
+       // MenuServices ms = new MenuServices(con);
+        ItemTypeService its = new ItemTypeService(con);
+        ArrayList<ItemType> items = its.getAll();
+       // ArrayList<Menu> menus = ms.getAll();
+        ServiceWrapper.printItemType(items);
+        Scanner sc = new Scanner(System.in);
+        int input = sc.nextInt();
+        //check for wrong entery
+        while(input > items.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == items.size() + 1){
+            return;
+        }
+        ItemType itm =items.get(input-1);
+        //Menu men = menus.get(input-1);
+        ItemTypeService itmServ = new ItemTypeService(con);
+        //MenuServices menServ = new MenuServices(con);
+        System.out.println("Enter item type id: ");
+        sc.nextLine();
+        String itemTypeId= sc.nextLine();
+        System.out.println("Enter item type: ");
+        String itemType = sc.next();
         
+        ItemType itmUp = new ItemType(itemTypeId, itemType);
+        itmServ.update(itmUp);
+        System.out.println("Updated " + itemType);
     }
     public static void addItemTypeScreen(){
 
