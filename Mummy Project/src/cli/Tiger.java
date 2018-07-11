@@ -350,7 +350,7 @@ public class Tiger {
         System.out.println("\n*Edit Order*");
         ArrayList<String> options = new ArrayList<String>();
         options.add("Edit Tip");
-        options.add("Edit delivery time");
+       // options.add("Edit delivery time");
         options.add("Edit Instructions");
         options.add("Edit Delivery Method");
         options.add("Edit Store");
@@ -389,14 +389,10 @@ public class Tiger {
                 currentOrder.setTip(newTip);
                 System.out.println("Tip Changed to: $" + newTip);
             } else if (input == 2) {
-                int newDelivery_timestamp = Integer.parseInt(editString());
-                currentOrder.setDelivery_timestamp(newDelivery_timestamp);
-                System.out.println("Delivery Time Changed to: " + newDelivery_timestamp);
-            } else if (input == 3) {
                 String newInstructions = editString();
                 currentOrder.setInstuctions(newInstructions);
                 System.out.println("Instructions Changed to: " + newInstructions);
-            } else if (input == 4) {
+            } else if (input == 3) {
                 System.out.println("Pick one of the options below.");
                 System.out.println("1. Deliver Food");
                 System.out.println("2. Pick up");
@@ -416,15 +412,23 @@ public class Tiger {
                     }
                     isOk1=false;
                 }
+                sc.nextLine();
+                if(input2==1) {
+                    // ask the user for delivery time
+                    System.out.println("Pick a delivery time.");
+                    int newDelivery_timestamp = Integer.parseInt(editString());
+                    currentOrder.setDelivery_timestamp(newDelivery_timestamp);
+                    System.out.println("Delivery Time Changed to: " + newDelivery_timestamp);
+                }
                 String newDelivery_method = Integer.toString(input2);
                 //String newDelivery_method = editString();
                 currentOrder.setDelivery_method_id(newDelivery_method);
                 System.out.println("Delivery Method Changed to: " + newDelivery_method);
-            } else if (input == 5) {
+            } else if (input == 4) {
                 String newStore = editString();
                 currentOrder.setStore_id(newStore);
                 System.out.println("Delivery Method Changed to: " + newStore);
-            } else if (input == 6) {
+            } else if (input == 5) {
                 homeScreen();
             }
             isOk=false;
