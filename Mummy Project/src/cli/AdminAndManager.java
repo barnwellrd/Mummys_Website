@@ -764,7 +764,20 @@ public class AdminAndManager {
         System.out.println("Updated " + itemType);
     }
     public static void addItemTypeScreen(){
+        System.out.println("Add an item type");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\nEnter item type id: ");
+        String itemTypeId= sc.next();
+        System.out.println("\nEnter item type: ");
+        sc.nextLine();
+        String itemType= sc.nextLine();
 
+        ItemType itm = new ItemType(itemTypeId, itemType);
+        ItemTypeService itmServ = new ItemTypeService(con);
+        itmServ.add(itm);
+        System.out.println("\n" + itemType + " added to database\n");
+        AdminAndManager aam = new AdminAndManager(con);
+        aam.adminScreen();
     }
     public static void deleteItemTypeScreen(){
 
