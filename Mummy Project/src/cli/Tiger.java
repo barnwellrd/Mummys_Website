@@ -69,9 +69,9 @@ public class Tiger {
             default:
                 System.out.println("Please enter one of the options.");
                 firstScreen();
-            /*case 4:
+            case 4:
     			AdminAndManager aam = new AdminAndManager(con);
-    			aam.adminScreen(); */
+    			aam.adminScreen(); 
         }
 
     }
