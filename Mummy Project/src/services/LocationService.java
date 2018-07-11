@@ -23,19 +23,23 @@ public class LocationService implements Service<Location>{
 	public boolean add(Location location){
 		try{
 			String locationId = location.getLocationId();
-			String street = location.getStreet();
+			String userId = location.getUserId();
+                        String taxRate = location.getTaxRate();
+                        String street = location.getStreet();
 			String city = location.getCity();
 			String state = location.getState();
 			String country = location.getCountry();
 			String zip = location.getZip();
 			
-			CallableStatement oCSF = connection.prepareCall("{?=call sp_insert_location(?,?,?,?,?)}");
-			oCSF.setString(2, locationId);
-			oCSF.setString(3, street);
-			oCSF.setString(4, city);
-			oCSF.setString(5, state);
-			oCSF.setString(6, country);
-			oCSF.setString(7, zip);
+			CallableStatement oCSF = connection.prepareCall("{call sp_insert_location(?,?,?,?,?,?,?,?)}");
+			oCSF.setString(1, locationId);
+			oCSF.setString(2, userId);
+			oCSF.setString(3, taxRate);
+                        oCSF.setString(4, street);
+			oCSF.setString(5, city);
+			oCSF.setString(6, state);
+			oCSF.setString(7, country);
+			oCSF.setString(8, zip);
 			oCSF.execute();
 			oCSF.close();
 			return true;
@@ -46,12 +50,25 @@ public class LocationService implements Service<Location>{
 	}
 	public void deleteById(String id){
 		try{
-			Statement locationsSt = connection.createStatement();
-			locationsSt.executeQuery("Delete from locations where location_id = "+id);
+                    connection.createStatement().executeQuery("DELETE FROM locations WHERE location_id = "+id);
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
 		}
 	}
+        
+        public boolean delById(String id){
+		try{
+			CallableStatement oCSF = connection.prepareCall("{call sp_delete_location(?)}");
+			oCSF.setString(1, id);
+                        oCSF.executeUpdate();
+                        oCSF.close();
+                        return true;
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+                        return false;
+		}
+	}
+        
 	public ArrayList<Location> getAll(){
 
 		ArrayList<Location> locations = new ArrayList<Location>();
@@ -67,7 +84,9 @@ public class LocationService implements Service<Location>{
 						locationsRs.getString(3),
 						locationsRs.getString(4),
 						locationsRs.getString(5),
-						locationsRs.getString(6)
+						locationsRs.getString(6),
+          					locationsRs.getString(7),
+						locationsRs.getString(8)
 						); 
 				locations.add(location);
 			}
@@ -90,7 +109,9 @@ public class LocationService implements Service<Location>{
 					locationsRs.getString(3),
 					locationsRs.getString(4),
 					locationsRs.getString(5),
-					locationsRs.getString(6)
+					locationsRs.getString(6),
+                                        locationsRs.getString(7),
+                                        locationsRs.getString(8)
 					); 
 		}catch(Exception e){
 			System.out.println(e.getMessage());
@@ -98,24 +119,60 @@ public class LocationService implements Service<Location>{
 		
 		return location;
 	}
+        
 	public void update(Location location){
 		try{
 			String locationId = location.getLocationId();
-			String street = location.getStreet();
+			String userId = location.getUserId();
+                        String taxRate = location.getTaxRate();
+                        String street = location.getStreet();
 			String city = location.getCity();
 			String state = location.getState();
 			String country = location.getCountry();
 			String zip = location.getZip();
 			
-			CallableStatement oCSF = connection.prepareCall("{?=call sp_update_location(?,?,?,?,?)}");
-			oCSF.setString(2, locationId);
-			oCSF.setString(3, street);
-			oCSF.setString(4, city);
-			oCSF.setString(5, state);
-			oCSF.setString(6, country);
-			oCSF.setString(7, zip);
+			CallableStatement oCSF = connection.prepareCall("{call sp_update_location(?,?,?,?,?,?,?,?)}");
+			oCSF.setString(1, locationId);
+                        oCSF.setString(2, userId);
+                        oCSF.setString(3, taxRate);
+			oCSF.setString(4, street);
+			oCSF.setString(5, city);
+			oCSF.setString(6, state);
+			oCSF.setString(7, country);
+			oCSF.setString(8, zip);
+                        oCSF.executeUpdate();
+                        oCSF.close();                      
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+		}	
+	}
+        
+        public boolean updateLoc(Location location){
+		try{
+			String locationId = location.getLocationId();
+			String userId = location.getUserId();
+                        String taxRate = location.getTaxRate();
+                        String street = location.getStreet();
+			String city = location.getCity();
+			String state = location.getState();
+			String country = location.getCountry();
+			String zip = location.getZip();
+			
+			CallableStatement oCSF = connection.prepareCall("{call sp_update_location(?,?,?,?,?,?,?,?)}");
+			oCSF.setString(1, locationId);
+                        oCSF.setString(2, userId);
+                        oCSF.setString(3, taxRate);
+			oCSF.setString(4, street);
+			oCSF.setString(5, city);
+			oCSF.setString(6, state);
+			oCSF.setString(7, country);
+			oCSF.setString(8, zip);
+                        oCSF.executeUpdate();
+                        oCSF.close();
+                        return true;
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+                        return false;
 		}	
 	}
 	
@@ -134,7 +191,9 @@ public class LocationService implements Service<Location>{
 						locationsRs.getString(3),
 						locationsRs.getString(4),
 						locationsRs.getString(5),
-						locationsRs.getString(6)
+						locationsRs.getString(6),
+                                                locationsRs.getString(7),
+                                                locationsRs.getString(8)
 						); 
 				locations.add(location);
 			}

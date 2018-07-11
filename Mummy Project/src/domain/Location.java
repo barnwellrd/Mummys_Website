@@ -3,23 +3,27 @@ package domain;
 public class Location {
 	
 	String locationId;
+        String userId;
+        String taxRate;
 	String street;
 	String city;
-	String country;
 	String state;
+	String country;
 	String zip;
 	
 	public Location() {
 		super();
 	}
 	
-	public Location(String locationId, String street, String city, String country, String state, String zip) {
+	public Location(String locationId, String userId, String taxRate, String street, String city, String state, String country, String zip) {
 		super();
 		this.locationId = locationId;
+                this.userId = userId;
+                this.taxRate = taxRate;
 		this.street = street;
-		this.city = city;
 		this.country = country;
-		this.state = state;
+		this.city = city;
+                this.state = state;
 		this.zip = zip;
 	}
 
@@ -71,14 +75,25 @@ public class Location {
 		this.zip = zip;
 	}
 
-	@Override
-	public String toString() {
-		return "Locations [locationId=" + locationId + ", street=" + street + ", city=" + city + ", country="
-				+ country + ", state=" + state + ", zip=" + zip + "]";
-	}
-	
-	
-	
-	
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getTaxRate() {
+            return taxRate;
+        }
+
+        public void setTaxRate(String taxRate) {
+            this.taxRate = taxRate;
+        }
+        
+        @Override
+        public String toString() {
+            return "Location{" + "locationId=" + locationId + ", userId=" + userId + ", taxRate=" + taxRate + ", street=" + street + ", city=" + city + ", state=" + state + ", country=" + country + ", zip=" + zip + '}';
+        }	
 }
 
