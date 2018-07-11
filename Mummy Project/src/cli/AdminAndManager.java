@@ -780,7 +780,21 @@ public class AdminAndManager {
         aam.adminScreen();
     }
     public static void deleteItemTypeScreen(){
-
+        System.out.println("Choose an item type to delete");
+        ItemTypeService its = new ItemTypeService(con);
+        //MenuServices ms = new MenuServices(con);
+        ArrayList<ItemType> items = its.getAll();
+        //ArrayList<Menu> menus = ms.getAll();
+        ServiceWrapper.printItemType(items);
+        Scanner sc = new Scanner(System.in);
+        int input = sc.nextInt();
+        if(input == items.size() + 1)
+            return;
+        if(input == items.size()+2)
+            System.exit(0);
+        ItemTypeService itmtypServ = new ItemTypeService(con);
+        itmtypServ.deleteById(items.get(input-1).getItemTypeId());
+        System.out.println("Deleted " + items.get(input-1).getItemType());
     }
     public static void alterLocationScreen(){
         System.out.println("Choose an location to alter");

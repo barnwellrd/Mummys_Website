@@ -105,7 +105,7 @@ public class ItemTypeService implements Service<ItemType>{
 
 		public void deleteById(String id){
 		try {
-			connection.createStatement().executeQuery("DELETE FROM items WHERE item_id = " + id);
+			connection.createStatement().executeQuery("DELETE FROM item_types WHERE item_type_id = " + id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
