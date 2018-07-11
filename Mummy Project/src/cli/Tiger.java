@@ -9,6 +9,7 @@ import domain.Menu;
 import domain.Order;
 import domain.Store;
 import domain.User;
+import java.text.DecimalFormat;
 import services.MenuServices;
 import services.OrderService;
 import services.StoreService;
@@ -70,8 +71,7 @@ public class Tiger{
     			aam.adminScreen(); */
 	    }
 
-	}
-		
+	}		
 	public static void loginScreen(){
             System.out.println("\n*Login*");
             System.out.println("Enter email:");
@@ -85,7 +85,7 @@ public class Tiger{
                     System.out.println("Wrong email");
                     firstScreen();
             }
-            if(password.equals(candidate.getPassword())){
+           if(password.equals(candidate.getPassword())){
                 if(candidate.getUserStatusId().equals("5")) {
                     AdminAndManager aam = new AdminAndManager(con);
                     aam.adminScreen();
@@ -216,7 +216,8 @@ public class Tiger{
 		ServiceWrapper sw = new ServiceWrapper(con);
                 
 		currentOrder.setTotal_price((float) sw.calculateTotalPrice(currentOrder.getItem_ids()));
-                String formattedString = String.format("%.02f", currentOrder.getTotal_price());
+                float totalAmount = currentOrder.getTotal_price()+currentOrder.getTip();
+                String formattedString = String.format("%.02f", totalAmount);
 		System.out.println("Total price: $" +formattedString);
                 
 		System.out.println("Method: " +currentOrder.getDelivery_method_id());
@@ -256,8 +257,9 @@ public class Tiger{
 	    int input = sc.nextInt();
     		if(input==1){
     			int newTip = Integer.parseInt(editString());
+                        DecimalFormat df = new DecimalFormat("#.00");
     			currentOrder.setTip(newTip);
-    			System.out.println("Tip Changed to: $" + newTip);
+    			System.out.println("Tip Changed to: $" + df.format(newTip));
     		}
     		if(input==2){
     			int newDelivery_timestamp = Integer.parseInt(editString());

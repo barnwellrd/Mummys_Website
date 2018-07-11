@@ -113,8 +113,6 @@ public class ServiceWrapper {
 		ServiceWrapper sw = new ServiceWrapper(con);
 		ArrayList<Menu> items = sw.getMenuItems(item_ids);
 		for(Menu item: items){
-            String formattedString = String.format("%.02f", item.getPrice());
-
 			total += item.getPrice();
 		}
 		return total;
