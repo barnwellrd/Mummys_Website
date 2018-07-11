@@ -81,6 +81,7 @@ public class SendEmail {
         }
         catch(Exception e){
             System.out.println(e.getMessage());
+            System.err.println("Error sending email!");
             System.exit(0);
         }
     }

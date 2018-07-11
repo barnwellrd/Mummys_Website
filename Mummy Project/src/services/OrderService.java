@@ -71,6 +71,7 @@ public class OrderService implements Service<Order>{
 			return true;
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 			return false;
 		}	
 	}
@@ -95,6 +96,7 @@ public class OrderService implements Service<Order>{
 			
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
 	
@@ -136,6 +138,7 @@ public class OrderService implements Service<Order>{
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return orders;
 	}
@@ -181,6 +184,7 @@ public class OrderService implements Service<Order>{
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
 
@@ -218,6 +222,7 @@ public class OrderService implements Service<Order>{
 			order.setItem_ids(order_items);	
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return order;
@@ -260,6 +265,7 @@ public class OrderService implements Service<Order>{
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return orders;
 
@@ -274,6 +280,7 @@ public class OrderService implements Service<Order>{
 			statement.close();
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		
 	}

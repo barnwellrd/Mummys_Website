@@ -24,6 +24,7 @@ public class TimeSlotServices implements Service<TimeSlots>	{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 	}
 
@@ -42,6 +43,7 @@ public class TimeSlotServices implements Service<TimeSlots>	{
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		return false;
 	}
@@ -64,6 +66,7 @@ public class TimeSlotServices implements Service<TimeSlots>	{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		
 		return null;
@@ -82,6 +85,7 @@ public class TimeSlotServices implements Service<TimeSlots>	{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		
 		return null;

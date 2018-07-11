@@ -33,6 +33,7 @@ public class DeliveryMethodService implements Service<DeliveryMethod>{
 			return true;
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 			return false;
 		}	
 	}
@@ -51,6 +52,7 @@ public class DeliveryMethodService implements Service<DeliveryMethod>{
 		
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 	}
 	
@@ -69,6 +71,7 @@ public class DeliveryMethodService implements Service<DeliveryMethod>{
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return deliverMethods;
 	}
@@ -89,6 +92,7 @@ public class DeliveryMethodService implements Service<DeliveryMethod>{
 					); 
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return deliveryMethod;
@@ -104,6 +108,7 @@ public class DeliveryMethodService implements Service<DeliveryMethod>{
 			
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		
 	}

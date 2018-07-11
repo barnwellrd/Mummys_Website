@@ -31,6 +31,7 @@ public class Tiger {
             con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "db_uSpring", "pass");
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Error connecting to database!");
         }
         sw = new ServiceWrapper(con);
         sc = new Scanner(System.in);
@@ -110,6 +111,8 @@ public class Tiger {
                 firstScreen();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                System.err.println("Application timed out!");
+
             }
         }
 
@@ -384,6 +387,8 @@ public class Tiger {
                 catch (NumberFormatException nfe) 
                 {
                     System.err.println("NumberFormatException: " + nfe.getMessage());
+                    System.err.println("Error reading input!");
+
                 }
                // int newTip = Integer.parseInt(editString());
                 currentOrder.setTip(newTip);

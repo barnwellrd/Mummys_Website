@@ -41,6 +41,7 @@ public class CardService implements Service<Card>{
 			return true;
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 			return false;
 		}	
 	}
@@ -50,6 +51,7 @@ public class CardService implements Service<Card>{
 			cardsSt.executeQuery("Delete from cards where card_id = "+id);
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 	}
 	public ArrayList<Card> getAll(){
@@ -72,6 +74,7 @@ public class CardService implements Service<Card>{
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return cards;
 	}
@@ -92,6 +95,7 @@ public class CardService implements Service<Card>{
 					); 
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return card;
@@ -115,6 +119,7 @@ public class CardService implements Service<Card>{
 			oCSF.close();
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
 	
@@ -138,6 +143,7 @@ public class CardService implements Service<Card>{
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return cards;
 	}
