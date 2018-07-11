@@ -13,6 +13,7 @@ import domain.Menu;
 import domain.Order;
 import domain.Store;
 import domain.User;
+import domain.Location;
 import domain.DeliveryMethod;
 import domain.DeliveryStatus;
 import services.CardService;
@@ -22,6 +23,7 @@ import services.MenuServices;
 import services.OrderService;
 import services.StoreService;
 import services.UserService;
+import services.LocationService;
 
 public class AdminAndManager {
 	
@@ -725,15 +727,80 @@ public class AdminAndManager {
     public static void deleteItemTypeScreen(){
 
     }
+    
     public static void alterLocationScreen(){
-
+        LocationService ls = new LocationService(con);
+        ArrayList<Location> locs = ls.getAll();
+        ServiceWrapper.printLocations(locs);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a location to alter");
+        int input = sc.nextInt();
+        Location loc = locs.get(input-1);
+        LocationService locServ = new LocationService(con);
+        System.out.println("Alter a Location");
+        System.out.println("\nEnter user id: ");
+        String userId= sc.next();
+        System.out.println("\nEnter tax rate: ");
+        String taxRate= sc.next();
+        System.out.println("\nEnter street name: ");
+        String street= sc.next();
+        System.out.println("\nEnter city name: ");
+        String city = sc.next();
+        System.out.println("\nEnter state name: ");
+        String state=sc.next();
+        System.out.println("\nEnter country name: ");
+        String country= sc.next();
+        System.out.println("\nEnter zip code: ");
+        String zip= sc.next();
+        String locId = loc.getLocationId();
+        Location updatedLoc = new Location(locId, userId, taxRate, street, city, state, country, zip);
+        System.out.println(updatedLoc);
+        locServ.updateLoc(updatedLoc);
+        System.out.println("Updated Location " + locId);
     }
+    
     public static void addLocationScreen(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Add a Location");
+        System.out.println("\nEnter location id: ");
+        String locationId= sc.next();
+        System.out.println("\nEnter user id: ");
+        String userId= sc.next();
+        System.out.println("\nEnter tax rate: ");
+        String taxRate= sc.next();
+        System.out.println("\nEnter street name: ");
+        String street= sc.next();
+        System.out.println("\nEnter city name: ");
+        String city = sc.next();
+        System.out.println("\nEnter state name: ");
+        String state=sc.next();
+        System.out.println("\nEnter country name: ");
+        String country= sc.next();
+        System.out.println("\nEnter zip code: ");
+        String zip= sc.next();
 
+        Location loc = new Location(locationId, userId, taxRate, street, city, state, country, zip);
+        LocationService locServ = new LocationService(con);
+        locServ.add(loc);
+        System.out.println("\n" + locationId + " added to database\n");
+        AdminAndManager aam = new AdminAndManager(con);
+        aam.adminScreen();
     }
-    public static void deleteLocationScreen(){
+    
+    public static void deleteLocationScreen(){     
+        LocationService ls = new LocationService(con);
+        ArrayList<Location> locs = ls.getAll();
+        ServiceWrapper.printLocations(locs);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a location to delete");
+        int input = sc.nextInt();
 
+        LocationService locServ = new LocationService(con);
+        String idToDel = (locs.get(input-1)).getLocationId();
+        locServ.delById(idToDel);
+        System.out.println("Location successfully deleted!");
     }
+    
     public static void alterOrdersScreen(){
 
     }
