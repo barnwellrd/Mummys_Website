@@ -33,6 +33,7 @@ public class SpecialServices implements Service<Special> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		return false;
 	}
@@ -47,6 +48,7 @@ public class SpecialServices implements Service<Special> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 	}
 	
@@ -62,6 +64,7 @@ public class SpecialServices implements Service<Special> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		
 		return null;
@@ -81,6 +84,7 @@ public class SpecialServices implements Service<Special> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		return null;
 	}
