@@ -337,7 +337,7 @@ public class Tiger {
             } else if (input == 3) {
                 editOrder(currentOrder);
             } else if (input == 4 && confirm()) {
-                if(currentOrder.getItem_ids().size()==0) {
+                if(currentOrder.getItemCount().size() == 0) {
                     System.out.println("Cart is empty.");
                     currentOrderScreen();
                 } else {
@@ -465,16 +465,29 @@ public class Tiger {
 
             if (items.isEmpty()) {
                 System.out.println("No items");
-                break;
+                System.out.println((items.size()+1) + ". Go Back");
+                while(isOk)
+                {
+                    int input = 0;
+                    while (!sc.hasNextInt())  {
+                        System.out.println("Please type in " + (items.size()+1) +".");
+                        sc.nextLine();
+                    }
+                    input = sc.nextInt();
+                    if(input == (items.size()+1))
+                        currentOrderScreen();
+                    System.out.println("Please type in " + (items.size()+1) +".");
+                }
             }
             for(Menu item: items){
                 count++;
                 String formattedString = String.format("%.02f", 
                         item.getPrice()*itemCount.get(item.getId()));
-                System.out.println(count +"."+ item.getName()+ "("+itemCount.get(item.getId())+
-                        ") - $"+ formattedString+ "\n "+item.getDescription());
+                System.out.println(count +". "+ item.getName()+ "("+itemCount.get(item.getId())+
+                        ")\t$"+ formattedString+ "\t "+item.getDescription());
                // System.out.println(df.format(menu.getPrice()));
             }
+            System.out.println((items.size()+1) + ". Go Back");
             while (!sc.hasNextInt()) {
                 System.out.println("Please type in a number.");
                 sc.nextLine();
