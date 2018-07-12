@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import domain.Location;
+import java.sql.Types;
 
 public class LocationService implements Service<Location>{
 	
@@ -22,7 +23,16 @@ public class LocationService implements Service<Location>{
 	}
 	public boolean add(Location location){
 		try{
-			String locationId = location.getLocationId();
+                        //get location id
+                        //get order id
+                        CallableStatement getLocationId = connection.prepareCall(
+					"{?=call AssignLocationId}");
+                        getLocationId.registerOutParameter(1, Types.VARCHAR);
+                        getLocationId.execute();
+			String locationId = getLocationId.getString(1);
+                        location.setLocationId(locationId);
+                        
+			//String locationId = location.getLocationId();
 			String userId = location.getUserId();
                         String taxRate = location.getTaxRate();
                         String street = location.getStreet();
@@ -34,7 +44,7 @@ public class LocationService implements Service<Location>{
 			CallableStatement oCSF = connection.prepareCall("{call sp_insert_location(?,?,?,?,?,?,?,?)}");
 			oCSF.setString(1, locationId);
 			oCSF.setString(2, userId);
-			oCSF.setString(3, taxRate);
+			oCSF.setDouble(3, Double.parseDouble(taxRate));
                         oCSF.setString(4, street);
 			oCSF.setString(5, city);
 			oCSF.setString(6, state);
