@@ -17,6 +17,7 @@ import services.MenuServices;
 import services.OrderService;
 import services.UserService;
 import services.LocationService;
+import services.SpecialServices;
 
 public class ServiceWrapper {
 	
@@ -71,6 +72,15 @@ public class ServiceWrapper {
 		}
 		System.out.println(++count + ". Go Back");
 	}
+        
+        public static void printSpecials(ArrayList<Special> specs) {
+           int count = 0;
+           for(Special spec: specs) {
+                    count++;
+                    System.out.println(count + ". " + spec.toString());
+            }
+            System.out.println(++count + ". Go Back");
+        }
         
         public static void printLocations(ArrayList<Location> locs) {
             int count = 0;

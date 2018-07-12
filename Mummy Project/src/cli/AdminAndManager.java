@@ -14,6 +14,7 @@ import domain.Order;
 import domain.Store;
 import domain.User;
 import domain.Location;
+import domain.Special;
 import domain.DeliveryMethod;
 import domain.DeliveryStatus;
 import domain.ItemType;
@@ -26,6 +27,7 @@ import services.OrderService;
 import services.StoreService;
 import services.UserService;
 import services.LocationService;
+import services.SpecialServices;
 
 public class AdminAndManager {
 	
@@ -39,7 +41,7 @@ public class AdminAndManager {
         ArrayList<String> options = new ArrayList<String>();
         System.out.println("Admin View");
         options.add("Alter Cards");
-        options.add("Alter Combos");
+        options.add("Alter Specials");
         options.add("Alter Delivery Methods");
         options.add("Alter Delivery Statuses");
         options.add("Alter Items");
@@ -72,10 +74,30 @@ public class AdminAndManager {
                 }
                 break;
             }
+            case 2:
+            {
+                option = optionsScreen("Specials");
+                switch(option){
+                    case 1:
+                        alterSpecialScreen();
+                        break;
+                    case 2:
+                        addSpecialScreen();
+                        break;
+                    case 3:
+                        deleteSpecialScreen();
+                        break;
+                    case 4:
+                        adminScreen();
+                        break;
+                }
+                break;
+            }
             case 3:
             {
-                option = optionsScreen("Delivery Method");
-                switch(option){
+                option = optionsScreen("Delivery Methods");
+                switch(option)
+                {
                     case 1:
                         alterDeliveryMethodScreen();
                         break;
@@ -87,7 +109,6 @@ public class AdminAndManager {
                         break;
                     case 4:
                         adminScreen();
-                        break;
                 }
                 break;
             }
@@ -290,7 +311,76 @@ public class AdminAndManager {
         System.out.println("Press any key to exit");
         sc.next();
     }
-
+    
+    public static void alterSpecialScreen() {
+        SpecialServices ss = new SpecialServices(con);
+        ArrayList<Special> specs = ss.getAll();
+        ServiceWrapper.printSpecials(specs);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a special to alter");
+        int input = sc.nextInt();
+        //check for wrong entery
+        while(input > specs.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == specs.size() + 1){
+            return;
+        }
+        Special spec = specs.get(input-1);
+        SpecialServices specServ = new SpecialServices(con);
+        System.out.println("Alter a Special");
+        System.out.println("\nEnter discount percentagee: ");
+        int discPercent= sc.nextInt();
+        String specId = spec.getItem_ID();
+        Special updatedSpec = new Special(specId, discPercent);
+        System.out.println(updatedSpec);
+        specServ.update(updatedSpec);
+        System.out.println("Updated Special " + specId);
+    }
+    
+    public static void addSpecialScreen() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Add a Special");
+        System.out.println("\nEnter special item id: ");
+        String specId= sc.next();
+        SpecialServices ss= new SpecialServices(con);
+        while(ss.itemIdExists(specId)){
+            System.out.println("Item does not exist! Enter a different item ID: ");
+            specId= sc.next();
+        }
+        while(!ss.specialIdExists(specId)){
+            System.out.println("Special ID already exists! Enter a different special ID: ");
+            specId= sc.next();
+        }
+        System.out.println("\nEnter discount percentage: ");
+        int discPercent= sc.nextInt();
+        Special spec = new Special(specId, discPercent);
+        SpecialServices specServ = new SpecialServices(con);
+        specServ.add(spec);
+        AdminAndManager aam = new AdminAndManager(con);
+        aam.adminScreen();
+    }
+    
+    public static void deleteSpecialScreen() {
+        SpecialServices ss = new SpecialServices(con);
+        ArrayList<Special> spec = ss.getAll();
+        ServiceWrapper.printSpecials(spec);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a special to delete");
+        int input = sc.nextInt();
+        if(input == spec.size() + 1)
+            return;
+        if(input == spec.size()+2)
+            System.exit(0);
+        SpecialServices specServ = new SpecialServices(con);
+        String idToDel = (spec.get(input-1)).getItem_ID();
+        specServ.deleteById(idToDel);
+        System.out.println("Special successfully deleted! " + spec.get(input-1).toString());    
+    }
+    
+    
     //Doesn't work
     public static void addCardScreen(){
         System.out.println("Add a Credit Card");

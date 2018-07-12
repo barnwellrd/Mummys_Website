@@ -22,6 +22,13 @@ public class Special {
 	public void setDiscoutPercentage(int discoutPercentage) {
 		this.discoutPercentage = discoutPercentage;
 	}
+
+    @Override
+    public String toString() {
+        return "Special{" + "item_ID=" + item_ID + ", discoutPercentage=" + discoutPercentage + '}';
+    }
+        
+        
 	
 	
 }
