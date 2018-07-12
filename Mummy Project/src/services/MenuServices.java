@@ -95,7 +95,7 @@ public class MenuServices implements Service<Menu> {
 			preStmt.setString(5, men.getDescription());
 			preStmt.setString(6, men.getSlot_ID());
 			preStmt.setString(7, men.getPhoto());
-			preStmt.setFloat(8, men.getPrice());
+			preStmt.setDouble(8, men.getPrice());
 			preStmt.executeUpdate(); //Data is not yet committed
 			System.out.println("Inserted");
 			return true;
@@ -129,7 +129,7 @@ public class MenuServices implements Service<Menu> {
 			preStmt.setString(4, men.getDescription());
 			preStmt.setString(5, timeId);
 			preStmt.setString(6, men.getPhoto());
-			preStmt.setFloat(7, men.getPrice());
+			preStmt.setDouble(7, men.getPrice());
 			preStmt.setString(8, men.getId());
 			preStmt.executeUpdate();
 		} catch (SQLException e) {

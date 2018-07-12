@@ -247,7 +247,8 @@ public class Tiger {
     public static void menuItemScreen(Menu menu) {
         System.out.println("\n*" + menu.getName() + "*");
         System.out.println(menu.getDescription());
-        System.out.println("$" + menu.getPrice());
+        String formattedString = String.format("%.02f", menu.getPrice());
+        System.out.println("$" + formattedString);
         System.out.println("1. Enter Quantity");
         System.out.println("2. Go Back");
         
