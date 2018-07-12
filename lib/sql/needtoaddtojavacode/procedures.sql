@@ -181,8 +181,20 @@ BEGIN
 END;
 
 -- SpecialServices.java
---insertSpecial
---deleteSpecial
+CREATE OR REPLACE PROCEDURE sp_insert_special(itemId VARCHAR, discPercent NUMBER)
+AS
+BEGIN
+    INSERT INTO Specials
+    VALUES(itemId, discPercent);
+END;
+
+CREATE OR REPLACE PROCEDURE sp_delete_special(itemId VARCHAR)
+AS
+BEGIN
+    DELETE FROM Specials
+    WHERE item_id=ItemId;
+END;
+
 CREATE OR REPLACE PROCEDURE sp_getById_special(itemId VARCHAR)
 AS
 BEGIN
