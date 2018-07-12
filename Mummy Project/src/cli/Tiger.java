@@ -600,8 +600,8 @@ public class Tiger {
             getLocation.execute();
             loc_id = getLocation.getString(1);
             if(loc_id.equals("-1")) {
-                System.out.println("You don't have a saved card.");
-                loc_id=addLocation(currentUser.getUserId()); // add a card
+                System.out.println("You don't have a saved address.");
+                loc_id=addLocation(currentUser.getUserId()); // add a address
             } else {
                 // they do have a saved location.
                 System.out.println("Here is the saved address.");
