@@ -35,6 +35,7 @@ public class UserStatusService implements Service<UserStatus>{
 			return true;
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 			return false;
 		}
 	}
@@ -44,6 +45,7 @@ public class UserStatusService implements Service<UserStatus>{
 			usersSt.executeQuery("Delete from user_statuses where user_status_id = "+id);
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 	}
 	public UserStatus getById(String id){
@@ -60,6 +62,7 @@ public class UserStatusService implements Service<UserStatus>{
 					); 
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return userStatus;
@@ -80,6 +83,7 @@ public class UserStatusService implements Service<UserStatus>{
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return userStatuses;
 	}
@@ -95,6 +99,7 @@ public class UserStatusService implements Service<UserStatus>{
 			oCSF.close();
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
 

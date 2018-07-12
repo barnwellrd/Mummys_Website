@@ -30,6 +30,7 @@ public class DeliveryStatusService {
 			
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
 	
@@ -46,6 +47,7 @@ public class DeliveryStatusService {
 		
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 	}
 	
@@ -59,6 +61,7 @@ public class DeliveryStatusService {
 			
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 	}
 	public ArrayList<DeliveryStatus> getAll(){
@@ -75,6 +78,7 @@ public class DeliveryStatusService {
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return deliveryStatuses;
 	}
@@ -93,6 +97,7 @@ public class DeliveryStatusService {
 					); 
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return deliveryStatus;

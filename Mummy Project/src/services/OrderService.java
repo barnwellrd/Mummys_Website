@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import domain.Order;
 import java.util.HashMap;
+import java.sql.Types;
+
 
 public class OrderService implements Service<Order>{
 	/*
@@ -30,10 +32,20 @@ public class OrderService implements Service<Order>{
 	@Override
 	public boolean add(Order order){
 		try{
+                        //get order id
+                        CallableStatement getOrderId = connection.prepareCall(
+					"{?=call AssignOrderId}");
+                        getOrderId.registerOutParameter(1, Types.VARCHAR);
+                        getOrderId.execute();
+			String orderId = getOrderId.getString(1);
+                        order.setOrder_id(orderId);
+                        // check for delivery method
+                        if(order.getDelivery_method_id() == "0") {
+                            order.setDelivery_method_id("2"); // default option is pickup
+                        }
 			//Add order items
 			CallableStatement statement = connection.prepareCall(
 					"{call AddOrder(?,?,?,?,?,?,?,?,?,?,?)}");
-			
 			statement.setString("ORDER_ID",order.getOrder_id());
 			statement.setString("USER_ID",order.getUser_id());
 			statement.setFloat("TIP",order.getTip());
@@ -45,7 +57,7 @@ public class OrderService implements Service<Order>{
 			statement.setString("DELIVERY_METHOD_ID",order.getDelivery_method_id());
 			statement.setString("STORE_ID",order.getStore_id());
 			statement.setString("DELIVERY_STATUS_ID",order.getDelivery_status_id());
-			statement.execute();
+			statement.executeQuery();
 			statement.close();
 			
 			//Add all items in order to order_items
@@ -63,6 +75,7 @@ public class OrderService implements Service<Order>{
 			return true;
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 			return false;
 		}	
 	}
@@ -87,6 +100,7 @@ public class OrderService implements Service<Order>{
 			
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
 	
@@ -131,6 +145,7 @@ public class OrderService implements Service<Order>{
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return orders;
 	}
@@ -178,6 +193,7 @@ public class OrderService implements Service<Order>{
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
 
@@ -217,6 +233,7 @@ public class OrderService implements Service<Order>{
                         }
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return order;
@@ -262,6 +279,7 @@ public class OrderService implements Service<Order>{
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return orders;
 
@@ -276,6 +294,7 @@ public class OrderService implements Service<Order>{
 			statement.close();
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		
 	}

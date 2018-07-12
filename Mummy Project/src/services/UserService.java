@@ -43,6 +43,7 @@ public class UserService implements Service<User>{
 			return true;
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 			return false;
 		}	
 	}
@@ -52,6 +53,7 @@ public class UserService implements Service<User>{
 			usersSt.executeQuery("Delete from users where user_id = "+id);
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 	}
 	public ArrayList<User> getAll(){
@@ -76,6 +78,7 @@ public class UserService implements Service<User>{
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return users;
 	}
@@ -98,6 +101,7 @@ public class UserService implements Service<User>{
 					); 
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return user;
@@ -126,6 +130,7 @@ public class UserService implements Service<User>{
 					); 
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return user;
@@ -152,8 +157,32 @@ public class UserService implements Service<User>{
 			oCSF.close();
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
+        
+        public boolean userExist(String id){
+            User user = null;
+            boolean ue = false;
+            try{
+                Statement usersSt = connection.createStatement();
+                ResultSet usersRs = usersSt.executeQuery("Select * from Users where user_id = " + id);
+
+                if(usersRs.next()){
+                    return ue = true;
+                }else {
+                    return ue = false;
+                }
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+                System.err.println("Error executing query!");
+
+            }
+            if(!ue){
+                return false;
+            }else
+                return true;
+            }
 	
 	
 }

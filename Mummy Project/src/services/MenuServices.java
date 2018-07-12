@@ -46,6 +46,7 @@ public class MenuServices implements Service<Menu> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		
 		return null;
@@ -72,6 +73,7 @@ public class MenuServices implements Service<Menu> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		
 		return null;
@@ -98,6 +100,7 @@ public class MenuServices implements Service<Menu> {
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		return false;
 	}
@@ -108,6 +111,7 @@ public class MenuServices implements Service<Menu> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 	}
 	
@@ -129,6 +133,7 @@ public class MenuServices implements Service<Menu> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 	}
 	
@@ -151,6 +156,7 @@ public class MenuServices implements Service<Menu> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        System.err.println("Error executing query!");
 		}
 		
 		return null;

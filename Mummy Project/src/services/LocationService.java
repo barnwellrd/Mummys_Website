@@ -45,6 +45,7 @@ public class LocationService implements Service<Location>{
 			return true;
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 			return false;
 		}	
 	}
@@ -53,6 +54,7 @@ public class LocationService implements Service<Location>{
                     connection.createStatement().executeQuery("DELETE FROM locations WHERE location_id = "+id);
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 	}
         
@@ -65,6 +67,7 @@ public class LocationService implements Service<Location>{
                         return true;
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
                         return false;
 		}
 	}
@@ -92,6 +95,7 @@ public class LocationService implements Service<Location>{
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return locations;
 	}
@@ -115,6 +119,7 @@ public class LocationService implements Service<Location>{
 					); 
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return location;
@@ -144,6 +149,7 @@ public class LocationService implements Service<Location>{
                         oCSF.close();                      
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
         
@@ -172,6 +178,7 @@ public class LocationService implements Service<Location>{
                         return true;
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
                         return false;
 		}	
 	}
@@ -199,8 +206,31 @@ public class LocationService implements Service<Location>{
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return locations;
 	}
+        
+        public boolean locationIdExist(String id){
+            Location location = null;
+            boolean ls = false;
+            try{
+                Statement locationsSt = connection.createStatement();
+                ResultSet locationsRs = locationsSt.executeQuery("Select * from Locations where location_id = " + id);
+                if(locationsRs.next()){
+                    return ls = false;
+                }else {
+                    return ls = true;
+                }
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+                System.err.println("Error executing query!");
+            }
+            if(!ls){
+                return true;
+            }else
+                return false;
+         }
+        
 	
 }

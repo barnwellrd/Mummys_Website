@@ -45,6 +45,7 @@ public class StoreService implements Service<Store>{
 			return true;
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 			return false;
 		}	
 	}
@@ -54,6 +55,7 @@ public class StoreService implements Service<Store>{
 			storesSt.executeQuery("Delete from stores where store_id = "+id);
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 	}
 	public ArrayList<Store> getAll(){
@@ -78,6 +80,7 @@ public class StoreService implements Service<Store>{
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}
 		return stores;
 	}
@@ -100,6 +103,7 @@ public class StoreService implements Service<Store>{
 					);  
 		}catch(Exception e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 		
 		return store;
@@ -124,6 +128,7 @@ public class StoreService implements Service<Store>{
 			oCSF.setInt(8, closeTime);
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
 		}	
 	}
 	

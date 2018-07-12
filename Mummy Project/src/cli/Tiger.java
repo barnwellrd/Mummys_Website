@@ -1,20 +1,20 @@
 package cli;
 
+import domain.Card;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-import domain.Menu;
-import domain.Order;
-import domain.Store;
-import domain.User;
 import java.util.HashMap;
-import services.MenuServices;
-import services.OrderService;
-import services.StoreService;
-import services.UserService;
+import java.sql.CallableStatement;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.text.SimpleDateFormat;
+import domain.*;
+import services.*;
 
 public class Tiger {
 
@@ -23,6 +23,9 @@ public class Tiger {
     public static User currentUser;
     public static Order currentOrder;
     public static Store currentStore;
+    public static Card currentCard;
+    public static Location currentLocation;
+
 
     static Scanner sc;
 
@@ -32,6 +35,7 @@ public class Tiger {
             con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "db_uSpring", "pass");
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Error connecting to database!");
         }
         sw = new ServiceWrapper(con);
         sc = new Scanner(System.in);
@@ -70,9 +74,9 @@ public class Tiger {
             default:
                 System.out.println("Please enter one of the options.");
                 firstScreen();
-            /*case 4:
+            case 4:
     			AdminAndManager aam = new AdminAndManager(con);
-    			aam.adminScreen(); */
+    			aam.adminScreen(); 
         }
 
     }
@@ -91,13 +95,13 @@ public class Tiger {
             firstScreen();
         }
         if (password.equals(candidate.getPassword())) {
-            if (candidate.getUserStatusId().equals("5")) {
+            if (candidate.getUserStatusId().equals("3")) {
                 AdminAndManager aam = new AdminAndManager(con);
                 aam.adminScreen();
             }
             currentUser = candidate;
             currentOrder = new Order();
-            currentOrder.setOrder_id(Double.toString(Math.random() * 10001));
+            currentOrder.setOrder_id("1"); // just assign it order id of 1 for now.
             currentOrder.setUser_id(currentUser.getUserId());
             currentOrder.setDelivery_status_id("0");
             //currentOrder.setCard_id();
@@ -111,6 +115,8 @@ public class Tiger {
                 firstScreen();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                System.err.println("Application timed out!");
+
             }
         }
 
@@ -322,7 +328,7 @@ public class Tiger {
             sc.nextLine();
             if (input == 1 && confirm()) {
                 currentOrder = new Order();
-                currentOrder.setOrder_id(Double.toString(Math.random() * 10001));
+                currentOrder.setOrder_id("1"); // set id=1 for now
                 currentOrder.setUser_id(currentUser.getUserId());
                 currentOrder.setDelivery_status_id("0");
                 homeScreen();
@@ -331,7 +337,19 @@ public class Tiger {
             } else if (input == 3) {
                 editOrder(currentOrder);
             } else if (input == 4 && confirm()) {
-                sw.submitOrder(currentOrder);
+                if(currentOrder.getItem_ids().size()==0) {
+                    System.out.println("Cart is empty.");
+                    currentOrderScreen();
+                } else {
+                    currentOrder.setCard_id(submitOrder());
+                    sw.submitOrder(currentOrder);
+                   // System.out.println("Order Complete");
+                    currentOrder = new Order();
+                    currentOrder.setOrder_id("1"); // set id=1 for now
+                    currentOrder.setUser_id(currentUser.getUserId());
+                    currentOrder.setDelivery_status_id("0");
+                    homeScreen();
+                }
             } else if (input == 5) {
                 homeScreen();
             } else {
@@ -345,7 +363,7 @@ public class Tiger {
         System.out.println("\n*Edit Order*");
         ArrayList<String> options = new ArrayList<String>();
         options.add("Edit Tip");
-        options.add("Edit delivery time");
+       // options.add("Edit delivery time");
         options.add("Edit Instructions");
         options.add("Edit Delivery Method");
         options.add("Edit Store");
@@ -370,26 +388,62 @@ public class Tiger {
             }
             sc.nextLine();
             if (input == 1) {
-                int newTip = Integer.parseInt(editString());
+                float newTip=0;
+                String s = editString();
+                try 
+                {
+                    newTip = Float.valueOf(s.trim()).floatValue();
+                }
+                catch (NumberFormatException nfe) 
+                {
+                    System.err.println("NumberFormatException: " + nfe.getMessage());
+                    System.err.println("Error reading input!");
+
+                }
+               // int newTip = Integer.parseInt(editString());
                 currentOrder.setTip(newTip);
                 System.out.println("Tip Changed to: $" + newTip);
             } else if (input == 2) {
-                int newDelivery_timestamp = Integer.parseInt(editString());
-                currentOrder.setDelivery_timestamp(newDelivery_timestamp);
-                System.out.println("Delivery Time Changed to: " + newDelivery_timestamp);
-            } else if (input == 3) {
                 String newInstructions = editString();
                 currentOrder.setInstuctions(newInstructions);
                 System.out.println("Instructions Changed to: " + newInstructions);
-            } else if (input == 4) {
-                String newDelivery_method = editString();
+            } else if (input == 3) {
+                System.out.println("Pick one of the options below.");
+                System.out.println("1. Deliver Food");
+                System.out.println("2. Pick up");
+                System.out.println("3. Dine in");
+                boolean isOk1=true;
+                int input2=0;
+                while(isOk1) {
+                    while(!sc.hasNextInt()) {
+                        System.out.println("Please type in a number.");
+                        sc.nextLine();
+                    }
+                    input2=sc.nextInt();
+                    if((input2<1) ||(input2>3)) {
+                        System.out.println("Please type in a valid option.");
+                        sc.nextLine();
+                        continue;
+                    }
+                    isOk1=false;
+                }
+                sc.nextLine();
+                if(input2==1) {
+                    // ask the user for delivery time
+                    System.out.println("Pick a delivery time.");
+                    int newDelivery_timestamp = Integer.parseInt(editString());
+                    currentOrder.setDelivery_timestamp(newDelivery_timestamp);
+                    System.out.println("Delivery Time Changed to: " + newDelivery_timestamp);
+                }
+                String newDelivery_method = Integer.toString(input2);
+                //String newDelivery_method = editString();
                 currentOrder.setDelivery_method_id(newDelivery_method);
                 System.out.println("Delivery Method Changed to: " + newDelivery_method);
-            } else if (input == 5) {
+            } else if (input == 4) {
                 String newStore = editString();
                 currentOrder.setStore_id(newStore);
                 System.out.println("Delivery Method Changed to: " + newStore);
-            } else if (input == 6) {
+            } else if (input == 5) {
                 homeScreen();
             }
             isOk=false;
@@ -460,9 +514,53 @@ public class Tiger {
     }
 
     //TODO
-    public static void submitOrder() {
-        System.out.println("\n*Submit*");
-
+    public static String submitOrder() {
+        String cardId="-1";
+        try {
+            CallableStatement getCreditCards = con.prepareCall(
+					"{?=call getCreditCard(?)}");
+            getCreditCards.setString(2,currentUser.getUserId());
+            getCreditCards.registerOutParameter(1, Types.VARCHAR);
+            getCreditCards.execute();
+            cardId = getCreditCards.getString(1);
+            if(cardId.equals("-1")) {
+                System.out.println("You don't have a saved card.");
+                addCard(currentUser.getUserId()); // add a card
+            } else {
+                // they do have a credit card.
+                System.out.println("Here is the saved card information.");
+                CardService cw = new CardService(con);
+                currentCard = cw.getById(cardId);
+                System.out.println(currentCard.toString());
+                boolean isOk=true;
+                System.out.println("1. Use this card.");
+                System.out.println("2. Replace this card.");
+                while(isOk) {
+                    while (!sc.hasNextInt()) {
+                        System.out.println("Please type in a number.");
+                        sc.nextLine();
+                    }
+                    int input = sc.nextInt();
+                    sc.nextLine();
+                    if((input<1) || (input>2)) {
+                        System.out.println("Please type in the right number.");
+                        continue;
+                    }
+                    if(input==2) {
+                        deleteCard(cardId);
+                        cardId=addCard(currentUser.getUserId()); // add/replace
+                    } else {
+                        System.out.println("Using this card now.");
+                    }
+                    isOk=false;
+                }
+                
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+            System.err.println("Error executing query!");
+        }
+        System.out.println("Order Complete");
         //OrderService os = new OrderService(con);
         //input should be equal to number of items in order
         //Menu menu = null;
@@ -473,8 +571,41 @@ public class Tiger {
         // }
         //OrderService os = new OrderService(con);
         //os.update(currentOrder);
+        return cardId;
     }
-
+    
+    public static String addCard(String uid) {
+        System.out.println("Enter your credit card info.");
+        String id = "1"; // make id = 1 for now
+        String userid = uid;
+        System.out.println("Enter card number: ");
+        String card_num = sc.nextLine();
+        System.out.println("Enter card expiration date year (YY)");
+        int year = sc.nextInt();
+        System.out.println("Enter card expiration date month (MM)");
+        int month = sc.nextInt();
+        System.out.println("Enter card expiration date day (DD)");
+        int d = sc.nextInt();
+        
+        SimpleDateFormat ft = new SimpleDateFormat ("yy-MM-dd"); 
+       // String input = args.length == 0 ? "1818-11-11" : args[0]; 
+        String date = (Integer.toString(year)+"-"+Integer.toString(month)+"-"
+                +Integer.toString(d));
+      //  System.out.print(input + " Parses as "); 
+        Date t=null;
+        System.out.println("Enter securit code.");
+        String sec = sc.nextLine();
+        Card c = new Card(id,userid,card_num,t,sec);
+        CardService cw = new CardService(con);
+        cw.add(c);
+        return id;
+    }
+    
+    public static void deleteCard(String cid) {
+        CardService cw = new CardService(con);
+        cw.deleteById(cid);
+    }
+    
     public static void accountScreen() {
         System.out.println("\n*Account*");
         ArrayList<String> options = new ArrayList<String>();
@@ -527,7 +658,7 @@ public class Tiger {
             } else if (input == 6) {
                 editCards();
             } else if (input == 7) {
-                editLocations();
+                viewAllLocations();
             } else if (input == 8) {
                 allOrdersScreen();
             } else if (input == 9) {
@@ -542,8 +673,38 @@ public class Tiger {
         accountScreen();
     }
 
-    private static void editLocations() {
-        // TODO Auto-generated method stub
+    private static void viewAllLocations() {
+        System.out.println("\n*All Locations*");
+        LocationService ls = new LocationService(con);
+        ArrayList<Location> locations = ls.getUserLocations(currentUser.getUserId());
+        if(locations.size() > 0){
+            System.out.println("Here are all your saved locations:");
+
+        } else{
+            System.out.println("You have no saved locations!");
+        }
+        ServiceWrapper.printLocations(locations);
+        boolean isOk=true;
+        
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
+            //System.out.println(input);
+            sc.nextLine();
+            if((input<1) || (input>locations.size()+1)) {
+                System.out.println("Please type in the right number.");
+                continue;
+            }
+            if (input == locations.size()+1) {
+                accountScreen();
+            } else {
+                viewLocationScreen(locations.get(input-1));
+            }
+            isOk=false;
+        }
 
     }
 
@@ -650,5 +811,60 @@ public class Tiger {
             }
         }
         return true;
+    }
+    
+    public static void viewLocationScreen(Location location) {
+        System.out.println("Street: " + location.getStreet());
+        System.out.println("City: " + location.getCity());
+        System.out.println("State: " + location.getState());
+        System.out.println("Country: " + location.getCountry());
+        System.out.println("Zip: " + location.getZip());
+        System.out.println("1. Set as current location");
+        System.out.println("2. Edit this location");
+        System.out.println("3. Go Back");
+        boolean isOk=true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
+            sc.nextLine();
+            if((input<1) || (input>3)) {
+                System.out.println("Please type in the right number.");
+                continue;
+            }
+            if (input == 1) {
+                currentLocation = location;
+                System.out.println("Current location updated!");
+                viewLocationScreen(location);
+            } else if (input == 2) {
+                editLocationScreen(location);
+                LocationService ls = new LocationService(con);
+                ls.updateLoc(location);
+                System.out.println("Location updated!");
+                viewLocationScreen(location);
+            } else if (input == 3){
+                viewAllLocations();
+            }
+        }
+    }
+
+    private static void editLocationScreen(Location location) {
+            System.out.println("Enter street:");
+	    String street = sc.nextLine();
+            location.setStreet(street);
+            System.out.println("Enter city:");
+	    String city = sc.nextLine();
+            location.setCity(city);
+            System.out.println("Enter state:");
+	    String state = sc.nextLine();
+            location.setState(state);
+            System.out.println("Enter country:");
+	    String country = sc.nextLine();
+            location.setCountry(country);
+            System.out.println("Enter zip:");
+	    String zip = sc.nextLine();
+            location.setZip(zip);   
     }
 }

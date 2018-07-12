@@ -76,9 +76,9 @@ public class ServiceWrapper {
             int count = 0;
             for(Location loc: locs) {
                     count++;
-                    System.out.println(count + ". " + loc.getLocationId());
+                    System.out.println(count + ". " + loc.toString());
             }
-            //System.out.println(++count + ". Go Back");
+            System.out.println(++count + ". Go Back");
 	}
 
 	public static void printOrders(ArrayList<Order> orders){
