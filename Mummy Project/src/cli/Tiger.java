@@ -6,14 +6,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-import domain.Menu;
-import domain.Order;
-import domain.Store;
-import domain.User;
-import services.MenuServices;
-import services.OrderService;
-import services.StoreService;
-import services.UserService;
+import domain.*;
+import services.*;
 
 public class Tiger {
 
@@ -22,6 +16,7 @@ public class Tiger {
     public static User currentUser;
     public static Order currentOrder;
     public static Store currentStore;
+    public static Location currentLocation;
 
     static Scanner sc;
 
@@ -551,7 +546,7 @@ public class Tiger {
             } else if (input == 6) {
                 editCards();
             } else if (input == 7) {
-                editLocations();
+                viewAllLocations();
             } else if (input == 8) {
                 allOrdersScreen();
             } else if (input == 9) {
@@ -566,8 +561,38 @@ public class Tiger {
         accountScreen();
     }
 
-    private static void editLocations() {
-        // TODO Auto-generated method stub
+    private static void viewAllLocations() {
+        System.out.println("\n*All Locations*");
+        LocationService ls = new LocationService(con);
+        ArrayList<Location> locations = ls.getUserLocations(currentUser.getUserId());
+        if(locations.size() > 0){
+            System.out.println("Here are all your saved locations:");
+
+        } else{
+            System.out.println("You have no saved locations!");
+        }
+        ServiceWrapper.printLocations(locations);
+        boolean isOk=true;
+        
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
+            //System.out.println(input);
+            sc.nextLine();
+            if((input<1) || (input>locations.size()+1)) {
+                System.out.println("Please type in the right number.");
+                continue;
+            }
+            if (input == locations.size()+1) {
+                accountScreen();
+            } else {
+                viewLocationScreen(locations.get(input-1));
+            }
+            isOk=false;
+        }
 
     }
 
@@ -676,60 +701,58 @@ public class Tiger {
         return true;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //ricky was here-----why????
+    public static void viewLocationScreen(Location location) {
+        System.out.println("Street: " + location.getStreet());
+        System.out.println("City: " + location.getCity());
+        System.out.println("State: " + location.getState());
+        System.out.println("Country: " + location.getCountry());
+        System.out.println("Zip: " + location.getZip());
+        System.out.println("1. Set as current location");
+        System.out.println("2. Edit this location");
+        System.out.println("3. Go Back");
+        boolean isOk=true;
+        while(isOk) {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+            }
+            int input = sc.nextInt();
+            sc.nextLine();
+            if((input<1) || (input>3)) {
+                System.out.println("Please type in the right number.");
+                continue;
+            }
+            if (input == 1) {
+                currentLocation = location;
+                System.out.println("Current location updated!");
+                viewLocationScreen(location);
+            } else if (input == 2) {
+                editLocationScreen(location);
+                LocationService ls = new LocationService(con);
+                ls.updateLoc(location);
+                System.out.println("Location updated!");
+                viewLocationScreen(location);
+            } else if (input == 3){
+                viewAllLocations();
+            }
+        }
+    }
+
+    private static void editLocationScreen(Location location) {
+            System.out.println("Enter street:");
+	    String street = sc.nextLine();
+            location.setStreet(street);
+            System.out.println("Enter city:");
+	    String city = sc.nextLine();
+            location.setCity(city);
+            System.out.println("Enter state:");
+	    String state = sc.nextLine();
+            location.setState(state);
+            System.out.println("Enter country:");
+	    String country = sc.nextLine();
+            location.setCountry(country);
+            System.out.println("Enter zip:");
+	    String zip = sc.nextLine();
+            location.setZip(zip);   
+    }
 }
