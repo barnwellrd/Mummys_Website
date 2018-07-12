@@ -7,8 +7,8 @@ public class Order {
 	
 	String order_id; //varchar
 	String user_id; //varchar
-	float tip; //number(5,2)
-	float total_price;//number(7,2)
+	double tip; //number(5,2)
+	double total_price;//number(7,2)
 	int placed_timestamp; //int
 	int delivery_timestamp; //int
 	String card_id; //varchar
@@ -22,7 +22,7 @@ public class Order {
 
 	
 	
-	public Order(String order_id, String user_id, float tip, float total_price, int placed_timestamp,
+	public Order(String order_id, String user_id, double tip, double total_price, int placed_timestamp,
 			int delivery_timestamp, String card_id, String instuctions, String delivery_method_id, String store_id,
 			String delivery_status_id, HashMap<String,Integer> itemCount) {
 		super();
@@ -97,19 +97,19 @@ public class Order {
 		this.user_id = user_id;
 	}
 
-	public float getTip() {
+	public double getTip() {
 		return tip;
 	}
 
-	public void setTip(float tip) {
+	public void setTip(double tip) {
 		this.tip = tip;
 	}
 
-	public float getTotal_price() {
+	public double getTotal_price() {
 		return total_price;
 	}
 
-	public void setTotal_price(float total_price) {
+	public void setTotal_price(double total_price) {
 		this.total_price = total_price;
 	}
 
