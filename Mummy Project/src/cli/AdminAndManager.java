@@ -16,9 +16,11 @@ import domain.User;
 import domain.Location;
 import domain.DeliveryMethod;
 import domain.DeliveryStatus;
+import domain.ItemType;
 import services.CardService;
 import services.DeliveryMethodService;
 import services.DeliveryStatusService;
+import services.ItemTypeService;
 import services.MenuServices;
 import services.OrderService;
 import services.StoreService;
@@ -422,6 +424,15 @@ public class AdminAndManager {
         Scanner sc = new Scanner(System.in);
         System.out.println("\nEnter item id: ");
         String id= sc.next();
+        
+        //validation
+        MenuServices itm = new MenuServices(con);
+        while(itm.itemExist(id)){
+            System.out.println("Item ID exist in database. Please Enter a different Item ID: ");
+            id= sc.next();
+        }
+        
+        
         System.out.println("\nEnter item name: ");
         sc.nextLine();
         String name= sc.nextLine();
@@ -472,6 +483,17 @@ public class AdminAndManager {
         ServiceWrapper.printMenuItems(menus);
         Scanner sc = new Scanner(System.in);
         int input = sc.nextInt();
+        
+        //check for wrong entery
+        while(input > menus.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == menus.size() + 1){
+            return;
+        }
+        
         Menu men = menus.get(input-1);
         MenuServices menServ = new MenuServices(con);
         System.out.println("Enter item name: ");
@@ -719,13 +741,77 @@ public class AdminAndManager {
         }
     }
     public static void alterItemTypeScreen(){
-
+        System.out.println("Choose an item type to alter");
+        MenuServices ms = new MenuServices(con);
+        ItemTypeService its = new ItemTypeService(con);
+        ArrayList<ItemType> items = its.getAll();
+        ArrayList<Menu> menus = ms.getAll();
+        ServiceWrapper.printItemType(items);
+        Scanner sc = new Scanner(System.in);
+        int input = sc.nextInt();
+        //check for wrong entery
+        while(input > items.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == items.size() + 1){
+            return;
+        }
+        ItemType itm =items.get(input-1);
+        Menu men = menus.get(input-1);
+        ItemTypeService itmServ = new ItemTypeService(con);
+        MenuServices menServ = new MenuServices(con);
+        System.out.println("Enter item type id: ");
+        sc.nextLine();
+        String itemTypeId= sc.nextLine();
+        System.out.println("Enter item type: ");
+        String itemType = sc.next();
+        
+        ItemType itmUp = new ItemType(itemTypeId, itemType);
+        itmServ.update(itmUp);
+        System.out.println("Updated " + itemType);
     }
     public static void addItemTypeScreen(){
+        System.out.println("Add an item type");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\nEnter item type id: ");
+        String itemTypeId= sc.next();
+        
+        ItemTypeService it = new ItemTypeService(con);
+        while(it.itemTypeExist(itemTypeId)){
+            System.out.println("Item Type ID exist in database. Please Enter a different Item Type ID: ");
+            itemTypeId= sc.next();
+        }
+        
+        
+        System.out.println("\nEnter item type: ");
+        sc.nextLine();
+        String itemType= sc.nextLine();
 
+        ItemType itm = new ItemType(itemTypeId, itemType);
+        ItemTypeService itmServ = new ItemTypeService(con);
+        itmServ.add(itm);
+        System.out.println("\n" + itemType + " added to database\n");
+        AdminAndManager aam = new AdminAndManager(con);
+        aam.adminScreen();
     }
     public static void deleteItemTypeScreen(){
-
+        System.out.println("Choose an item type to delete");
+        ItemTypeService its = new ItemTypeService(con);
+        //MenuServices ms = new MenuServices(con);
+        ArrayList<ItemType> items = its.getAll();
+        //ArrayList<Menu> menus = ms.getAll();
+        ServiceWrapper.printItemType(items);
+        Scanner sc = new Scanner(System.in);
+        int input = sc.nextInt();
+        if(input == items.size() + 1)
+            return;
+        if(input == items.size()+2)
+            System.exit(0);
+        ItemTypeService itmtypServ = new ItemTypeService(con);
+        itmtypServ.deleteById(items.get(input-1).getItemTypeId());
+        System.out.println("Deleted " + items.get(input-1).getItemType());
     }
     
     public static void alterLocationScreen(){

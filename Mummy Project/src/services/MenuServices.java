@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import domain.Menu;
 import domain.TimeSlots;
+import java.sql.Statement;
+import javax.mail.FetchProfile.Item;
 
 public class MenuServices implements Service<Menu> {
 	Connection con;
@@ -179,5 +181,28 @@ public class MenuServices implements Service<Menu> {
 		}
 		return id;
 	}
+        
+        public boolean itemExist(String id){
+            Item item = null;
+            boolean itm =false;
+            try{
+                Statement itemSt = con.createStatement();
+                ResultSet itemTypeRs = itemSt.executeQuery("Select * from ITEMS where ITEM_ID = " + id);
+
+                if(itemTypeRs.next()){
+                    return itm = true;
+                }else {
+                    return itm = false;
+                }
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+                System.err.println("Error executing query!");
+
+            }
+            if(itm){
+                return true;
+            }else
+                return false;
+            }
 
 }
