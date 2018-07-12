@@ -38,7 +38,7 @@ public class OrderService implements Service<Order>{
 			String orderId = getOrderId.getString(1);
                         order.setOrder_id(orderId);
                         // check for delivery method
-                        if(order.getDelivery_method_id() == null) {
+                        if(order.getDelivery_method_id() == "0") {
                             order.setDelivery_method_id("2"); // default option is pickup
                         }
 			//Add order items

@@ -1,5 +1,6 @@
 package cli;
 
+import domain.Card;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
@@ -10,6 +11,12 @@ import domain.Menu;
 import domain.Order;
 import domain.Store;
 import domain.User;
+import java.sql.CallableStatement;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.text.SimpleDateFormat;
+import services.CardService;
 import services.MenuServices;
 import services.OrderService;
 import services.StoreService;
@@ -22,6 +29,7 @@ public class Tiger {
     public static User currentUser;
     public static Order currentOrder;
     public static Store currentStore;
+    public static Card currentCard;
 
     static Scanner sc;
 
@@ -91,7 +99,7 @@ public class Tiger {
             firstScreen();
         }
         if (password.equals(candidate.getPassword())) {
-            if (candidate.getUserStatusId().equals("5")) {
+            if (candidate.getUserStatusId().equals("3")) {
                 AdminAndManager aam = new AdminAndManager(con);
                 aam.adminScreen();
             }
@@ -333,13 +341,19 @@ public class Tiger {
             } else if (input == 3) {
                 editOrder(currentOrder);
             } else if (input == 4 && confirm()) {
-                sw.submitOrder(currentOrder);
-                System.out.println("Order Complete");
-                currentOrder = new Order();
-                currentOrder.setOrder_id("1"); // set id=1 for now
-                currentOrder.setUser_id(currentUser.getUserId());
-                currentOrder.setDelivery_status_id("0");
-                homeScreen();
+                if(currentOrder.getItem_ids().size()==0) {
+                    System.out.println("Cart is empty.");
+                    currentOrderScreen();
+                } else {
+                    currentOrder.setCard_id(submitOrder());
+                    sw.submitOrder(currentOrder);
+                   // System.out.println("Order Complete");
+                    currentOrder = new Order();
+                    currentOrder.setOrder_id("1"); // set id=1 for now
+                    currentOrder.setUser_id(currentUser.getUserId());
+                    currentOrder.setDelivery_status_id("0");
+                    homeScreen();
+                }
             } else if (input == 5) {
                 homeScreen();
             } else {
@@ -484,9 +498,53 @@ public class Tiger {
     }
 
     //TODO
-    public static void submitOrder() {
-        System.out.println("\n*Submit*");
-
+    public static String submitOrder() {
+        String cardId="-1";
+        try {
+            CallableStatement getCreditCards = con.prepareCall(
+					"{?=call getCreditCard(?)}");
+            getCreditCards.setString(2,currentUser.getUserId());
+            getCreditCards.registerOutParameter(1, Types.VARCHAR);
+            getCreditCards.execute();
+            cardId = getCreditCards.getString(1);
+            if(cardId.equals("-1")) {
+                System.out.println("You don't have a saved card.");
+                addCard(currentUser.getUserId()); // add a card
+            } else {
+                // they do have a credit card.
+                System.out.println("Here is the saved card information.");
+                CardService cw = new CardService(con);
+                currentCard = cw.getById(cardId);
+                System.out.println(currentCard.toString());
+                boolean isOk=true;
+                System.out.println("1. Use this card.");
+                System.out.println("2. Replace this card.");
+                while(isOk) {
+                    while (!sc.hasNextInt()) {
+                        System.out.println("Please type in a number.");
+                        sc.nextLine();
+                    }
+                    int input = sc.nextInt();
+                    sc.nextLine();
+                    if((input<1) || (input>2)) {
+                        System.out.println("Please type in the right number.");
+                        continue;
+                    }
+                    if(input==2) {
+                        deleteCard(cardId);
+                        cardId=addCard(currentUser.getUserId()); // add/replace
+                    } else {
+                        System.out.println("Using this card now.");
+                    }
+                    isOk=false;
+                }
+                
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+            System.err.println("Error executing query!");
+        }
+        System.out.println("Order Complete");
         //OrderService os = new OrderService(con);
         //input should be equal to number of items in order
         //Menu menu = null;
@@ -497,8 +555,41 @@ public class Tiger {
         // }
         //OrderService os = new OrderService(con);
         //os.update(currentOrder);
+        return cardId;
     }
-
+    
+    public static String addCard(String uid) {
+        System.out.println("Enter your credit card info.");
+        String id = "1"; // make id = 1 for now
+        String userid = uid;
+        System.out.println("Enter card number: ");
+        String card_num = sc.nextLine();
+        System.out.println("Enter card expiration date year (YY)");
+        int year = sc.nextInt();
+        System.out.println("Enter card expiration date month (MM)");
+        int month = sc.nextInt();
+        System.out.println("Enter card expiration date day (DD)");
+        int d = sc.nextInt();
+        
+        SimpleDateFormat ft = new SimpleDateFormat ("yy-MM-dd"); 
+       // String input = args.length == 0 ? "1818-11-11" : args[0]; 
+        String date = (Integer.toString(year)+"-"+Integer.toString(month)+"-"
+                +Integer.toString(d));
+      //  System.out.print(input + " Parses as "); 
+        Date t=null;
+        System.out.println("Enter securit code.");
+        String sec = sc.nextLine();
+        Card c = new Card(id,userid,card_num,t,sec);
+        CardService cw = new CardService(con);
+        cw.add(c);
+        return id;
+    }
+    
+    public static void deleteCard(String cid) {
+        CardService cw = new CardService(con);
+        cw.deleteById(cid);
+    }
+    
     public static void accountScreen() {
         System.out.println("\n*Account*");
         ArrayList<String> options = new ArrayList<String>();
