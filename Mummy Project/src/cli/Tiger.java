@@ -247,7 +247,8 @@ public class Tiger {
     public static void menuItemScreen(Menu menu) {
         System.out.println("\n*" + menu.getName() + "*");
         System.out.println(menu.getDescription());
-        System.out.println("$" + menu.getPrice());
+        String formattedString = String.format("%.02f", menu.getPrice());
+        System.out.println("$" + formattedString);
         System.out.println("1. Enter Quantity");
         System.out.println("2. Go Back");
         
@@ -304,7 +305,8 @@ public class Tiger {
         System.out.println("Delivered: " + currentOrder.getDelivery_timestamp());
         ServiceWrapper sw = new ServiceWrapper(con);
         currentOrder.setTotal_price((float) sw.calculateTotalPrice(currentOrder.getItemCount()));
-        String formattedString = String.format("%.02f", currentOrder.getTotal_price());
+        String formattedString = String.format("%.02f", currentOrder.getTotal_price()+currentOrder.getTip());
+        
 	System.out.println("Total price: $" +formattedString);        
         System.out.println("Method: " + currentOrder.getDelivery_method_id());
         System.out.println("Status: " + currentOrder.getDelivery_status_id());
