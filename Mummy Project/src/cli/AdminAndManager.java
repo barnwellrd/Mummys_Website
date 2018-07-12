@@ -707,15 +707,15 @@ public class AdminAndManager {
         String firstName = sc.next();
         System.out.println("Enter last name: ");
         String lastName = sc.next();
+        System.out.println("Enter the phone number:");
+        String phoneNumber = sc.next();
         System.out.println("Enter email: ");
         String email = sc.next();
         System.out.println("Enter password: ");
         String password = sc.next();
         System.out.println("Enter status id: ");
         String userStatusId = sc.next();
-        System.out.println("Enter location id: ");
-        String locationId = sc.next();
-        User u = new User(userId, firstName, lastName, email, password, userStatusId, locationId);
+        User u = new User(userId, firstName, lastName, phoneNumber, email, password, userStatusId);
         UserService us = new UserService(con);
         us.add(u);
 
