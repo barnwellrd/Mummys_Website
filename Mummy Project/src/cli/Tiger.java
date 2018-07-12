@@ -306,6 +306,7 @@ public class Tiger {
         ServiceWrapper sw = new ServiceWrapper(con);
         currentOrder.setTotal_price((float) sw.calculateTotalPrice(currentOrder.getItemCount()));
         String formattedString = String.format("%.02f", currentOrder.getTotal_price()+currentOrder.getTip());
+        
 	System.out.println("Total price: $" +formattedString);        
         System.out.println("Method: " + currentOrder.getDelivery_method_id());
         System.out.println("Status: " + currentOrder.getDelivery_status_id());
