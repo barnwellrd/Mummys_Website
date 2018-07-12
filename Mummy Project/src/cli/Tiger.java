@@ -431,6 +431,8 @@ public class Tiger {
                 }
                 sc.nextLine();
                 if(input2==1) {
+                    // ??????????????????????/
+                    getLocation();
                     // ask the user for delivery time
                     System.out.println("Pick a delivery time.");
                     int newDelivery_timestamp = Integer.parseInt(editString());
@@ -588,6 +590,67 @@ public class Tiger {
         //os.update(currentOrder);
         return cardId;
     }
+
+    //TODO
+    public static String getLocation() {
+        String loc_id="-1";
+        try {
+            CallableStatement getLocation = con.prepareCall(
+					"{?=call getLocationId(?)}");
+            getLocation.setString(2,currentUser.getUserId());
+            getLocation.registerOutParameter(1, Types.VARCHAR);
+            getLocation.execute();
+            loc_id = getLocation.getString(1);
+            if(loc_id.equals("-1")) {
+                System.out.println("You don't have a saved address.");
+                loc_id=addLocation(currentUser.getUserId()); // add a address
+            } else {
+                // they do have a saved location.
+                System.out.println("Here is the saved address.");
+                LocationService ls = new LocationService(con);
+                currentLocation = ls.getById(loc_id);
+                viewLocationScreen(currentLocation);
+                boolean isOk=true;
+                System.out.println("1. Use this address.");
+                System.out.println("2. Change address.");
+                while(isOk) {
+                    while (!sc.hasNextInt()) {
+                        System.out.println("Please type in a number.");
+                        sc.nextLine();
+                    }
+                    int input = sc.nextInt();
+                    sc.nextLine();
+                    if((input<1) || (input>2)) {
+                        System.out.println("Please type in the right number.");
+                        continue;
+                    }
+                    if(input==2) {
+                        deleteLocation(loc_id);
+                        loc_id=addLocation(currentUser.getUserId()); // add/replace
+                    } else {
+                        System.out.println("Using this card now.");
+                    }
+                    isOk=false;
+                }
+                
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+            System.err.println("Error executing query!");
+        }
+        System.out.println("Adress Added");
+        //OrderService os = new OrderService(con);
+        //input should be equal to number of items in order
+        //Menu menu = null;
+        // int input = 0;
+        //for(int i=0;i<input;i++){
+        //create order item and add to item
+        //os.addItem_id(menu.getId(), currentOrder.getOrder_id());
+        // }
+        //OrderService os = new OrderService(con);
+        //os.update(currentOrder);
+        return loc_id;
+    }
     
     public static String addCard(String uid) {
         System.out.println("Enter your credit card info.");
@@ -619,6 +682,35 @@ public class Tiger {
     public static void deleteCard(String cid) {
         CardService cw = new CardService(con);
         cw.deleteById(cid);
+    }
+    
+    public static String addLocation(String uid) {
+        System.out.println("Enter your address.");
+        String id = "1"; // make id = 1 for now
+        String userid = uid;
+        String tax_rate="0.1";
+        System.out.println("Enter street: ");
+        String street = sc.nextLine();
+        System.out.println("Enter city");
+        String city = sc.nextLine();
+        System.out.println("Enter state");
+        String state = sc.nextLine();
+        System.out.println("Enter Country");
+        String country = sc.nextLine();
+        System.out.println("Enter zip");
+        String zip = sc.nextLine();
+        
+        
+        Location l = new Location(id,userid,tax_rate,street,city,state,
+            country,zip);
+        LocationService ls = new LocationService(con);
+        ls.add(l);
+        return id;
+    }
+    
+    public static void deleteLocation(String lid) {
+        LocationService ls = new LocationService(con);
+        ls.deleteById(lid);
     }
     
     public static void accountScreen() {
@@ -834,6 +926,7 @@ public class Tiger {
         System.out.println("State: " + location.getState());
         System.out.println("Country: " + location.getCountry());
         System.out.println("Zip: " + location.getZip());
+        /*
         System.out.println("1. Set as current location");
         System.out.println("2. Edit this location");
         System.out.println("3. Go Back");
@@ -863,6 +956,7 @@ public class Tiger {
                 viewAllLocations();
             }
         }
+        */
     }
 
     private static void editLocationScreen(Location location) {
