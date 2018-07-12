@@ -17,6 +17,7 @@ import services.MenuServices;
 import services.OrderService;
 import services.UserService;
 import services.LocationService;
+import services.SendEmail;
 
 public class ServiceWrapper {
 	
@@ -101,6 +102,33 @@ public class ServiceWrapper {
 		
 		currentOrder.setDelivery_status_id("0");
 		OrderService os = new OrderService(con);
+                String subject = "Mummy Resaurant:"+currentOrder.getOrder_id()+
+                        " "+currentOrder.getPlaced_timestamp();
+                HashMap<String,Integer> itemCount = currentOrder.getItemCount();
+                UserService us = new UserService(con);
+                User user = us.getById(currentOrder.getUser_id());
+                String target = user.getEmail();
+                MenuServices ms = new MenuServices(con);
+                String message = "";
+                for(String itemId : itemCount.keySet()){
+                    Menu item = ms.getById(itemId);
+                    int count = itemCount.get(itemId);
+                    String formattedString = String.format("%.02f", 
+                        item.getPrice()*count);
+                    message+=item.getName()
+                            +"("+count+")"
+                            +"\t"+formattedString+"\n";
+                }
+                String formattedString = String.format("%.02f",currentOrder.getTip());
+                message+="Tip:"+formattedString+"\n";
+                formattedString = String.format("%.02f",
+                        currentOrder.getTotal_price()+currentOrder.getTip());
+                message+="Total:"+formattedString+"\n";
+                message+="Delivery Time:"+currentOrder.getDelivery_timestamp();
+                System.out.println(message);
+                
+                SendEmail se = new SendEmail(subject,message,target);
+                se.sendMail();
 		os.add(currentOrder);
 		
 	}
