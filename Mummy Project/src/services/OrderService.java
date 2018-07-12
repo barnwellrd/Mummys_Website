@@ -48,8 +48,8 @@ public class OrderService implements Service<Order>{
 					"{call AddOrder(?,?,?,?,?,?,?,?,?,?,?)}");
 			statement.setString("ORDER_ID",order.getOrder_id());
 			statement.setString("USER_ID",order.getUser_id());
-			statement.setFloat("TIP",order.getTip());
-			statement.setFloat("TOTAL_PRICE",order.getTotal_price());
+			statement.setDouble("TIP",order.getTip());
+			statement.setDouble("TOTAL_PRICE",order.getTotal_price());
 			statement.setInt("PLACED_TIMESTAMP",order.getPlaced_timestamp());
 			statement.setInt("DELIVERY_TIMESTAMP",order.getDelivery_timestamp());
 			statement.setString("CARD_ID",order.getCard_id());
@@ -160,8 +160,8 @@ public class OrderService implements Service<Order>{
 			
 			statement.setString("ORDER_ID",order.getOrder_id());
 			statement.setString("USER_ID",order.getUser_id());
-			statement.setFloat("TIP",order.getTip());
-			statement.setFloat("TOTAL_PRICE",order.getTotal_price());
+			statement.setDouble("TIP",order.getTip());
+			statement.setDouble("TOTAL_PRICE",order.getTotal_price());
 			statement.setInt("PLACED_TIMESTAMP",order.getPlaced_timestamp());
 			statement.setInt("DELIVERY_TIMESTAMP",order.getDelivery_timestamp());
 			statement.setString("CARD_ID",order.getCard_id());
