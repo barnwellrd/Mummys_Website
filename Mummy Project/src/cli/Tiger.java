@@ -10,6 +10,7 @@ import domain.Menu;
 import domain.Order;
 import domain.Store;
 import domain.User;
+import java.util.HashMap;
 import services.MenuServices;
 import services.OrderService;
 import services.StoreService;
@@ -296,7 +297,7 @@ public class Tiger {
         System.out.println("Placed: " + currentOrder.getPlaced_timestamp());
         System.out.println("Delivered: " + currentOrder.getDelivery_timestamp());
         ServiceWrapper sw = new ServiceWrapper(con);
-        currentOrder.setTotal_price((float) sw.calculateTotalPrice(currentOrder.getItem_ids()));
+        currentOrder.setTotal_price((float) sw.calculateTotalPrice(currentOrder.getItemCount()));
         String formattedString = String.format("%.02f", currentOrder.getTotal_price());
 	System.out.println("Total price: $" +formattedString);        
         System.out.println("Method: " + currentOrder.getDelivery_method_id());
@@ -401,21 +402,41 @@ public class Tiger {
     //TODO get item from item id here
     private static void viewEditOrderItems(Order order) {
         System.out.println("*View Items*");
-        ArrayList<String> itemIds = currentOrder.getItem_ids();
-        ArrayList<Menu> items = sw.getMenuItems(itemIds);
-        if (items.isEmpty()) {
-            System.out.println("No items");
-        }
-        ServiceWrapper.printMenuItems(items);
+        
         boolean isOk=true;
         while(isOk) {
+            HashMap<String,Integer> itemCount = currentOrder.getItemCount();
+            ArrayList<Menu> items = sw.getMenuItems(itemCount);
+            int count = 0;
+
+            if (items.isEmpty()) {
+                System.out.println("No items");
+                break;
+            }
+            for(Menu item: items){
+                count++;
+                String formattedString = String.format("%.02f", 
+                        item.getPrice()*itemCount.get(item.getId()));
+                System.out.println(count +"."+ item.getName()+ "("+itemCount.get(item.getId())+
+                        ") - $"+ formattedString+ "\n "+item.getDescription());
+               // System.out.println(df.format(menu.getPrice()));
+            }
             while (!sc.hasNextInt()) {
                 System.out.println("Please type in a number.");
                 sc.nextLine();
             }
             int input = sc.nextInt();
             sc.nextLine();
-            if(input == items.size()+1) {
+            if(input < items.size()+1){
+                System.out.println("Enter a new quantity");
+                while (!sc.hasNextInt()) {
+                System.out.println("Please type in a number.");
+                sc.nextLine();
+                }
+                int newQuantity = sc.nextInt();
+                currentOrder.setItemQuantity(items.get(input-1).getId(), newQuantity);
+            }
+            else if(input == items.size()+1) {
                 currentOrderScreen();
                 isOk=false;
             }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import domain.*;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 
 import services.MenuServices;
@@ -104,25 +105,25 @@ public class ServiceWrapper {
 		
 	}
 
-	public ArrayList<Menu> getMenuItems(ArrayList<String> itemIds) {
+	public ArrayList<Menu> getMenuItems(HashMap<String,Integer> itemCount) {
 		
 		MenuServices ms = new MenuServices(con);
-		ArrayList<Menu> items = new ArrayList<Menu>();
+		ArrayList<Menu> items = new ArrayList<>();
 		
 		
-		for (String itemId:itemIds){
+		for (String itemId:itemCount.keySet()){
 			items.add(ms.getById(itemId));
 		}
 
 		return items;
 	}
 
-	public double calculateTotalPrice(ArrayList<String> item_ids) {
+	public double calculateTotalPrice(HashMap<String,Integer> itemCount) {
 		double total = 0;
 		ServiceWrapper sw = new ServiceWrapper(con);
-		ArrayList<Menu> items = sw.getMenuItems(item_ids);
+		ArrayList<Menu> items = sw.getMenuItems(itemCount);
 		for(Menu item: items){
-			total += item.getPrice();
+			total += item.getPrice()*itemCount.get(item.getId());
 		}
 		return total;
 	}

@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Order {
 	
@@ -17,13 +18,13 @@ public class Order {
 	String delivery_status_id; //varchar
 	
 	//Array to hold order items rather than the order_items table
-	ArrayList<String> item_ids = new ArrayList<String>();
+	HashMap<String,Integer> itemCount;
 
 	
 	
 	public Order(String order_id, String user_id, float tip, float total_price, int placed_timestamp,
 			int delivery_timestamp, String card_id, String instuctions, String delivery_method_id, String store_id,
-			String delivery_status_id, ArrayList<String> item_ids) {
+			String delivery_status_id, HashMap<String,Integer> itemCount) {
 		super();
 		this.order_id = order_id;
 		this.user_id = user_id;
@@ -36,7 +37,7 @@ public class Order {
 		this.delivery_method_id = delivery_method_id;
 		this.store_id = store_id;
 		this.delivery_status_id = delivery_status_id;
-		this.item_ids = item_ids;
+		this.itemCount = itemCount;
 	}
 
 	public Order() {
@@ -49,17 +50,24 @@ public class Order {
 		this.delivery_method_id = "0";
 		this.store_id = "0";
 		this.delivery_status_id = "0";
+                this.itemCount = new HashMap<String,Integer>();
 	}
 	
-	public ArrayList<String> getItem_ids() {
-		return item_ids;
+	public HashMap<String,Integer> getItemCount() {
+		return itemCount;
 	}
 
-	public void setItem_ids(ArrayList<String> item_ids) { 
-		this.item_ids = (ArrayList<String>) item_ids.clone();
+	public void setItemCount(HashMap<String,Integer> itemCount) { 
+		this.itemCount = (HashMap<String,Integer>) itemCount.clone();
 	}
 	public void addItem_id(String item_id){
-		this.item_ids.add(item_id);
+            if(itemCount.containsKey(item_id)){
+                int newValue = itemCount.get(item_id)+1;
+                itemCount.replace(item_id, newValue);
+            }
+            else{
+                itemCount.put(item_id,1);
+            }
 	}
 	public String getOrder_id() {
 		return order_id;
@@ -72,6 +80,18 @@ public class Order {
 	public String getUser_id() {
 		return user_id;
 	}
+        
+        public void setItemQuantity(String itemId, int quantity){
+            if(!itemCount.containsKey(itemId) && quantity>0){
+                itemCount.put(itemId,quantity);
+            }
+            else if(quantity == 0){
+                itemCount.remove(itemId);
+            }
+            else{
+                itemCount.replace(itemId,quantity);
+            }
+        }
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
@@ -154,7 +174,7 @@ public class Order {
 		return "Order [order_id=" + order_id + ", user_id=" + user_id + ", tip=" + tip + ", total_price=" + total_price
 				+ ", placed_timestamp=" + placed_timestamp + ", delivery_timestamp=" + delivery_timestamp + ", card_id="
 				+ card_id + ", instuctions=" + instuctions + ", delivery_method_id=" + delivery_method_id
-				+ ", store_id=" + store_id + ", delivery_status_id=" + delivery_status_id + ", item_ids=" + item_ids
+				+ ", store_id=" + store_id + ", delivery_status_id=" + delivery_status_id + ", item_ids=" + itemCount
 				+ "]";
 	}
 
