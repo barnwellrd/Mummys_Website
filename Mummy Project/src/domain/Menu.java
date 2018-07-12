@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Objects;
+
 public class Menu {
 	String id;
 	String name;
@@ -8,9 +10,9 @@ public class Menu {
 	String type;
 	String slot_ID;
 	String photo;
-	float price;
+	double price;
 	
-	public Menu(String id, String name, char vegetarian, String type, String description, String slot_ID, String photo, float price) {
+	public Menu(String id, String name, char vegetarian, String type, String description, String slot_ID, String photo, double price) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -79,7 +81,7 @@ public class Menu {
 		this.photo = photo;
 	}
 
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
@@ -95,7 +97,9 @@ public class Menu {
 	}
 
 
-	@Override
+        
+        
+/*	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -156,7 +160,60 @@ public class Menu {
 			return false;
 		return true;
 	}
+*/
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.id);
+        hash = 13 * hash + Objects.hashCode(this.name);
+        hash = 13 * hash + this.vegetarian;
+        hash = 13 * hash + Objects.hashCode(this.description);
+        hash = 13 * hash + Objects.hashCode(this.type);
+        hash = 13 * hash + Objects.hashCode(this.slot_ID);
+        hash = 13 * hash + Objects.hashCode(this.photo);
+        hash = 13 * hash + (int) (Double.doubleToLongBits(this.price) ^ (Double.doubleToLongBits(this.price) >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Menu other = (Menu) obj;
+        if (this.vegetarian != other.vegetarian) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.price) != Double.doubleToLongBits(other.price)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        if (!Objects.equals(this.slot_ID, other.slot_ID)) {
+            return false;
+        }
+        if (!Objects.equals(this.photo, other.photo)) {
+            return false;
+        }
+        return true;
+    }
 	
 	
 }
