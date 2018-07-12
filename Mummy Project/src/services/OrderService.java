@@ -9,7 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import domain.Order;
+import java.util.HashMap;
 import java.sql.Types;
+
 
 public class OrderService implements Service<Order>{
 	/*
@@ -59,14 +61,16 @@ public class OrderService implements Service<Order>{
 			statement.close();
 			
 			//Add all items in order to order_items
-			ArrayList<String> item_ids = order.getItem_ids();
-			for (String item_id: item_ids){
+			HashMap<String,Integer> itemCount = order.getItemCount();
+			for (String item_id: itemCount.keySet()){
+                            for(int i=0; i<itemCount.get(item_id);i++){
 				statement = connection.prepareCall(
 						"{call AddOrderItem(?,?)}");
 				statement.setString(1, order.getOrder_id());
 				statement.setString(2, item_id);
 				statement.execute();
 				statement.close();
+                            }
 			}
 			return true;
 		}catch(SQLException e){
@@ -133,7 +137,10 @@ public class OrderService implements Service<Order>{
 						resultSetOrders.getString("DELIVERY_METHOD_ID"),
 						resultSetOrders.getString("STORE_ID"),
 						resultSetOrders.getString("DELIVERY_STATUS_ID"),
-						order_items);
+						new HashMap<String,Integer>());
+                                for(String itemId:order_items){
+                                    order.addItem_id(itemId);
+                                }
 				orders.add(order);
 			}
 		}catch(SQLException e){
@@ -173,14 +180,16 @@ public class OrderService implements Service<Order>{
 			statement.close();
 			
 			//Add all items in order to order_items
-			ArrayList<String> item_ids = order.getItem_ids();
-			for (String item_id: item_ids){
+			HashMap<String,Integer> itemCount = order.getItemCount();
+			for (String item_id: itemCount.keySet()){
+                            for(int i=0; i<itemCount.get(item_id);i++){
 				statement = connection.prepareCall(
 						"{call AddOrderItem(?,?)}");
 				statement.setString(1, order.getOrder_id());
 				statement.setString(2, item_id);
 				statement.execute();
 				statement.close();
+                            }
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
@@ -219,7 +228,9 @@ public class OrderService implements Service<Order>{
 			while(resultSet.next()){
 				order_items.add(resultSet.getString("ITEM_ID"));
 			}
-			order.setItem_ids(order_items);	
+                        for(String item_id : order_items){
+                            order.addItem_id(item_id);
+                        }
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
                         System.err.println("Error executing query!");
@@ -260,7 +271,10 @@ public class OrderService implements Service<Order>{
 						resultSetOrders.getString("DELIVERY_METHOD_ID"),
 						resultSetOrders.getString("STORE_ID"),
 						resultSetOrders.getString("DELIVERY_STATUS_ID"),
-						order_items);
+						new HashMap<String,Integer>());
+                                for(String itemId : order_items){
+                                    order.addItem_id(itemId);
+                                }
 				orders.add(order);
 			}
 		}catch(SQLException e){
