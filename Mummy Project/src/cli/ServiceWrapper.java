@@ -102,8 +102,8 @@ public class ServiceWrapper {
 		
 		currentOrder.setDelivery_status_id("0");
 		OrderService os = new OrderService(con);
-                String subject = "Mummy Resaurant:"+currentOrder.getOrder_id()+
-                        " "+currentOrder.getPlaced_timestamp();
+                String subject = "Mummy Resaurant. Order #"+currentOrder.getOrder_id()+
+                        ", Order timestamp:"+currentOrder.getPlaced_timestamp();
                 HashMap<String,Integer> itemCount = currentOrder.getItemCount();
                 UserService us = new UserService(con);
                 User user = us.getById(currentOrder.getUser_id());
