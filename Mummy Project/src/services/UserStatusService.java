@@ -53,7 +53,7 @@ public class UserStatusService implements Service<UserStatus>{
 		
 		try{
 			Statement usersSt = connection.createStatement();
-			ResultSet usersRs = usersSt.executeQuery("Select * from Users where user_id = " + id);
+			ResultSet usersRs = usersSt.executeQuery("Select * from user_statuses where user_status_id = " + id);
 			
 			usersRs.next();
 			userStatus = new UserStatus(
@@ -68,17 +68,17 @@ public class UserStatusService implements Service<UserStatus>{
 		return userStatus;
 	}
 	public ArrayList<UserStatus> getAll(){
-		ArrayList<UserStatus> userStatuses = new ArrayList<UserStatus>();
+		ArrayList<UserStatus> userStatuses = new ArrayList<>();
 		
 		try{
 			Statement userStatusesSt = connection.createStatement();
-			ResultSet userStatusesRs = userStatusesSt.executeQuery("Select * from Users");
+			ResultSet userStatusesRs = userStatusesSt.executeQuery("Select * from USER_STATUSES");
 			
 			while(userStatusesRs.next()){
 				UserStatus userStatus = new UserStatus(
 						userStatusesRs.getString(1),
 						userStatusesRs.getString(2)
-						); 
+						);
 				userStatuses.add(userStatus);
 			}
 		}catch(Exception e){
