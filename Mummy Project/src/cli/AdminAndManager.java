@@ -53,6 +53,7 @@ public class AdminAndManager {
         options.add("Alter Order_items"); //Probably don't need this one
         options.add("Alter Users");
         options.add("Alter User Statuses");
+        options.add("Alter Stores");
         options.add("Display Pending Orders");
         int input = choiceScreen(options);
         int option = 0;
@@ -255,15 +256,34 @@ public class AdminAndManager {
             }
             case 12:
             {
-                displayPendingOrdersScreen();
+                option = optionsScreen("Stores");
+                switch(option){
+                    case 1:
+                        alterStoresScreen();
+                        break;
+                    case 2:
+                        addStoresScreen();
+                        break;
+                    case 3:
+                        deleteStoresScreen();
+                        break;
+                    case 4:
+                        adminScreen();
+                        break;
+                }
                 break;
             }
             case 13:
             {
+                displayPendingOrdersScreen();
+                break;
+            }
+            case 14:
+            {
                 //Returns to initial screen
                 Tiger.firstScreen();
             }
-            case 14:
+            case 15:
                 System.exit(0);
         }
 
@@ -1094,5 +1114,101 @@ public class AdminAndManager {
             uss.deleteById(statusList.get(input-1).getUserStatusId());
         }
         System.out.println("User Status Deleted");
+    }
+    
+    public static void alterStoresScreen() {
+        StoreService ls = new StoreService(con);
+        ArrayList<Store> stores = ls.getAll();
+        ServiceWrapper.printStores(stores);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a store to alter");
+        int input = sc.nextInt();
+        //check for wrong entery
+        while(input > stores.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == stores.size() + 1){
+            return;
+        }
+        Store store = stores.get(input-1);
+        StoreService storeServ = new StoreService(con);
+        System.out.println("Alter a Store");
+        System.out.println("\nEnter location ID: ");
+        String locationId= sc.next();
+        LocationService locs= new LocationService(con);
+        while(locs.locationIdExist(locationId)){
+            System.out.println("Location ID does not exist! Enter a different location ID: ");
+            locationId= sc.next();
+        }
+        System.out.println("\nEnter store name: ");
+        String storeName= sc.next();
+        System.out.println("\nEnter phone number: ");
+        String phoneNum= sc.next();
+        System.out.println("\nEnter manager ID: ");
+        String manId = sc.next();
+        System.out.println("\nEnter open time: ");
+        int openTime=sc.nextInt();
+        System.out.println("\nEnter close time: ");
+        int closeTime= sc.nextInt();
+        String storeId = store.getStoreId();
+        Store updatedStore = new Store(storeId, locationId, storeName, phoneNum, manId, openTime, closeTime);
+        System.out.println(updatedStore);
+        storeServ.update(updatedStore);
+        System.out.println("Updated store " + storeId);
+    }
+                   
+    public static void addStoresScreen() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Add a Store");
+        System.out.println("\nEnter store id: ");
+        String storeId= sc.next();
+        StoreService sts= new StoreService(con);
+        while(!sts.storeIdExists(storeId)){
+            System.out.println("Store ID already exists! Enter a different store ID: ");
+            storeId= sc.next();
+        }
+        System.out.println("\nEnter location id: ");
+        String locationId= sc.next();
+        LocationService ls= new LocationService(con);
+        while(ls.locationIdExist(locationId)){
+            System.out.println("Location ID does not exist! Enter a different location ID: ");
+            locationId= sc.next();
+        }
+        System.out.println("\nEnter store name: ");
+        String storeName= sc.next();
+        System.out.println("\nEnter phone number: ");
+        String phoneNum= sc.next();
+        System.out.println("\nEnter manager ID: ");
+        String manId = sc.next();
+        System.out.println("\nEnter open time: ");
+        int openTime=sc.nextInt();
+        System.out.println("\nEnter close time: ");
+        int closeTime= sc.nextInt();
+
+        Store store = new Store(storeId, locationId, storeName, phoneNum, manId, openTime, closeTime);
+        StoreService storeServ = new StoreService(con);
+        storeServ.add(store);
+        System.out.println("\n" + storeName + " added to database\n");
+        AdminAndManager aam = new AdminAndManager(con);
+        aam.adminScreen();
+    }
+                   
+    public static void deleteStoresScreen() {
+        StoreService sts = new StoreService(con);
+        ArrayList<Store> stores = sts.getAll();
+        ServiceWrapper.printStores(stores);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a location to delete");
+        int input = sc.nextInt();
+        if(input == stores.size() + 1)
+            return;
+        if(input == stores.size()+2)
+            System.exit(0);
+        StoreService storeServ = new StoreService(con);
+        String idToDel = (stores.get(input-1)).getLocationId();
+        storeServ.deleteById(idToDel);
+        System.out.println("Location successfully deleted! " + stores.get(input-1).toString());
     }
 }

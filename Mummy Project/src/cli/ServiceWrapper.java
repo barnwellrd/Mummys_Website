@@ -19,6 +19,7 @@ import services.UserService;
 import services.LocationService;
 import services.SpecialServices;
 import services.SendEmail;
+import services.StoreService;
 
 public class ServiceWrapper {
 	
@@ -174,6 +175,15 @@ public class ServiceWrapper {
 		}
 		System.out.println(++count + ". Go Back");
 	}
+        
+        public static void printStores(ArrayList<Store> stores) {
+           int count = 0;
+           for(Store store: stores) {
+                    count++;
+                    System.out.println(count + ". " + store.toString());
+            }
+            System.out.println(++count + ". Go Back");
+        }
 
 
 }
