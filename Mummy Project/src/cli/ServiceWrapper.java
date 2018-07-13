@@ -85,9 +85,9 @@ public class ServiceWrapper {
 		int count = 0;
 		for(Order order: orders){
 			count++;
-			System.out.println(count + ". " + order.getPlaced_timestamp());
+			System.out.println(count + ". " + order.toString());
 		}
-		System.out.println(count++ + ". Go Back");
+		System.out.println(++count + ". Go Back");
 	}
 
 	public void cancelOrder(Order order) {
