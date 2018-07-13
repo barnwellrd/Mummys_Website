@@ -7,15 +7,11 @@ import domain.*;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import services.*;
-
 
 public class ServiceWrapper {
 
@@ -40,7 +36,6 @@ public class ServiceWrapper {
     }
 
     public User register(String firstName, String lastName, String phone, String email, String password) {
-        //, String street, String city, String state, String country, String zip, String userStatus
         boolean result = false;
         String userId = Double.toString(Math.random() * 10001);
         String userStatusId = "1";
@@ -67,7 +62,6 @@ public class ServiceWrapper {
             count++;
             String formattedString = String.format("%.02f", menu.getPrice());
             System.out.println(count + "." + menu.getName() + " - $" + formattedString + "\n " + menu.getDescription());
-            // System.out.println(df.format(menu.getPrice()));
         }
         System.out.println(++count + ". Go Back");
     }
@@ -106,8 +100,6 @@ public class ServiceWrapper {
     }
 
     public void submitOrder(Order currentOrder) {
-        // TODO Auto-generated method stub
-
         currentOrder.setDelivery_status_id("0");
         OrderService os = new OrderService(con);
         String subject = "Mummy Resaurant. Order #" + currentOrder.getOrder_id()
@@ -305,17 +297,15 @@ public class ServiceWrapper {
         }
         return input;
     }
-   
-    
-        public static void printStores(ArrayList<Store> stores) {
-           int count = 0;
-           for(Store store: stores) {
-                    count++;
-                    System.out.println(count + ". " + store.toString());
-            }
-            System.out.println(++count + ". Go Back");
-        }
 
+    public static void printStores(ArrayList<Store> stores) {
+        int count = 0;
+        for (Store store : stores) {
+            count++;
+            System.out.println(count + ". " + store.toString());
+        }
+        System.out.println(++count + ". Go Back");
+    }
 
     public boolean validatePassword(String password) {
         return false;
@@ -420,7 +410,7 @@ public class ServiceWrapper {
                     System.out.println("Please enter a valid Day(DD).");
                     day = sc.nextLine();
                 }
-} else {
+            } else {
                 Scanner sc = new Scanner(System.in);
                 System.out.println("Please enter a valid Day(DD).");
                 day = sc.nextLine();
@@ -428,32 +418,28 @@ public class ServiceWrapper {
         }
         return Integer.getInteger(day);
     }
-               
 
-	public double calculateTotalPrice(HashMap<String,Integer> itemCount) {
-            SpecialServices ss = new SpecialServices(con);
-            ArrayList<Special> arrS= ss.getAll();
-            
-            ServiceWrapper sw = new ServiceWrapper(con);
-            ArrayList<Menu> items = sw.getMenuItems(itemCount);
-            
-            for (int i=0; i<items.size(); i++) {
-                for(int j=0;j<arrS.size();j++) {
-                    if(items.get(i).getId().equals(arrS.get(j).getItem_ID())) {
-                        Double disc = ((Double.valueOf(arrS.get(j).getDiscoutPercentage()))/100);
-                        items.get(i).setPrice(items.get(i).getPrice()*(1-disc));
-                    }
+    public double calculateTotalPrice(HashMap<String, Integer> itemCount) {
+        SpecialServices ss = new SpecialServices(con);
+        ArrayList<Special> arrS = ss.getAll();
+
+        ServiceWrapper sw = new ServiceWrapper(con);
+        ArrayList<Menu> items = sw.getMenuItems(itemCount);
+
+        for (int i = 0; i < items.size(); i++) {
+            for (int j = 0; j < arrS.size(); j++) {
+                if (items.get(i).getId().equals(arrS.get(j).getItem_ID())) {
+                    Double disc = ((Double.valueOf(arrS.get(j).getDiscoutPercentage())) / 100);
+                    items.get(i).setPrice(items.get(i).getPrice() * (1 - disc));
                 }
             }
-		double total = 0;
-		//ServiceWrapper sw = new ServiceWrapper(con);
-		//ArrayList<Menu> items = sw.getMenuItems(itemCount);
-		for(Menu item: items){
-			total += item.getPrice()*itemCount.get(item.getId());
-		}
-		return total;
-	}
-
+        }
+        double total = 0;
+        for (Menu item : items) {
+            total += item.getPrice() * itemCount.get(item.getId());
+        }
+        return total;
+    }
 
     public int validateMonth(String month) {
         Pattern rfc2822 = Pattern.compile("^(1[0-2]|0[1-9])$");

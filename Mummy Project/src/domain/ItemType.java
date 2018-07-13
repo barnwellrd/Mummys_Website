@@ -10,11 +10,11 @@ package domain;
  * @author syntel
  */
 public class ItemType {
-    
+
     String itemTypeId;
     String itemType;
-    
-    public ItemType(){
+
+    public ItemType() {
         super();
     }
 
@@ -39,9 +39,9 @@ public class ItemType {
     public void setItemType(String itemType) {
         this.itemType = itemType;
     }
-    
+
     @Override
     public String toString() {
         return "ItemType{" + "itemTypeId=" + itemTypeId + ", itemType=" + itemType + '}';
-    } 
+    }
 }
