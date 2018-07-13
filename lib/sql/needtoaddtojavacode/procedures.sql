@@ -20,12 +20,6 @@ BEGIN
     VALUES(locationId, userId, taxRate, street, city, state, country, zip);
 END;
 
-CREATE OR REPLACE PROCEDURE sp_gettAll_location()
-AS
-BEGIN
-    SELECT * FROM Locations;
-END;
-
 CREATE OR REPLACE PROCEDURE sp_getById_location(locationId VARCHAR)
 AS
 BEGIN
@@ -44,11 +38,6 @@ END;
 -- CardService.java
 -- sp_insert_card
 -- sp_update_card
-CREATE OR REPLACE PROCEDURE sp_getAll_card()
-AS
-BEGIN
-    SELECT * FROM Cards;
-END;
 
 CREATE OR REPLACE PROCEDURE sp_getById_card(cardId VARCHAR)
 AS
@@ -82,12 +71,6 @@ BEGIN
     WHERE delivery_method_id=deliMethId;
 END;
 
-CREATE OR REPLACE PROCEDURE sp_getAll_deliveryMethod()
-AS
-BEGIN
-    SELECT * FROM Delivery_Methods;
-END;
-
 -- DeliveryStatusService.java
 --AddDeliveryStatus
 --DeleteDeliveryStatus
@@ -105,12 +88,6 @@ BEGIN
     WHERE delivery_status_id=deliStatusId;
 END;
 
-CREATE OR REPLACE PROCEDURE sp_getAll_deliveryStatus()
-AS
-BEGIN
-    SELECT * FROM Delivery_Statuses
-END;
-
 -- MenuService.java
 CREATE OR REPLACE PROCEDURE sp_getById_menu(itemId VARCHAR)
 AS
@@ -124,12 +101,6 @@ AS
 BEGIN
     SELECT * FROM Items
     WHERE items_type_id=itemsTypeId;
-END;
-
-CREATE OR REPLACE PROCEDURE sp_getAll_menu()
-AS
-BEGIN
-    SELECT * FROM Items;
 END;
 
 CREATE OR REPLACE PROCEDURE sp_delete_menu(itemId VARCHAR2)
@@ -160,18 +131,6 @@ END;
 -- DeleteOrderItems
 -- DeleteOrder
 -- UpdateOrder
-CREATE OR REPLACE PROCEDURE sp_getById_menu(orderId VARCHAR)
-AS
-BEGIN
-    SELECT * FROM Orders
-    WHERE order_id=orderId;
-END;
-
-CREATE OR REPLACE PROCEDURE sp_getAll_order()
-AS
-BEGIN
-    SELECT * FROM Orders;
-END;
 
 CREATE OR REPLACE PROCEDURE sp_getUserOrders_menu(userId VARCHAR)
 AS
@@ -181,41 +140,40 @@ BEGIN
 END;
 
 -- SpecialServices.java
---insertSpecial
---deleteSpecial
-CREATE OR REPLACE PROCEDURE sp_getById_special(itemId VARCHAR)
+CREATE OR REPLACE PROCEDURE sp_insert_special(itemId VARCHAR, discPercent NUMBER)
 AS
 BEGIN
-    SELECT * FROM Specials
-    WHERE item_id=itemId;
+    INSERT INTO Specials
+    VALUES(itemId, discPercent);
 END;
 
-CREATE OR REPLACE PROCEDURE sp_getAll_special()
+CREATE OR REPLACE PROCEDURE sp_delete_special(itemId VARCHAR)
 AS
 BEGIN
-    SELECT * FROM Specials;
+    DELETE FROM Specials
+    WHERE item_id=ItemId;
 END;
 
 -- StoreService.java
---sp_insert_store
-CREATE OR REPLACE PROCEDURE sp_deleteById_store(storeId VARCHAR)
+CREATE OR REPLACE PROCEDURE sp_update_store(storeId VARCHAR, locationId VARCHAR, storeName VARCHAR, phoneNum VARCHAR, manId VARCHAR, openTime NUMBER, closeTime NUMBER)
+AS
+BEGIN
+    UPDATE Stores SET store_id=storeId, location_id=locationId, store=storeName, phone_number=phoneNum, manager_id=manId, open_time=openTime, close_time=closeTime
+    WHERE store_id=storeId;
+END;
+
+CREATE OR REPLACE PROCEDURE sp_insert_store(storeId VARCHAR, locationId VARCHAR, storeName VARCHAR, phoneNum VARCHAR, manId VARCHAR, openTime NUMBER, closeTime NUMBER)
+AS
+BEGIN
+    INSERT INTO Stores
+    VALUES(storeId, locationId, storeName, phoneNum, manId, openTime, closeTime);
+END;
+
+CREATE OR REPLACE PROCEDURE sp_delete_store(storeId VARCHAR)
 AS
 BEGIN
     DELETE FROM Stores
     WHERE store_id=storeId;
-END;
-
-CREATE OR REPLACE PROCEDURE sp_getById_store(storeId VARCHAR)
-AS
-BEGIN
-    SELECT * FROM Stores
-    WHERE store_id=storeId;
-END;
-
-CREATE OR REPLACE PROCEDURE sp_getAll_store()
-AS
-BEGIN
-    SELECT * FROM Stores;
 END;
 
 -- TimeSlotServices.java
@@ -231,13 +189,6 @@ AS
 BEGIN
     insert into item_slot_id
     VALUES(slotId, timeStart, timeEnd, timeName);
-END;
-
-CREATE OR REPLACE PROCEDURE sp_getById_timeSlot(timeSlotId VARCHAR)
-AS
-BEGIN
-    SELECT * FROM item_slot_id
-    WHERE time_slot_id=timeSlotId;
 END;
 
 CREATE OR REPLACE PROCEDURE sp_getAll_timeSlot()
@@ -256,25 +207,6 @@ BEGIN
     WHERE user_id=userId;
 END;
 
-CREATE OR REPLACE PROCEDURE sp_getById_user(userId VARCHAR)
-AS
-BEGIN
-    SELECT * FROM Users
-    WHERE user_id=userId;
-END;
-
-CREATE OR REPLACE PROCEDURE sp_getAll_user()
-AS
-BEGIN
-    SELECT * FROM Users;
-END;
-
-CREATE OR REPLACE PROCEDURE sp_getByEmail_user(emailName VARCHAR)
-AS
-BEGIN
-    SELECT * FROM Users
-    WHERE email=emailName;
-END;
 
 -- UserStatusService.java
 --sp_insert_user_status
@@ -284,17 +216,4 @@ AS
 BEGIN
     DELETE FROM User_statuses
     WHERE user_status_id=userStatusId;
-END;
-
-CREATE OR REPLACE PROCEDURE sp_getById_user_status(userStatusId VARCHAR)
-AS
-BEGIN
-    SELECT * FROM User_statuses
-    WHERE user_status_id=userStatusId;
-END;
-
-CREATE OR REPLACE PROCEDURE sp_getAll_user_status()
-AS
-BEGIN
-    SELECT * FROM User_statuses;
 END;

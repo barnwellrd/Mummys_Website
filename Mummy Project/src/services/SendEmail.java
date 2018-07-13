@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package services;
+
 import javax.mail.Session;
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
@@ -13,12 +14,14 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
- /**
+import javax.mail.MessagingException;
+
+/**
  *
  * @author syntel
  */
 public class SendEmail {
-    
+
     String messageText;
     String toAddress;
     String subject;
@@ -52,23 +55,24 @@ public class SendEmail {
     public void setToAddress(String toAddress) {
         this.toAddress = toAddress;
     }
-    
-    public void sendMail(){
-        try{
+
+    public void sendMail() {
+        try {
             String username = "<USERNAME>@gmail.com";
             String password = "<PASSWORD>";
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.port","587");
+            props.put("mail.smtp.port", "587");
             Session session = Session.getDefaultInstance(props,
                     new javax.mail.Authenticator() {
-                        protected PasswordAuthentication getPasswordAuthentication(){
-                            return new PasswordAuthentication(username,password);
-                        }
-                    });
-            
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password);
+                }
+            });
+
             Address target = new InternetAddress(toAddress);
             Address from = new InternetAddress(username);
             Message msg = new MimeMessage(session);
@@ -76,10 +80,9 @@ public class SendEmail {
             msg.setSubject(subject);
             msg.setSentDate(new Date());
             msg.setText(messageText);
-            Address [] addresses = {target};
+            Address[] addresses = {target};
             Transport.send(msg, addresses);
-        }
-        catch(Exception e){
+        } catch (MessagingException e) {
             System.out.println(e.getMessage());
             System.err.println("Error sending email!");
             System.exit(0);
