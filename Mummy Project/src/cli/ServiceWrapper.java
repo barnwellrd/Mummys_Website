@@ -287,6 +287,7 @@ public class ServiceWrapper {
                     System.out.println("Please enter a valid Delivery Time(0000-2400).");
                     time = sc.nextLine();
                 }
+
             } else {
                 Scanner sc = new Scanner(System.in);
                 System.out.println("Please enter a valid Delivery Time(0000-2400).");
@@ -310,6 +311,48 @@ public class ServiceWrapper {
         }
         return input;
     }
+
+	public ArrayList<Menu> getMenuItems(HashMap<String,Integer> itemCount) {
+		
+		MenuServices ms = new MenuServices(con);
+		ArrayList<Menu> items = new ArrayList<>();
+		
+		
+		for (String itemId:itemCount.keySet()){
+			items.add(ms.getById(itemId));
+		}
+
+		return items;
+	}
+
+	public double calculateTotalPrice(HashMap<String,Integer> itemCount) {
+		double total = 0;
+		ServiceWrapper sw = new ServiceWrapper(con);
+		ArrayList<Menu> items = sw.getMenuItems(itemCount);
+		for(Menu item: items){
+			total += item.getPrice()*itemCount.get(item.getId());
+		}
+		return total;
+	}
+        
+        public static void printItemType(ArrayList<ItemType> items){
+		int count = 0;
+		for(ItemType item: items){
+			count++;
+			System.out.println(count+". "+ item.toString());
+		}
+		System.out.println(++count + ". Go Back");
+	}
+    
+        public static void printStores(ArrayList<Store> stores) {
+           int count = 0;
+           for(Store store: stores) {
+                    count++;
+                    System.out.println(count + ". " + store.toString());
+            }
+            System.out.println(++count + ". Go Back");
+        }
+
 
     public boolean validatePassword(String password) {
         return false;
