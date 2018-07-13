@@ -103,7 +103,7 @@ public class Tiger {
             currentOrder = new Order();
             currentOrder.setOrder_id("1"); // just assign it order id of 1 for now.
             currentOrder.setUser_id(currentUser.getUserId());
-            currentOrder.setDelivery_status_id("0");
+            currentOrder.setDelivery_status_id("2");
             //currentOrder.setCard_id();
             StoreService ss = new StoreService(con);
             currentStore = ss.getById("0");
@@ -155,7 +155,7 @@ public class Tiger {
             currentOrder = new Order();
             currentOrder.setOrder_id(Double.toString(Math.random() * 10001));
             currentOrder.setUser_id(currentUser.getUserId());
-            currentOrder.setDelivery_status_id("0");
+            currentOrder.setDelivery_status_id("2");
             homeScreen();
         } else {
             System.out.println("Mismatching passwords, try again");
@@ -302,10 +302,14 @@ public class Tiger {
     public static void currentOrderScreen() {
         System.out.println("\n*Current Order*");
         System.out.println("Placed: " + currentOrder.getPlaced_timestamp());
-        System.out.println("Delivered: " + currentOrder.getDelivery_timestamp());
+        System.out.println("Deliver On: " + currentOrder.getDelivery_timestamp());
         ServiceWrapper sw = new ServiceWrapper(con);
         currentOrder.setTotal_price((float) sw.calculateTotalPrice(currentOrder.getItemCount()));
-        String formattedString = String.format("%.02f", currentOrder.getTotal_price()+currentOrder.getTip());
+        double delivery_fee=0;
+        if(currentOrder.getDelivery_method_id().equals("1")){
+            delivery_fee=5.0;
+        }
+        String formattedString = String.format("%.02f", currentOrder.getTotal_price()+currentOrder.getTip()+delivery_fee);
         
 	System.out.println("Total price: $" +formattedString);        
         System.out.println("Method: " + currentOrder.getDelivery_method_id());
@@ -315,49 +319,35 @@ public class Tiger {
         System.out.println("3. Edit Order");
         System.out.println("4. Submit Order");
         System.out.println("5. Go Back");
-        boolean isOk = true;
-        while(isOk) {
-            while (!sc.hasNextInt()) {
-                System.out.println("Please type in a number.");
-                sc.nextLine();
-            }
-            int input = sc.nextInt();
-            if((input<1) || (input>5)) {
-                System.out.println("Please type in the right value.");
-                sc.nextLine();
-                continue;
-            }
-            sc.nextLine();
-            if (input == 1 && confirm()) {
+        int input = inputValidation(1,5);
+        if (input == 1 && confirm()) {
+            currentOrder = new Order();
+            currentOrder.setOrder_id("1"); // set id=1 for now
+            currentOrder.setUser_id(currentUser.getUserId());
+            currentOrder.setDelivery_status_id("2");
+            homeScreen();
+        } else if (input == 2) {
+            viewEditOrderItems(currentOrder);
+        } else if (input == 3) {
+            editOrder(currentOrder);
+        } else if (input == 4 && confirm()) {
+            if(currentOrder.getItemCount().size() == 0) {
+                System.out.println("Cart is empty.");
+                currentOrderScreen();
+            } else {
+                currentOrder.setCard_id(submitOrder());
+                sw.submitOrder(currentOrder);
+               // System.out.println("Order Complete");
                 currentOrder = new Order();
                 currentOrder.setOrder_id("1"); // set id=1 for now
                 currentOrder.setUser_id(currentUser.getUserId());
-                currentOrder.setDelivery_status_id("0");
+                currentOrder.setDelivery_status_id("2");
                 homeScreen();
-            } else if (input == 2) {
-                viewEditOrderItems(currentOrder);
-            } else if (input == 3) {
-                editOrder(currentOrder);
-            } else if (input == 4 && confirm()) {
-                if(currentOrder.getItemCount().size() == 0) {
-                    System.out.println("Cart is empty.");
-                    currentOrderScreen();
-                } else {
-                    currentOrder.setCard_id(submitOrder());
-                    sw.submitOrder(currentOrder);
-                   // System.out.println("Order Complete");
-                    currentOrder = new Order();
-                    currentOrder.setOrder_id("1"); // set id=1 for now
-                    currentOrder.setUser_id(currentUser.getUserId());
-                    currentOrder.setDelivery_status_id("0");
-                    homeScreen();
-                }
-            } else if (input == 5) {
-                homeScreen();
-            } else {
-                currentOrderScreen();
             }
-            isOk=false;
+        } else if (input == 5) {
+            homeScreen();
+        } else {
+            currentOrderScreen();
         }
     }
 
@@ -414,26 +404,9 @@ public class Tiger {
                 System.out.println("1. Deliver Food");
                 System.out.println("2. Pick up");
                 System.out.println("3. Dine in");
-                boolean isOk1=true;
-                int input2=0;
-                while(isOk1) {
-                    while(!sc.hasNextInt()) {
-                        System.out.println("Please type in a number.");
-                        sc.nextLine();
-                    }
-                    input2=sc.nextInt();
-                    if((input2<1) ||(input2>3)) {
-                        System.out.println("Please type in a valid option.");
-                        sc.nextLine();
-                        continue;
-                    }
-                    isOk1=false;
-                }
-                sc.nextLine();
+                int input2=inputValidation(1,3);
                 if(input2==1) {
-                    // ??????????????????????/
                     getLocation();
-                    // ask the user for delivery time
                     System.out.println("Pick a delivery time.");
                     int newDelivery_timestamp = Integer.parseInt(editString());
                     currentOrder.setDelivery_timestamp(newDelivery_timestamp);
@@ -444,9 +417,26 @@ public class Tiger {
                 currentOrder.setDelivery_method_id(newDelivery_method);
                 System.out.println("Delivery Method Changed to: " + newDelivery_method);
             } else if (input == 4) {
-                String newStore = editString();
+                StoreService stores = new StoreService(con);
+                ArrayList<Store> sl = stores.getAll();
+                ArrayList<String> s_ids = new ArrayList<>();
+                System.out.println("Store id\t"+"Store Details");
+                for (Store s : sl) {   
+                    System.out.println(s.getStoreId()+".\t\t"+s.toString());
+                    s_ids.add(s.getStoreId());
+                }
+                System.out.println("Pick the store id of the store that is closest to you.");
+                boolean isOk2=true;
+                String newStore="0";
+                while(isOk2) {
+                    newStore = editString();
+                    if(s_ids.contains(newStore)) {
+                        isOk2=false;
+                    }
+                    System.out.println("Please pick the right store id.");
+                }
                 currentOrder.setStore_id(newStore);
-                System.out.println("Delivery Method Changed to: " + newStore);
+                System.out.println("Store Changed to: " + newStore);
             } else if (input == 5) {
                 homeScreen();
             }
@@ -532,51 +522,45 @@ public class Tiger {
 
     //TODO
     public static String submitOrder() {
+        System.out.println("1. Pay in store.");
+        System.out.println("2. Pay now using credit card.");
+        int pay = inputValidation(1,2);
         String cardId="-1";
-        try {
-            CallableStatement getCreditCards = con.prepareCall(
-					"{?=call getCreditCard(?)}");
-            getCreditCards.setString(2,currentUser.getUserId());
-            getCreditCards.registerOutParameter(1, Types.VARCHAR);
-            getCreditCards.execute();
-            cardId = getCreditCards.getString(1);
-            if(cardId.equals("-1")) {
-                System.out.println("You don't have a saved card.");
-                addCard(currentUser.getUserId()); // add a card
-            } else {
-                // they do have a credit card.
-                System.out.println("Here is the saved card information.");
-                CardService cw = new CardService(con);
-                currentCard = cw.getById(cardId);
-                System.out.println(currentCard.toString());
-                boolean isOk=true;
-                System.out.println("1. Use this card.");
-                System.out.println("2. Replace this card.");
-                while(isOk) {
-                    while (!sc.hasNextInt()) {
-                        System.out.println("Please type in a number.");
-                        sc.nextLine();
-                    }
-                    int input = sc.nextInt();
-                    sc.nextLine();
-                    if((input<1) || (input>2)) {
-                        System.out.println("Please type in the right number.");
-                        continue;
-                    }
-                    if(input==2) {
+        if(pay==2) {
+            try {
+                CallableStatement getCreditCards = con.prepareCall(
+                                            "{?=call getCreditCard(?)}");
+                getCreditCards.setString(2,currentUser.getUserId());
+                getCreditCards.registerOutParameter(1, Types.VARCHAR);
+                getCreditCards.execute();
+                cardId = getCreditCards.getString(1);
+                if(cardId.equals("-1")) {
+                    System.out.println("You don't have a saved card.");
+                    addCard(currentUser.getUserId()); // add a card
+                } else {
+                    // they do have a credit card.
+                    System.out.println("Here is the saved card information.");
+                    CardService cw = new CardService(con);
+                    currentCard = cw.getById(cardId);
+                    System.out.println(currentCard.toString());
+                    boolean isOk=true;
+                    System.out.println("1. Use this card.");
+                    System.out.println("2. Replace this card.");
+                    int in = inputValidation(1,2);
+                    if(in==2) {
                         deleteCard(cardId);
                         cardId=addCard(currentUser.getUserId()); // add/replace
                     } else {
                         System.out.println("Using this card now.");
                     }
-                    isOk=false;
+
                 }
-                
+            } catch(SQLException e) {
+                System.out.println(e.getMessage());
+                System.err.println("Error executing query!");
             }
-        } catch(SQLException e) {
-            System.out.println(e.getMessage());
-            System.err.println("Error executing query!");
         }
+        
         System.out.println("Order Complete");
         //OrderService os = new OrderService(con);
         //input should be equal to number of items in order
@@ -901,23 +885,10 @@ public class Tiger {
         System.out.println("\n1*Confirm*");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        boolean isOk=true;
-        while(isOk) {
-            while (!sc.hasNextInt()) {
-                System.out.println("Please type in a number.");
-                sc.nextLine();
-            }
-            int input = sc.nextInt();
-            sc.nextLine();
-            if (input == 1) {
-                return true;
-            } else if(input==2) {
-                return false;
-            } else {
-                System.out.println("Please type either 1 or 2.");
-            }
-        }
-        return true;
+        int input = inputValidation(1,2);
+        if(input == 1)
+            return true;
+        return false;
     }
     
     public static void viewLocationScreen(Location location) {
@@ -975,5 +946,24 @@ public class Tiger {
             System.out.println("Enter zip:");
 	    String zip = sc.nextLine();
             location.setZip(zip);   
+    }
+    public static int inputValidation(int x, int y) {
+        int in=0;
+        boolean isOk=true;
+        while(isOk) {
+            while(!sc.hasNextInt()) {
+                System.out.println("Please type a number.");
+                sc.nextLine();
+            }
+            
+            in = sc.nextInt();
+            sc.nextLine();
+            if(in<x || in>y) {
+                System.out.println("Please type in a valid number.");
+                continue;
+            }
+            isOk=false;
+        }
+        return in;
     }
 }
