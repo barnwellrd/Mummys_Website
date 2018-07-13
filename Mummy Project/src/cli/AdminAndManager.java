@@ -18,6 +18,7 @@ import domain.Special;
 import domain.DeliveryMethod;
 import domain.DeliveryStatus;
 import domain.ItemType;
+import domain.UserStatus;
 import services.CardService;
 import services.DeliveryMethodService;
 import services.DeliveryStatusService;
@@ -28,6 +29,7 @@ import services.StoreService;
 import services.UserService;
 import services.LocationService;
 import services.SpecialServices;
+import services.UserStatusService;
 
 public class AdminAndManager {
 	
@@ -1010,12 +1012,87 @@ public class AdminAndManager {
 
     }
     public static void alterUserStatusScreen(){
-
+        UserStatusService uss = new UserStatusService(con);
+        ArrayList<UserStatus> userStatuses= uss.getAll();
+        int input=0;
+        while(input != userStatuses.size()+1){
+            //userStatuses = uss.getAll();
+            ArrayList<String> options = new ArrayList<>();
+            for(UserStatus status:userStatuses){
+                options.add(status.getUserStatus());
+            }
+            input = choiceScreen(options);
+            if(input < userStatuses.size()+1){
+                alterUserStatusFieldScreen(userStatuses.get(input-1));
+                System.out.println("Status Changed");
+            }
+            else if(input > userStatuses.size()+1){
+                System.out.println("Invalid input");
+            }
+        }
+    }
+    public static void alterUserStatusFieldScreen(UserStatus status){
+        UserStatusService uss = new UserStatusService(con);
+        Scanner sc = new Scanner(System.in);
+        int input = 0;
+        while(input != 3){
+            ArrayList<String> options = new ArrayList<>();
+            options.add("ID:"+status.getUserStatusId());
+            options.add("Status:"+status.getUserStatusId());
+            input = choiceScreen(options);
+            switch(input){
+                case 1:{
+                    String oldId = status.getUserStatusId();
+                    System.out.println("Enter the new Id");
+                    String newId = sc.next();
+                    try{
+                        status.setUserStatusId(newId);
+                        uss.deleteById(oldId);
+                        uss.add(status);
+                    }
+                    catch(Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                }
+                case 2:{
+                    System.out.println("Enter the new Status");
+                    String newStatus = sc.next();
+                    status.setUserStatus(newStatus);
+                    break;
+                }
+            }
+        }
+        uss.update(status);
+        
     }
     public static void addUserStatusScreen(){
-
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the new Status ID");
+        String id = sc.next();
+        System.out.println("Enter the new Status");
+        String statusName = sc.next();
+        try{
+            UserStatus status = new UserStatus(id,statusName);
+            UserStatusService uss = new UserStatusService();
+            uss.add(status);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
     public static void deleteUserStatusScreen(){
-
+        UserStatusService uss = new UserStatusService();
+        ArrayList<UserStatus> statusList = uss.getAll();
+        ArrayList<String> options = new ArrayList<>();
+        int input = 0;
+        for(UserStatus status: statusList){
+            options.add(status.getUserStatusId()+":"+status.getUserStatus());
+        }
+        input = choiceScreen(options);
+        if(input < options.size()+1){
+            uss.deleteById(statusList.get(input-1).getUserStatusId());
+        }
+        System.out.println("User Status Deleted");
     }
 }
