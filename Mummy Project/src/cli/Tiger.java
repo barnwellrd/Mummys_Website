@@ -755,9 +755,31 @@ public class Tiger {
                 currentUser.setEmail(newEmail);
                 System.out.println("Email Changed to: " + newEmail);
             } else if (input == 4) {
-                String newPassword = editString();
-                currentUser.setPassword(newPassword);
-                System.out.println("Password Changed to: " + newPassword);
+                boolean pass =true;
+                if(pass){
+                System.out.println("Enter Old Password: ");
+                String password = sc.nextLine();
+                if (password.equals(currentUser.getPassword())){
+                    System.out.println("Enter New Password: ");
+                    String newPassword = editString();
+                    currentUser.setPassword(newPassword);
+                    try{
+                        CallableStatement replacePassword = con.prepareCall(
+					"{?=call SP_UPDATE_USER(?,?,?,?,?,?,?)}");
+                        replacePassword.setString(6,currentUser.getPassword());
+                        System.out.println("Password Changed to: " + newPassword);
+
+                    } catch(SQLException e) {
+                        System.out.println(e.getMessage());
+                        System.err.println("Error executing query!");
+                    
+                }
+              }
+             }
+                else{
+                    accountScreen();
+                    pass=false;
+                }
             } else if (input == 5) {
                 String newPhoneNumber = editString();
                 currentUser.setPhone(newPhoneNumber);
