@@ -293,5 +293,49 @@ public class OrderService implements Service<Order> {
         }
 
     }
+    public ArrayList<Order> getPendingOrders() {
+        ArrayList<Order> orders = new ArrayList<>();
+        Order order;
+        ArrayList<String> order_items = new ArrayList<>();
+        try {
+            //Get Order
+            Statement statement = connection.createStatement();
+            ResultSet resultSetOrders = statement.executeQuery("SELECT * FROM ORDERS WHERE DELIVERY_STATUS_ID='0'");
+            
 
+            ResultSet resultSetItems;
+            while (resultSetOrders.next()) {
+                //fetch all order items
+                statement = connection.createStatement();
+                resultSetItems = statement.executeQuery(
+                        "SELECT * FROM ORDER_ITEMS WHERE ORDER_ID = " + resultSetOrders.getString("ORDER_ID"));
+                order_items.clear();
+                while (resultSetItems.next()) {
+                    order_items.add(resultSetItems.getString("ITEM_ID"));
+                }
+
+                //Make new order
+                order = new Order(resultSetOrders.getString("ORDER_ID"),
+                        resultSetOrders.getString("USER_ID"),
+                        resultSetOrders.getFloat("TIP"),
+                        resultSetOrders.getFloat("TOTAL_PRICE"),
+                        resultSetOrders.getInt("PLACED_TIMESTAMP"),
+                        resultSetOrders.getInt("DELIVERY_TIMESTAMP"),
+                        resultSetOrders.getString("CARD_ID"),
+                        resultSetOrders.getString("INSTRUCTIONS"),
+                        resultSetOrders.getString("DELIVERY_METHOD_ID"),
+                        resultSetOrders.getString("STORE_ID"),
+                        resultSetOrders.getString("DELIVERY_STATUS_ID"),
+                        new HashMap<>());
+                for (String itemId : order_items) {
+                    order.addItem_id(itemId);
+                }
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.err.println("Error executing query!");
+        }
+        return orders;
+    }
 }

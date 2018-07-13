@@ -708,7 +708,6 @@ public class Tiger {
     }
 
     public static boolean confirm() {
-        String order = "";
         HashMap<String, Integer> itemCount = currentOrder.getItemCount();
         ArrayList<Menu> items = sw.getMenuItems(itemCount);
         for(Menu item: items){
