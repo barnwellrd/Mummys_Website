@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import domain.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import services.*;
 
 public class Tiger {
@@ -257,10 +260,13 @@ public class Tiger {
         //ServiceWrapper sw = new ServiceWrapper(con);
         currentOrder.setTotal_price((float) sw.calculateTotalPrice(currentOrder.getItemCount()));
         double delivery_fee=0;
+        
         if(currentOrder.getDelivery_method_id().equals("1")){
             delivery_fee=5.0;
         }
         String formattedString = String.format("%.02f", currentOrder.getTotal_price()+currentOrder.getTip()+delivery_fee);
+     //=======================================================================================================================================   
+         
         
 	System.out.println("Total price: $" +formattedString);        
         System.out.println("Method: " + currentOrder.getDelivery_method_id());

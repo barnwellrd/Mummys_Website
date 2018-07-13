@@ -7,11 +7,15 @@ import domain.*;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import services.*;
+
 
 public class ServiceWrapper {
 
@@ -147,16 +151,6 @@ public class ServiceWrapper {
         }
 
         return items;
-    }
-
-    public double calculateTotalPrice(HashMap<String, Integer> itemCount) {
-        double total = 0;
-        ServiceWrapper sw = new ServiceWrapper(con);
-        ArrayList<Menu> items = sw.getMenuItems(itemCount);
-        for (Menu item : items) {
-            total += item.getPrice() * itemCount.get(item.getId());
-        }
-        return total;
     }
 
     public static void printItemType(ArrayList<ItemType> items) {
@@ -426,7 +420,7 @@ public class ServiceWrapper {
                     System.out.println("Please enter a valid Day(DD).");
                     day = sc.nextLine();
                 }
-            } else {
+} else {
                 Scanner sc = new Scanner(System.in);
                 System.out.println("Please enter a valid Day(DD).");
                 day = sc.nextLine();
@@ -434,6 +428,32 @@ public class ServiceWrapper {
         }
         return Integer.getInteger(day);
     }
+               
+
+	public double calculateTotalPrice(HashMap<String,Integer> itemCount) {
+            SpecialServices ss = new SpecialServices(con);
+            ArrayList<Special> arrS= ss.getAll();
+            
+            ServiceWrapper sw = new ServiceWrapper(con);
+            ArrayList<Menu> items = sw.getMenuItems(itemCount);
+            
+            for (int i=0; i<items.size(); i++) {
+                for(int j=0;j<arrS.size();j++) {
+                    if(items.get(i).getId().equals(arrS.get(j).getItem_ID())) {
+                        Double disc = ((Double.valueOf(arrS.get(j).getDiscoutPercentage()))/100);
+                        items.get(i).setPrice(items.get(i).getPrice()*(1-disc));
+                    }
+                }
+            }
+		double total = 0;
+		//ServiceWrapper sw = new ServiceWrapper(con);
+		//ArrayList<Menu> items = sw.getMenuItems(itemCount);
+		for(Menu item: items){
+			total += item.getPrice()*itemCount.get(item.getId());
+		}
+		return total;
+	}
+
 
     public int validateMonth(String month) {
         Pattern rfc2822 = Pattern.compile("^(1[0-2]|0[1-9])$");
