@@ -1,6 +1,7 @@
 package cli;
 
 import cli.ServiceWrapper;
+import static cli.Tiger.sw;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -17,6 +18,7 @@ import domain.Location;
 import domain.DeliveryMethod;
 import domain.DeliveryStatus;
 import domain.ItemType;
+import java.util.HashMap;
 import services.CardService;
 import services.DeliveryMethodService;
 import services.DeliveryStatusService;
@@ -357,6 +359,7 @@ public class AdminAndManager {
             }
         }
     }
+    
     public static void alterCardFieldScreen(Card card){
         Scanner sc = new Scanner(System.in);
         CardService cs = new CardService();
@@ -518,6 +521,7 @@ public class AdminAndManager {
         menServ.update(menUp);
         System.out.println("Updated " + name);
     }
+    
     public static void alterUserScreen() {
         System.out.println("Choose a user to alter");
         Scanner sc = new Scanner(System.in);
@@ -534,6 +538,7 @@ public class AdminAndManager {
         User user = us.getById(id);
         alterUserFieldScreen(user);
     }
+    
     public static void alterUserFieldScreen(User user){
         UserService us = new UserService(con);
         Scanner sc = new Scanner(System.in);
@@ -650,6 +655,7 @@ public class AdminAndManager {
         System.out.println(uArr.get(input-1).getFirstName() + "has been deleted");
 
     }
+    
     public static void alterDeliveryMethodScreen(){
         DeliveryMethodService dms = new DeliveryMethodService(con);
         ArrayList<DeliveryMethod> dmList = dms.getAll();
@@ -668,6 +674,7 @@ public class AdminAndManager {
             dms.update(deliveryMethod);
         }
     }
+    
     public static void addDeliveryMethodScreen(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Add a DeliveryMethod");
@@ -680,6 +687,7 @@ public class AdminAndManager {
         dms.add(deliveryMethod);
         System.out.println("Added new Delivery Method");
     }
+    
     public static void deleteDeliveryMethodScreen(){
         DeliveryMethodService dms = new DeliveryMethodService(con);
         ArrayList<DeliveryMethod> dmList = dms.getAll();
@@ -695,6 +703,7 @@ public class AdminAndManager {
             System.out.println("Method deleted");
         }
     }
+    
     public static void alterDeliveryStatusScreen(){
         DeliveryStatusService dss = new DeliveryStatusService(con);
         ArrayList<DeliveryStatus> dsList = dss.getAll();
@@ -713,6 +722,7 @@ public class AdminAndManager {
             dss.update(deliveryStatus);
         }
     }
+    
     public static void addDeliveryStatusScreen(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Add a Delivery Status");
@@ -725,6 +735,7 @@ public class AdminAndManager {
         dss.add(deliveryStatus);
         System.out.println("Added new Delivery Status");
     }
+    
     public static void deleteDeliveryStatusScreen(){
         DeliveryStatusService dss = new DeliveryStatusService(con);
         ArrayList<DeliveryStatus> dsList = dss.getAll();
@@ -740,6 +751,7 @@ public class AdminAndManager {
             System.out.println("Status deleted");
         }
     }
+    
     public static void alterItemTypeScreen(){
         System.out.println("Choose an item type to alter");
         MenuServices ms = new MenuServices(con);
@@ -772,6 +784,7 @@ public class AdminAndManager {
         itmServ.update(itmUp);
         System.out.println("Updated " + itemType);
     }
+    
     public static void addItemTypeScreen(){
         System.out.println("Add an item type");
         Scanner sc = new Scanner(System.in);
@@ -796,12 +809,11 @@ public class AdminAndManager {
         AdminAndManager aam = new AdminAndManager(con);
         aam.adminScreen();
     }
+    
     public static void deleteItemTypeScreen(){
         System.out.println("Choose an item type to delete");
         ItemTypeService its = new ItemTypeService(con);
-        //MenuServices ms = new MenuServices(con);
         ArrayList<ItemType> items = its.getAll();
-        //ArrayList<Menu> menus = ms.getAll();
         ServiceWrapper.printItemType(items);
         Scanner sc = new Scanner(System.in);
         int input = sc.nextInt();
@@ -912,12 +924,270 @@ public class AdminAndManager {
     
     public static void alterOrdersScreen(){
 
-    }
-    public static void addOrdersScreen(){
+        System.out.println("Choose an order to alter");
+        OrderService os = new OrderService(con);
+        ArrayList<Order> orders = os.getAll();
+        ServiceWrapper.printOrders(orders);
+        
+        Scanner sc = new Scanner(System.in);
+        int input = sc.nextInt();
+        
+        //check for wrong entery
+        while(input > orders.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == orders.size() + 1){
+            return;
+        }
+        //ord instance use to convert the input line number to get an ID of the line
+        Order ord = orders.get(input-1);
+        OrderService ordServ = new OrderService(con);
+        //get constent values for order
+        String order_id = ord.getOrder_id();
+        String user_id = ord.getUser_id();
+        int placed_timestamp = ord.getPlaced_timestamp();
+        String card_id = ord.getCard_id();
+        
+        System.out.println("Enter Tip: ");
+        sc.nextLine();
+        float tip = sc.nextFloat();
+        System.out.println("Enter total price: ");
+        float total_price = sc.nextFloat();
+        System.out.println("Enter a delivery time stamp: ");
+        sc.nextLine();
+        int delivery_timestamp= sc.nextInt();
+        System.out.println("Enter a instruction: ");
+        String instructions= sc.next();
+        
+        System.out.println("Choose Delivery method: ");
+        DeliveryMethodService dms = new DeliveryMethodService(con);
+        ArrayList<DeliveryMethod> dmList = dms.getAll();
+        ArrayList<String> options = new ArrayList<>();
 
+        for(DeliveryMethod dm:dmList){
+            options.add(dm.getDeliveryMethod());
+        }
+        int input2 = choiceScreen(options);
+        //check for wrong entery
+        while(input2 > dmList.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input2 = sc.nextInt();
+        }
+        //Go back 
+        if(input2 == dmList.size() + 1){
+            return;
+        }
+      
+        String delivery_method_id= "";
+        if(input2 < dmList.size()){
+            delivery_method_id = dmList.get(input2).getDeliveryMethodId();
+        }
+        
+        System.out.println("Choose a Store: ");
+        StoreService ss = new StoreService(con);
+        ArrayList<Store> ssList = ss.getAll();
+        ArrayList<String> options2 = new ArrayList<>();
+
+        for(Store s :ssList){
+            options2.add(s.getStoreName());
+        }
+        
+        
+        int input3 = choiceScreen(options2);
+        
+        while(input3 > ssList.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input3 = sc.nextInt();
+        }
+        //Go back 
+        if(input3 == ssList.size() + 1){
+            return;
+        }
+        String store_id= "";
+        if(input3 < ssList.size()){
+            store_id = ssList.get(input3).getStoreId();
+        }
+        
+        System.out.println("Choose delivery status: ");
+        DeliveryStatusService ds = new DeliveryStatusService(con);
+        ArrayList<DeliveryStatus> dsList = ds.getAll();
+        ArrayList<String> options3 = new ArrayList<>();
+
+        for(DeliveryStatus d :dsList){
+            options3.add(d.getDeliveryStatus());
+        }
+        int input4 = choiceScreen(options3);
+        
+        while(input4 > dsList.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input4 = sc.nextInt();
+        }
+        //Go back 
+        if(input4 == dsList.size() + 1){
+            return;
+        }
+        
+        String delivery_status_id= "";
+        if(input4 < dsList.size()){
+            delivery_status_id = dsList.get(input4).getDeliveryStatusId();
+        } 
+        
+        
+        System.out.println("Choose an item to change a quantity: ");
+        HashMap<String,Integer> itemCount = ord.getItemCount();
+        ArrayList<Menu> items = sw.getMenuItems(itemCount);
+        int count = 0;
+        
+        for(Menu item: items){
+                count++;
+                System.out.println(count +". "+ item.getName()+ "("+itemCount.get(item.getId()) + ")");
+            }
+        System.out.println(++count +". Go back.");
+        
+        int input5 = sc.nextInt();
+        //check for wrong entery
+        while(input5 > items.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input5 = sc.nextInt();
+        }
+        //Go back 
+        if(input5 == orders.size() + 1){
+            return;
+        }
+        System.out.println("Enter a quantity: ");
+        int quantity = sc.nextInt();
+     
+        Order ordUp = new Order(order_id, user_id, tip, total_price, placed_timestamp,
+			 delivery_timestamp, card_id, instructions, delivery_method_id, store_id,
+			 delivery_status_id, itemCount);
+        ordUp.setItemQuantity(items.get(input5 -1).getId(), quantity);
+        
+        ordServ.update(ordUp);
+        System.out.println("Updated " + order_id);   
+       
+        
+    }
+    
+    public static void addOrdersScreen(){
+        /*
+        System.out.println("Add an order");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\nEnter order id: ");
+        String id= sc.next();
+        
+        //validation
+        OrderService ord = new OrderService(con);
+        MenuServices itm = new MenuServices(con);
+        while(ord.orderExist(id)){
+            System.out.println("Order ID exist in database. Please Enter a different Order ID: ");
+            id= sc.next();
+        }
+        
+        System.out.println("\nEnter user id: ");
+        String userId= sc.next();
+        UserService us = new UserService(con);
+        while(!us.userExist(userId)){
+            System.out.println("USER ID DOES NOT EXIST! Enter the user ID again: ");
+            userId= sc.next();
+        }
+        
+        
+        System.out.println("\nChoose an item: ");
+        MenuServices ms = new MenuServices(con);
+        ArrayList<Menu> menus = ms.getAll();
+        ServiceWrapper.printMenuItems(menus);
+        int input = sc.nextInt();
+        
+        //check for wrong entery
+        while(input > menus.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == menus.size() + 1){
+            return;
+        }
+        
+        Menu men = menus.get(input-1);
+        
+        
+        
+        boolean yesorno= false;
+        do{
+            System.out.println("would you like to add an item?");
+            System.out.println("1. Yes");
+            System.out.println("2. No?");
+            System.out.println("3. Go back");
+            
+            int input = sc.nextInt();
+            if(input >= 3)
+                return;
+            if(input == 1)
+                yesorno = true;
+            if(input == 2 )
+                 yesorno = false;
+            
+        }while(true);
+        
+        
+        
+        
+        
+        
+        
+        
+        System.out.println("\nEnter item name: ");
+        sc.nextLine();
+        String name= sc.nextLine();
+        System.out.println("\nEnter vegeterian (y or n): ");
+        String vege = sc.next();
+        char vegetarian = vege.charAt(0);
+        System.out.println("\nEnter a description: ");
+        sc.nextLine();
+        String description= sc.nextLine();
+        System.out.println("\nEnter type number id: ");
+        String type= sc.next();
+        System.out.println("\nEnter meal time: ");
+        String slot_ID= sc.next();
+        System.out.println("\nEnter photo link: ");
+        String photo= sc.next();
+        System.out.println("\nEnter a price: ");
+        float price= sc.nextFloat();
+
+        Menu men = new Menu(id, name, vegetarian, type, description, slot_ID, photo, price);
+        MenuServices menServ = new MenuServices(con);
+        menServ.add(men);
+        System.out.println("\n" + name + " added to database\n");
+        AdminAndManager aam = new AdminAndManager(con);
+        aam.adminScreen();
+*/
     }
     public static void deleteOrdersScreen(){
+        System.out.println("Choose an order to delete");
+        
+        OrderService os = new OrderService(con);
+        ArrayList<Order> orders = os.getAll();
+        ServiceWrapper.printOrders(orders);
+        
+        Scanner sc = new Scanner(System.in);
+        int input = sc.nextInt();
+        
+        //check for wrong entery
+        while(input > orders.size() + 1){
+            System.out.println("Wrong entry. Please enter again: ");
+            input = sc.nextInt();
+        }
+        //Go back 
+        if(input == orders.size() + 1){
+            return;
+        }
 
+        OrderService orderServ = new OrderService(con);
+        orderServ.deleteById(orders.get(input-1).getOrder_id());
+
+        System.out.println("Deleted: " + orders.get(input-1).toString());
     }
     public static void alterUserStatusScreen(){
 

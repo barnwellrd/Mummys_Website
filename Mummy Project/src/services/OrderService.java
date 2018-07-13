@@ -53,7 +53,7 @@ public class OrderService implements Service<Order>{
 			statement.setInt("PLACED_TIMESTAMP",order.getPlaced_timestamp());
 			statement.setInt("DELIVERY_TIMESTAMP",order.getDelivery_timestamp());
 			statement.setString("CARD_ID",order.getCard_id());
-			statement.setString("INSTRUCTIONS",order.getInstuctions());
+			statement.setString("INSTRUCTIONS",order.getInstructions());
 			statement.setString("DELIVERY_METHOD_ID",order.getDelivery_method_id());
 			statement.setString("STORE_ID",order.getStore_id());
 			statement.setString("DELIVERY_STATUS_ID",order.getDelivery_status_id());
@@ -79,7 +79,7 @@ public class OrderService implements Service<Order>{
 			return false;
 		}	
 	}
-	
+	/*
 	@Override
 	public void deleteById(String id){
 		try{
@@ -102,6 +102,18 @@ public class OrderService implements Service<Order>{
 			System.out.println(e.getMessage());
                         System.err.println("Error executing query!");
 		}	
+	}
+        */
+        public void deleteById(String id){
+		try {
+                    connection.createStatement().executeQuery("DELETE FROM order_items WHERE order_id = " + id);
+                    connection.createStatement().executeQuery("DELETE FROM orders WHERE order_id = " + id);
+                    
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+                        System.err.println("Error executing query!");
+		}
 	}
 	
 	@Override
@@ -149,7 +161,7 @@ public class OrderService implements Service<Order>{
 		}
 		return orders;
 	}
-	
+	/*
 	@Override
 	public void update(Order order){
 		
@@ -158,6 +170,7 @@ public class OrderService implements Service<Order>{
 			CallableStatement statement = connection.prepareCall(
 					"{call UpdateOrder(?,?,?,?,?,?,?,?,?,?,?)}");
 			
+                        
 			statement.setString("ORDER_ID",order.getOrder_id());
 			statement.setString("USER_ID",order.getUser_id());
 			statement.setFloat("TIP",order.getTip());
@@ -165,7 +178,7 @@ public class OrderService implements Service<Order>{
 			statement.setInt("PLACED_TIMESTAMP",order.getPlaced_timestamp());
 			statement.setInt("DELIVERY_TIMESTAMP",order.getDelivery_timestamp());
 			statement.setString("CARD_ID",order.getCard_id());
-			statement.setString("INSTRUCTIONS",order.getInstuctions());
+			statement.setString("INSTRUCTIONS",order.getInstructions());
 			statement.setString("DELIVERY_METHOD_ID",order.getDelivery_method_id());
 			statement.setString("STORE_ID",order.getStore_id());
 			statement.setString("DELIVERY_STATUS_ID",order.getDelivery_status_id());
@@ -196,7 +209,38 @@ public class OrderService implements Service<Order>{
                         System.err.println("Error executing query!");
 		}	
 	}
+*/
+        
+        
+        @Override
+	public void update(Order order){
+		
+		try {
+			PreparedStatement preStmt = connection.prepareStatement("UPDATE orders SET "
+                                + "user_id=?, tip=?, total_price=?, placed_timestamp=?, "
+                                + "delivery_timestamp=?, card_id=?, instructions=?, delivery_method_id=?, "
+                                + "store_id=?, delivery_status_id=?  WHERE order_id=?"  );
+			
+			preStmt.setString(1,order.getUser_id());
+			preStmt.setFloat(2,order.getTip());
+			preStmt.setFloat(3,order.getTotal_price());
+			preStmt.setInt(4,order.getPlaced_timestamp());
+			preStmt.setInt(5,order.getDelivery_timestamp());
+			preStmt.setString(6,order.getCard_id());
+			preStmt.setString(7,order.getInstructions());
+			preStmt.setString(8,order.getDelivery_method_id());
+			preStmt.setString(9,order.getStore_id());
+			preStmt.setString(10,order.getDelivery_status_id());
+                        preStmt.setString(11,order.getOrder_id());
+			preStmt.executeUpdate();
+			//preStmt.close();
 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+                        System.err.println("Error executing query!");
+		}
+	}
 	@Override
 	public Order getById(String id) {
 		Order order = new Order();
@@ -213,7 +257,7 @@ public class OrderService implements Service<Order>{
 			order.setPlaced_timestamp(resultSet.getInt("PLACED_TIMESTAMP"));
 			order.setDelivery_timestamp(resultSet.getInt("DELIVERY_TIMESTAMP"));
 			order.setCard_id(resultSet.getString("CARD_ID"));
-			order.setInstuctions(resultSet.getString("INSTRUCTIONS"));
+			order.setInstructions(resultSet.getString("INSTRUCTIONS"));
 			order.setDelivery_method_id(resultSet.getString("DELIVERY_METHOD_ID"));
 			order.setStore_id(resultSet.getString("STORE_ID"));
 			order.setDelivery_status_id(resultSet.getString("DELIVERY_STATUS_ID"));
@@ -298,6 +342,29 @@ public class OrderService implements Service<Order>{
 		}
 		
 	}
+        
+        public boolean orderExist(String id){
+            Order order = null;
+            boolean ord = false;
+            try{
+                Statement orderSt = connection.createStatement();
+                ResultSet orderRs = orderSt.executeQuery("Select * from orders where order_ID = " + id);
+
+                if(orderRs.next()){
+                    return ord = true;
+                }else {
+                    return ord = false;
+                }
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+                System.err.println("Error executing query!");
+
+            }
+            if(ord){
+                return true;
+            }else
+                return false;
+            }
 
 	
 }

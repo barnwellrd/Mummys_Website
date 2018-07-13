@@ -12,7 +12,7 @@ public class Order {
 	int placed_timestamp; //int
 	int delivery_timestamp; //int
 	String card_id; //varchar
-	String instuctions; //carchar
+	String instructions; //carchar
 	String delivery_method_id; //varchar
 	String store_id; //varchar
 	String delivery_status_id; //varchar
@@ -23,7 +23,7 @@ public class Order {
 	
 	
 	public Order(String order_id, String user_id, float tip, float total_price, int placed_timestamp,
-			int delivery_timestamp, String card_id, String instuctions, String delivery_method_id, String store_id,
+			int delivery_timestamp, String card_id, String instructions, String delivery_method_id, String store_id,
 			String delivery_status_id, HashMap<String,Integer> itemCount) {
 		super();
 		this.order_id = order_id;
@@ -33,11 +33,28 @@ public class Order {
 		this.placed_timestamp = placed_timestamp;
 		this.delivery_timestamp = delivery_timestamp;
 		this.card_id = card_id;
-		this.instuctions = instuctions;
+		this.instructions = instructions;
 		this.delivery_method_id = delivery_method_id;
 		this.store_id = store_id;
 		this.delivery_status_id = delivery_status_id;
 		this.itemCount = itemCount;
+	}
+        
+        public Order(String order_id, String user_id, float tip, float total_price, int placed_timestamp,
+			int delivery_timestamp, String card_id, String instructions, String delivery_method_id, String store_id,
+			String delivery_status_id) {
+		super();
+		this.order_id = order_id;
+		this.user_id = user_id;
+		this.tip = tip;
+		this.total_price = total_price;
+		this.placed_timestamp = placed_timestamp;
+		this.delivery_timestamp = delivery_timestamp;
+		this.card_id = card_id;
+		this.instructions = instructions;
+		this.delivery_method_id = delivery_method_id;
+		this.store_id = store_id;
+		this.delivery_status_id = delivery_status_id;
 	}
 
 	public Order() {
@@ -46,7 +63,7 @@ public class Order {
 		this.total_price = 0;
 		this.placed_timestamp = 0;
 		this.delivery_timestamp = 0;
-		this.instuctions = "";
+		this.instructions = "";
 		this.delivery_method_id = "0";
 		this.store_id = "0";
 		this.delivery_status_id = "0";
@@ -137,12 +154,12 @@ public class Order {
 		this.card_id = card_id;
 	}
 
-	public String getInstuctions() {
-		return instuctions;
+	public String getInstructions() {
+		return instructions;
 	}
 
-	public void setInstuctions(String instuctions) {
-		this.instuctions = instuctions;
+	public void setInstructions(String instructions) {
+		this.instructions = instructions;
 	}
 
 	public String getDelivery_method_id() {
@@ -173,7 +190,7 @@ public class Order {
 	public String toString() {
 		return "Order [order_id=" + order_id + ", user_id=" + user_id + ", tip=" + tip + ", total_price=" + total_price
 				+ ", placed_timestamp=" + placed_timestamp + ", delivery_timestamp=" + delivery_timestamp + ", card_id="
-				+ card_id + ", instuctions=" + instuctions + ", delivery_method_id=" + delivery_method_id
+				+ card_id + ", instructions=" + instructions + ", delivery_method_id=" + delivery_method_id
 				+ ", store_id=" + store_id + ", delivery_status_id=" + delivery_status_id + ", item_ids=" + itemCount
 				+ "]";
 	}
