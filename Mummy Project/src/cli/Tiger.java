@@ -241,13 +241,8 @@ public class Tiger {
 
     public static void itemQuantityScreen(Menu menu) {
         System.out.println("Enter Quantity");
-        boolean isOk = true;
-        int input = 0;
-        while(isOk) {
-            input = sw.validateQuantityOption();
-            sc.nextLine();
-        }
-        
+        int input = sw.validateQuantityOption();
+
         for (int i = 0; i < input; i++) {
             currentOrder.addItem_id(menu.getId());
         }
@@ -428,6 +423,7 @@ public class Tiger {
             else {
                 System.out.println("Please type in a valid number to go back.");
             }
+            isOk=false;
         }
     }
 
@@ -517,7 +513,11 @@ public class Tiger {
                 System.out.println("Here is the saved address.");
                 LocationService ls = new LocationService(con);
                 currentLocation = ls.getById(loc_id);
-                viewLocationScreen(currentLocation);
+                System.out.println("Street: " + currentLocation.getStreet());
+                System.out.println("City: " + currentLocation.getCity());
+                System.out.println("State: " + currentLocation.getState());
+                System.out.println("Country: " + currentLocation.getCountry());
+                System.out.println("Zip: " + currentLocation.getZip());
                 boolean isOk=true;
                 System.out.println("1. Use this address.");
                 System.out.println("2. Change address.");
@@ -563,7 +563,6 @@ public class Tiger {
         int month = sw.validateMonth(sc.nextLine());
         System.out.println("Enter card expiration date day (DD)");
         int d = sw.validateDay(sc.nextLine());
-        sc.nextLine();
         SimpleDateFormat ft = new SimpleDateFormat ("yy-MM-dd"); 
        // String input = args.length == 0 ? "1818-11-11" : args[0]; 
         String date = (Integer.toString(year)+"-"+Integer.toString(month)+"-"
