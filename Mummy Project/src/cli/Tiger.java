@@ -671,6 +671,7 @@ public class Tiger {
                 +Integer.toString(d));
       //  System.out.print(input + " Parses as "); 
         Date t=null;
+        sc.nextLine();
         System.out.println("Enter securit code.");
         String sec = sc.nextLine();
         Card c = new Card(id,userid,card_num,t,sec);
