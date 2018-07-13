@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import domain.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 
 import services.MenuServices;
@@ -157,9 +160,23 @@ public class ServiceWrapper {
 	}
 
 	public double calculateTotalPrice(HashMap<String,Integer> itemCount) {
+            SpecialServices ss = new SpecialServices(con);
+            ArrayList<Special> arrS= ss.getAll();
+            
+            ServiceWrapper sw = new ServiceWrapper(con);
+            ArrayList<Menu> items = sw.getMenuItems(itemCount);
+            
+            for (int i=0; i<items.size(); i++) {
+                for(int j=0;j<arrS.size();j++) {
+                    if(items.get(i).getId().equals(arrS.get(j).getItem_ID())) {
+                        Double disc = ((Double.valueOf(arrS.get(j).getDiscoutPercentage()))/100);
+                        items.get(i).setPrice(items.get(i).getPrice()*(1-disc));
+                    }
+                }
+            }
 		double total = 0;
-		ServiceWrapper sw = new ServiceWrapper(con);
-		ArrayList<Menu> items = sw.getMenuItems(itemCount);
+		//ServiceWrapper sw = new ServiceWrapper(con);
+		//ArrayList<Menu> items = sw.getMenuItems(itemCount);
 		for(Menu item: items){
 			total += item.getPrice()*itemCount.get(item.getId());
 		}
