@@ -1,35 +1,11 @@
 package cli;
 
-import cli.ServiceWrapper;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-
-import domain.Card;
-import domain.Menu;
-import domain.Order;
-import domain.Store;
-import domain.User;
-import domain.Location;
-import domain.Special;
-import domain.DeliveryMethod;
-import domain.DeliveryStatus;
-import domain.ItemType;
-import domain.UserStatus;
-import services.CardService;
-import services.DeliveryMethodService;
-import services.DeliveryStatusService;
-import services.ItemTypeService;
-import services.MenuServices;
-import services.OrderService;
-import services.StoreService;
-import services.UserService;
-import services.LocationService;
-import services.SpecialServices;
-import services.UserStatusService;
+import domain.*;
+import services.*;
 
 public class AdminAndManager {
 	
@@ -40,7 +16,7 @@ public class AdminAndManager {
     }
 
     public void adminScreen(){
-        ArrayList<String> options = new ArrayList<String>();
+        ArrayList<String> options = new ArrayList<>();
         System.out.println("Admin View");
         options.add("Alter Cards");
         options.add("Alter Specials");
@@ -55,7 +31,7 @@ public class AdminAndManager {
         options.add("Alter User Statuses");
         options.add("Display Pending Orders");
         int input = choiceScreen(options);
-        int option = 0;
+        int option;
         switch(input){
             case 1:
             {
@@ -274,7 +250,7 @@ public class AdminAndManager {
 	
     public static int optionsScreen(String thing){
         System.out.println("How would you like to alter " + thing);
-        ArrayList<String> options = new ArrayList<String>();
+        ArrayList<String> options = new ArrayList<>();
         options.add("Alter");
         options.add("Add");
         options.add("Delete");
@@ -415,7 +391,7 @@ public class AdminAndManager {
         CardService cs = new CardService(con);
         ArrayList<Card> cl = cs.getAll();
         ArrayList<String> options = new ArrayList<>();
-        int input = 0;
+        int input;
         for(Card c:cl){
             options.add(c.getCardNumber());
         }
@@ -454,7 +430,7 @@ public class AdminAndManager {
         CardService cs = new CardService();
         int input = 0;
         while(input != 5){
-            ArrayList<String>options= new ArrayList<String>();
+            ArrayList<String>options= new ArrayList<>();
             options.add("Card ID:"+card.getCardId());
             options.add("Card Number:"+card.getCardNumber());
             options.add("Expiration Date:"+card.getExpiryDate());
@@ -632,7 +608,7 @@ public class AdminAndManager {
         
         int input = 0;
         while(input!=8){
-            ArrayList<String> options = new ArrayList<String>();
+            ArrayList<String> options = new ArrayList<>();
             options.add("ID:"+user.getUserId());
             options.add("First Name:"+user.getFirstName());
             options.add("Last Name:"+user.getLastName());
@@ -1085,7 +1061,7 @@ public class AdminAndManager {
         UserStatusService uss = new UserStatusService();
         ArrayList<UserStatus> statusList = uss.getAll();
         ArrayList<String> options = new ArrayList<>();
-        int input = 0;
+        int input;
         for(UserStatus status: statusList){
             options.add(status.getUserStatusId()+":"+status.getUserStatus());
         }
