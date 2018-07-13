@@ -31,15 +31,14 @@ public class StoreService implements Service<Store>{
 			int openTime = store.getOpenTime();
 			int closeTime = store.getCloseTime();
 			
-			CallableStatement oCSF = connection.prepareCall("{?=call sp_insert_store(?,?,?,?,?,?,?)}");
-			oCSF.setString(2, storeId);
-			oCSF.setString(3, locationId);
-			oCSF.setString(4, storeName);
-			oCSF.setString(5, phoneNumber);
-			oCSF.setString(6, managerId);
-			oCSF.setInt(7, openTime);
-			oCSF.setInt(8, closeTime);
-
+			CallableStatement oCSF = connection.prepareCall("{call sp_insert_store(?,?,?,?,?,?,?)}");
+			oCSF.setString(1, storeId);
+			oCSF.setString(2, locationId);
+			oCSF.setString(3, storeName);
+			oCSF.setString(4, phoneNumber);
+			oCSF.setString(5, managerId);
+			oCSF.setInt(6, openTime);
+			oCSF.setInt(7, closeTime);
 			oCSF.execute();
 			oCSF.close();
 			return true;
@@ -49,13 +48,16 @@ public class StoreService implements Service<Store>{
 			return false;
 		}	
 	}
+        
 	public void deleteById(String id){
 		try{
-			Statement storesSt = connection.createStatement();
-			storesSt.executeQuery("Delete from stores where store_id = "+id);
+                    CallableStatement oCSF = connection.prepareCall("{call sp_delete_store(?)}");
+                    oCSF.setString(1, id);
+                    oCSF.executeUpdate();
+                    oCSF.close();     
 		}catch(SQLException e){
-			System.out.println(e.getMessage());
-                        System.err.println("Error executing query!");
+                    System.out.println(e.getMessage());
+                    System.err.println("Error executing query!");
 		}
 	}
 	public ArrayList<Store> getAll(){
@@ -118,18 +120,39 @@ public class StoreService implements Service<Store>{
 			int openTime = store.getOpenTime();
 			int closeTime = store.getCloseTime();
 			
-			CallableStatement oCSF = connection.prepareCall("{?=call sp_insert_store(?,?,?,?,?,?,?)}");
-			oCSF.setString(2, storeId);
-			oCSF.setString(3, locationId);
-			oCSF.setString(4, storeName);
-			oCSF.setString(5, phoneNumber);
-			oCSF.setString(6, managerId);
-			oCSF.setInt(7, openTime);
-			oCSF.setInt(8, closeTime);
+			CallableStatement oCSF = connection.prepareCall("{call sp_update_store(?,?,?,?,?,?,?)}");
+			oCSF.setString(1, storeId);
+			oCSF.setString(2, locationId);
+			oCSF.setString(3, storeName);
+			oCSF.setString(4, phoneNumber);
+			oCSF.setString(5, managerId);
+			oCSF.setInt(6, openTime);
+			oCSF.setInt(7, closeTime);
+                        oCSF.executeUpdate();
+                        oCSF.close();
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
                         System.err.println("Error executing query!");
 		}	
 	}
 	
+        public boolean storeIdExists(String id){
+            boolean ls = false;
+            try{
+                Statement locationsSt = connection.createStatement();
+                ResultSet locationsRs = locationsSt.executeQuery("Select * from Stores where store_id = " + id);
+                if(locationsRs.next()){
+                    return ls = false;
+                }else {
+                    return ls = true;
+                }
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+                System.err.println("Error executing query!");
+            }
+            if(!ls){
+                return true;
+            }else
+                return false;
+         }
 }
