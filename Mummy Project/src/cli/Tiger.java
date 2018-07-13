@@ -405,7 +405,7 @@ public class Tiger {
                 System.out.println("Tip Changed to: $" + newTip);
             } else if (input == 2) {
                 String newInstructions = editString();
-                currentOrder.setInstuctions(newInstructions);
+                currentOrder.setInstructions(newInstructions);
                 System.out.println("Instructions Changed to: " + newInstructions);
             } else if (input == 3) {
                 System.out.println("Pick one of the options below.");
