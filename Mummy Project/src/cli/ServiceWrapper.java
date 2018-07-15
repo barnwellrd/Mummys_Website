@@ -13,15 +13,55 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import services.*;
 
+
 public class ServiceWrapper {
+    
+	Connection con;
+	
+public ServiceWrapper(Connection con) {
+	super();
+	this.con = con;
 
-    Connection con;
+	}
+        
+	public static void printOrders(ArrayList<Order> orders){
+		int count = 0;
+		for(Order order: orders){
+			count++;
+			System.out.println(count + ". " + order.toString());
+		}
+		System.out.println(++count + ". Go Back");
+	}
 
-    public ServiceWrapper(Connection con) {
-        super();
-        this.con = con;
+	public void cancelOrder(Order order) {
+		order.setDelivery_status_id("3");
+		OrderService os = new OrderService(con);
+		os.update(order);
+	}
 
-    }
+	public ArrayList<Menu> getMenuItems(HashMap<String,Integer> itemCount) {
+		
+		MenuServices ms = new MenuServices(con);
+		ArrayList<Menu> items = new ArrayList<>();
+		
+		
+		for (String itemId:itemCount.keySet()){
+			items.add(ms.getById(itemId));
+		}
+
+		return items;
+	}
+        
+        public static void printItemType(ArrayList<ItemType> items){
+		int count = 0;
+		for(ItemType item: items){
+			count++;
+			System.out.println(count+". "+ item.toString());
+		}
+		System.out.println(++count + ". Go Back");
+	}
+
+
 
     public User login(String email, String password) {
 
@@ -84,21 +124,6 @@ public class ServiceWrapper {
         System.out.println(++count + ". Go Back");
     }
 
-    public static void printOrders(ArrayList<Order> orders) {
-        int count = 0;
-        for (Order order : orders) {
-            count++;
-            System.out.println(count + ". " + order.getPlaced_timestamp());
-        }
-        System.out.println(count++ + ". Go Back");
-    }
-
-    public void cancelOrder(Order order) {
-        order.setDelivery_status_id("3");
-        OrderService os = new OrderService(con);
-        os.update(order);
-    }
-
     public void submitOrder(Order currentOrder) {
         currentOrder.setDelivery_status_id("0");
         OrderService os = new OrderService(con);
@@ -131,27 +156,6 @@ public class ServiceWrapper {
         se.sendMail();
         os.add(currentOrder);
 
-    }
-
-    public ArrayList<Menu> getMenuItems(HashMap<String, Integer> itemCount) {
-
-        MenuServices ms = new MenuServices(con);
-        ArrayList<Menu> items = new ArrayList<>();
-
-        for (String itemId : itemCount.keySet()) {
-            items.add(ms.getById(itemId));
-        }
-
-        return items;
-    }
-
-    public static void printItemType(ArrayList<ItemType> items) {
-        int count = 0;
-        for (ItemType item : items) {
-            count++;
-            System.out.println(count + ". " + item.toString());
-        }
-        System.out.println(++count + ". Go Back");
     }
 
     public String validateEmail(String email) {

@@ -314,7 +314,7 @@ public class Tiger {
                     break;
                 case 2:
                     String newInstructions = sw.validateNotEmpty(sc.nextLine());
-                    currentOrder.setInstuctions(newInstructions);
+                    currentOrder.setInstructions(newInstructions);
                     System.out.println("Instructions Changed to: " + newInstructions);
                     break;
                 case 3:

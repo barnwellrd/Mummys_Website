@@ -4,59 +4,83 @@ import java.util.HashMap;
 
 public class Order {
 
-    String order_id; //varchar
-    String user_id; //varchar
-    double tip; //number(5,2)
-    double total_price;//number(7,2)
-    int placed_timestamp; //int
-    int delivery_timestamp; //int
-    String card_id; //varchar
-    String instuctions; //carchar
-    String delivery_method_id; //varchar
-    String store_id; //varchar
-    String delivery_status_id; //varchar
+	
+	String order_id; //varchar
+	String user_id; //varchar
+	double tip; //number(5,2)
+	double total_price;//number(7,2)
+	int placed_timestamp; //int
+	int delivery_timestamp; //int
+	String card_id; //varchar
+	String instructions; //carchar
+	String delivery_method_id; //varchar
+	String store_id; //varchar
+	String delivery_status_id; //varchar
+	
+	//Array to hold order items rather than the order_items table
+	HashMap<String,Integer> itemCount;
 
-    //Array to hold order items rather than the order_items table
-    HashMap<String, Integer> itemCount;
+	
+	
+	public Order(String order_id, String user_id, float tip, float total_price, int placed_timestamp,
+			int delivery_timestamp, String card_id, String instructions, String delivery_method_id, String store_id,
+			String delivery_status_id, HashMap<String,Integer> itemCount) {
+		super();
+		this.order_id = order_id;
+		this.user_id = user_id;
+		this.tip = tip;
+		this.total_price = total_price;
+		this.placed_timestamp = placed_timestamp;
+		this.delivery_timestamp = delivery_timestamp;
+		this.card_id = card_id;
+		this.instructions = instructions;
+		this.delivery_method_id = delivery_method_id;
+		this.store_id = store_id;
+		this.delivery_status_id = delivery_status_id;
+		this.itemCount = itemCount;
+	}
+        
+        public Order(String order_id, String user_id, float tip, float total_price, int placed_timestamp,
+			int delivery_timestamp, String card_id, String instructions, String delivery_method_id, String store_id,
+			String delivery_status_id) {
+		super();
+		this.order_id = order_id;
+		this.user_id = user_id;
+		this.tip = tip;
+		this.total_price = total_price;
+		this.placed_timestamp = placed_timestamp;
+		this.delivery_timestamp = delivery_timestamp;
+		this.card_id = card_id;
+		this.instructions = instructions;
+		this.delivery_method_id = delivery_method_id;
+		this.store_id = store_id;
+		this.delivery_status_id = delivery_status_id;
+	}
 
-    public Order(String order_id, String user_id, double tip, double total_price, int placed_timestamp,
-            int delivery_timestamp, String card_id, String instuctions, String delivery_method_id, String store_id,
-            String delivery_status_id, HashMap<String, Integer> itemCount) {
-        super();
-        this.order_id = order_id;
-        this.user_id = user_id;
-        this.tip = tip;
-        this.total_price = total_price;
-        this.placed_timestamp = placed_timestamp;
-        this.delivery_timestamp = delivery_timestamp;
-        this.card_id = card_id;
-        this.instuctions = instuctions;
-        this.delivery_method_id = delivery_method_id;
-        this.store_id = store_id;
-        this.delivery_status_id = delivery_status_id;
-        this.itemCount = itemCount;
-    }
+	public Order() {
+		super();
+		this.tip = 0;
+		this.total_price = 0;
+		this.placed_timestamp = 0;
+		this.delivery_timestamp = 0;
+		this.instructions = "";
+		this.delivery_method_id = "0";
+		this.store_id = "0";
+		this.delivery_status_id = "0";
+                this.itemCount = new HashMap<String,Integer>();
+	}
+	
+	public HashMap<String,Integer> getItemCount() {
+		return itemCount;
+	}
 
-    public Order() {
-        super();
-        this.tip = 0;
-        this.total_price = 0;
-        this.placed_timestamp = 0;
-        this.delivery_timestamp = 0;
-        this.instuctions = "";
-        this.delivery_method_id = "0";
-        this.store_id = "0";
-        this.delivery_status_id = "0";
-        this.itemCount = new HashMap<>();
-    }
+	public void setItemCount(HashMap<String,Integer> itemCount) { 
+		this.itemCount = (HashMap<String,Integer>) itemCount.clone();
+	}
 
-    public HashMap<String, Integer> getItemCount() {
-        return itemCount;
-    }
-
-    public void setItemCount(HashMap<String, Integer> itemCount) {
-        this.itemCount = (HashMap<String, Integer>) itemCount.clone();
-    }
+	public String getUser_id() {
+		return user_id;
+	}
 
     public void addItem_id(String item_id) {
         if (itemCount.containsKey(item_id)) {
@@ -73,10 +97,6 @@ public class Order {
 
     public void setOrder_id(String order_id) {
         this.order_id = order_id;
-    }
-
-    public String getUser_id() {
-        return user_id;
     }
 
     public void setItemQuantity(String itemId, int quantity) {
@@ -129,17 +149,20 @@ public class Order {
         return card_id;
     }
 
+
+	public String getInstructions() {
+		return instructions;
+	}
+
+	public void setInstructions(String instructions) {
+		this.instructions = instructions;
+	}
+        
     public void setCard_id(String card_id) {
         this.card_id = card_id;
     }
 
-    public String getInstuctions() {
-        return instuctions;
-    }
 
-    public void setInstuctions(String instuctions) {
-        this.instuctions = instuctions;
-    }
 
     public String getDelivery_method_id() {
         return delivery_method_id;
@@ -161,17 +184,19 @@ public class Order {
         return delivery_status_id;
     }
 
+
+	@Override
+	public String toString() {
+		return "Order [order_id=" + order_id + ", user_id=" + user_id + ", tip=" + tip + ", total_price=" + total_price
+				+ ", placed_timestamp=" + placed_timestamp + ", delivery_timestamp=" + delivery_timestamp + ", card_id="
+				+ card_id + ", instructions=" + instructions + ", delivery_method_id=" + delivery_method_id
+				+ ", store_id=" + store_id + ", delivery_status_id=" + delivery_status_id + ", item_ids=" + itemCount
+				+ "]";
+	}
+
     public void setDelivery_status_id(String delivery_status_id) {
         this.delivery_status_id = delivery_status_id;
     }
 
-    @Override
-    public String toString() {
-        return "Order [order_id=" + order_id + ", user_id=" + user_id + ", tip=" + tip + ", total_price=" + total_price
-                + ", placed_timestamp=" + placed_timestamp + ", delivery_timestamp=" + delivery_timestamp + ", card_id="
-                + card_id + ", instuctions=" + instuctions + ", delivery_method_id=" + delivery_method_id
-                + ", store_id=" + store_id + ", delivery_status_id=" + delivery_status_id + ", item_ids=" + itemCount
-                + "]";
-    }
 
 }
