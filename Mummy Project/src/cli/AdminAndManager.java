@@ -6,6 +6,7 @@ import static cli.Tiger.sw;
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
@@ -294,7 +295,24 @@ public class AdminAndManager {
 
     public static void displayPendingOrdersScreen() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Put orders here");
+        OrderService os = new OrderService(con);
+        ArrayList<Order> pendingOrders = os.getPendingOrders();
+        ServiceWrapper sw = new ServiceWrapper(con);
+        for(Order order : pendingOrders){
+            HashMap<String, Integer> itemCount = order.getItemCount();
+            ArrayList<Menu> items = sw.getMenuItems(itemCount);
+            for(Menu item: items){
+                int count = itemCount.get(item.getId());
+                String formattedString = String.format("%.02f", item.getPrice()*count);
+                System.out.println(item.getName()+"("+count+")\t"+formattedString);
+            }
+            String formattedString = String.format("%.02f", order.getTip());
+            System.out.println("Tip:\t"+formattedString);
+
+            formattedString = String.format("%.02f",order.getTotal_price()+order.getTip());
+            System.out.println("Total\t"+formattedString);
+        System.out.println("==============================================");
+        }
         System.out.println("Press any key to exit");
         sc.next();
     }

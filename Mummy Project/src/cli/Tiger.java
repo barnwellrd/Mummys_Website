@@ -405,13 +405,13 @@ public class Tiger {
                 int newQuantity = sw.validateQuantityOption();
                 currentOrder.setItemQuantity(items.get(input - 1).getId(), newQuantity);
             } else if (input == items.size() + 1) {
-                currentOrderScreen();
                 isOk = false;
             } else {
                 System.out.println("Please type in a valid number to go back.");
             }
-            isOk = false;
         }
+        currentOrderScreen();
+        
     }
 
     //TODO
@@ -708,6 +708,19 @@ public class Tiger {
     }
 
     public static boolean confirm() {
+        HashMap<String, Integer> itemCount = currentOrder.getItemCount();
+        ArrayList<Menu> items = sw.getMenuItems(itemCount);
+        for(Menu item: items){
+            int count = itemCount.get(item.getId());
+            String formattedString = String.format("%.02f", item.getPrice()*count);
+            System.out.println(item.getName()+"("+count+")\t"+formattedString);
+        }
+        String formattedString = String.format("%.02f", currentOrder.getTip());
+        System.out.println("Tip:\t"+formattedString);
+        
+        formattedString = String.format("%.02f",currentOrder.getTotal_price()+currentOrder.getTip());
+        System.out.println("Total\t"+formattedString);
+        
         System.out.println("\n1*Confirm*");
         System.out.println("1. Yes");
         System.out.println("2. No");
