@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import domain.Order;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
@@ -75,14 +74,14 @@ public class OrderService implements Service<Order> {
             return false;
         }
     }
+    @Override
         public void deleteById(String id){
 		try {
                     connection.createStatement().executeQuery("DELETE FROM order_items WHERE order_id = " + id);
                     connection.createStatement().executeQuery("DELETE FROM orders WHERE order_id = " + id);
                     
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
                         System.err.println("Error executing query!");
 		}
 	}
@@ -298,18 +297,15 @@ public class OrderService implements Service<Order> {
                 }else {
                     return ord = false;
                 }
-            }catch(Exception e){
+            }catch(SQLException e){
                 System.out.println(e.getMessage());
                 System.err.println("Error executing query!");
 
             }
-            if(ord){
-                return true;
-            }else
-                return false;
+        return ord;
         }
 
-}
+
 
     public ArrayList<Order> getPendingOrders() {
         ArrayList<Order> orders = new ArrayList<>();
