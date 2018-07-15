@@ -317,21 +317,19 @@ public ServiceWrapper(Connection con) {
     }
 
     public double validateMoney(String money) {
-        Number number = null;
         boolean isValid = false;
-        while (!isValid) {
-            try {
-                number = NumberFormat.getCurrencyInstance(Locale.US).parse(money);
-            } catch (ParseException pe) {
-                // ignore
-            }
+        String pattern = "\\d.\\d{2}+";
+        Pattern p = Pattern.compile(pattern);
 
-            if (number != null) {
+        while (!isValid) {
+            money = money.replace("$", "");
+            Matcher m = p.matcher(money);
+            if (m.find()) {
                 // proceed as user entered a good value
                 isValid = true;
             } else {
                 // user didn't enter a good value
-                System.out.println("Please type in a valid amount.");
+                System.out.println("Please type in a valid amount(x.xx).");
                 money = sc.nextLine();
             }
         }
