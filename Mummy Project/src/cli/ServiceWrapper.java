@@ -4,64 +4,57 @@ import static cli.Tiger.sc;
 import java.sql.Connection;
 import java.util.ArrayList;
 import domain.*;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import services.*;
 
-
 public class ServiceWrapper {
-    
-	Connection con;
-	
-public ServiceWrapper(Connection con) {
-	super();
-	this.con = con;
 
-	}
-        
-	public static void printOrders(ArrayList<Order> orders){
-		int count = 0;
-		for(Order order: orders){
-			count++;
-			System.out.println(count + ". " + order.toString());
-		}
-		System.out.println(++count + ". Go Back");
-	}
+    Connection con;
 
-	public void cancelOrder(Order order) {
-		order.setDelivery_status_id("3");
-		OrderService os = new OrderService(con);
-		os.update(order);
-	}
+    public ServiceWrapper(Connection con) {
+        super();
+        this.con = con;
 
-	public ArrayList<Menu> getMenuItems(HashMap<String,Integer> itemCount) {
-		
-		MenuServices ms = new MenuServices(con);
-		ArrayList<Menu> items = new ArrayList<>();
-		
-		
-		for (String itemId:itemCount.keySet()){
-			items.add(ms.getById(itemId));
-		}
+    }
 
-		return items;
-	}
-        
-        public static void printItemType(ArrayList<ItemType> items){
-		int count = 0;
-		for(ItemType item: items){
-			count++;
-			System.out.println(count+". "+ item.toString());
-		}
-		System.out.println(++count + ". Go Back");
-	}
+    public static void printOrders(ArrayList<Order> orders) {
+        int count = 0;
+        for (Order order : orders) {
+            count++;
+            System.out.println(count + ". " + order.toString());
+        }
+        System.out.println(++count + ". Go Back");
+    }
 
+    public void cancelOrder(Order order) {
+        order.setDelivery_status_id("3");
+        OrderService os = new OrderService(con);
+        os.update(order);
+    }
 
+    public ArrayList<Menu> getMenuItems(HashMap<String, Integer> itemCount) {
+
+        MenuServices ms = new MenuServices(con);
+        ArrayList<Menu> items = new ArrayList<>();
+
+        for (String itemId : itemCount.keySet()) {
+            items.add(ms.getById(itemId));
+        }
+
+        return items;
+    }
+
+    public static void printItemType(ArrayList<ItemType> items) {
+        int count = 0;
+        for (ItemType item : items) {
+            count++;
+            System.out.println(count + ". " + item.toString());
+        }
+        System.out.println(++count + ". Go Back");
+    }
 
     public User login(String email, String password) {
 
@@ -101,7 +94,7 @@ public ServiceWrapper(Connection con) {
         for (Menu menu : menus) {
             count++;
             String formattedString = String.format("%.02f", menu.getPrice());
-            System.out.println(count + "." + menu.getName() + " - $" + formattedString + "\n " + menu.getDescription());
+            System.out.println(count + "." + padRight(menu.getName(),20) + "$" + padRight(formattedString,10) + menu.getDescription());
         }
         System.out.println(++count + ". Go Back");
     }
@@ -162,6 +155,7 @@ public ServiceWrapper(Connection con) {
         Pattern rfc2822 = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
         boolean isValid = false;
         while (!isValid) {
+            email = email.toLowerCase();
             if (rfc2822.matcher(email).matches()) {
                 isValid = true;
 
@@ -369,7 +363,7 @@ public ServiceWrapper(Connection con) {
             in = sc.nextInt();
             sc.nextLine();
             if (in <= 0) {
-                System.out.println("Please enter a number equal to or greater than 0.");
+                System.out.println("Please enter a number greater than 0.");
                 continue;
             }
             isOk = false;
@@ -456,6 +450,10 @@ public ServiceWrapper(Connection con) {
             }
         }
         return Integer.getInteger(month);
+    }
+
+    public static String padRight(String s, int n) {
+        return String.format("%1$-" + n + "s", s);
     }
 
 }

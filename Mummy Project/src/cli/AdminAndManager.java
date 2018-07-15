@@ -14,6 +14,7 @@ import services.*;
 public class AdminAndManager {
 
     static Connection con;
+    public static ServiceWrapper sw;
 
     public AdminAndManager(Connection con) {
         AdminAndManager.con = con;
