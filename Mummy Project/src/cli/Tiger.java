@@ -62,7 +62,7 @@ public class Tiger {
                 registerScreen();
                 break;
             case 3:
-                System.out.println("Goodbye");
+                System.out.println("Thanks for shopping with us! Come again!");
                 System.exit(0);
             default:
                 System.out.println("Please enter one of the options.");
@@ -119,10 +119,20 @@ public class Tiger {
         System.out.println("\n*Register*");
         System.out.println("Enter email:");
         String email = sw.validateEmail(sc.nextLine());
-        System.out.println("Enter password:");
-        String password = sw.validateNotEmpty(sc.nextLine());
-        System.out.println("Enter password again:");
-        String passwordConfirm = sw.validateNotEmpty(sc.nextLine());
+        boolean validPass = false;
+        String password = "";
+        String passwordConfirm = "";
+        while (!validPass) {
+            System.out.println("Enter password:");
+            password = sw.validateNotEmpty(sc.nextLine());
+            System.out.println("Enter password again:");
+            passwordConfirm = sw.validateNotEmpty(sc.nextLine());
+            if (!password.equals(passwordConfirm)) {
+                System.out.println("Mismatching passwords, try again!\n");
+            } else {
+                validPass = true;
+            }
+        }
         System.out.println("Enter first name:");
         String first = sw.validateNotEmpty(sc.nextLine());
         System.out.println("Enter last name:");
@@ -146,7 +156,7 @@ public class Tiger {
     }
 
     public static void homeScreen() {
-        System.out.println("Welcome " + currentUser.getFirstName());
+        System.out.println("\nWelcome, " + currentUser.getFirstName() + "!");
         System.out.println("\n*Home*");
         ArrayList<String> options = new ArrayList<>();
         options.add("Menu");
@@ -180,7 +190,7 @@ public class Tiger {
                     firstScreen();
                     break;
                 case 6:
-                    System.out.println("Goodbye");
+                    System.out.println("Thanks for shopping with us! Come again!");
                     System.exit(0);
             }
             isOk = false;
@@ -394,8 +404,8 @@ public class Tiger {
                 count++;
                 String formattedString = String.format("%.02f",
                         item.getPrice() * itemCount.get(item.getId()));
-                System.out.println(count + ". " + item.getName() + "(" + itemCount.get(item.getId())
-                        + ")\t$" + formattedString + "\t " + item.getDescription());
+                System.out.println(count + ". " + sw.padRight(item.getName(), 20) + sw.padRight("(" + itemCount.get(item.getId())
+                        + ")", 7) + "$" + sw.padRight(formattedString, 10) + "\t " + item.getDescription());
                 // System.out.println(df.format(menu.getPrice()));
             }
             System.out.println((items.size() + 1) + ". Go Back");
@@ -411,7 +421,7 @@ public class Tiger {
             }
         }
         currentOrderScreen();
-        
+
     }
 
     //TODO
@@ -710,17 +720,17 @@ public class Tiger {
     public static boolean confirm() {
         HashMap<String, Integer> itemCount = currentOrder.getItemCount();
         ArrayList<Menu> items = sw.getMenuItems(itemCount);
-        for(Menu item: items){
+        for (Menu item : items) {
             int count = itemCount.get(item.getId());
-            String formattedString = String.format("%.02f", item.getPrice()*count);
-            System.out.println(item.getName()+"("+count+")\t"+formattedString);
+            String formattedString = String.format("%.02f", item.getPrice() * count);
+            System.out.println(item.getName() + "(" + count + ")\t" + formattedString);
         }
         String formattedString = String.format("%.02f", currentOrder.getTip());
-        System.out.println("Tip:\t"+formattedString);
-        
-        formattedString = String.format("%.02f",currentOrder.getTotal_price()+currentOrder.getTip());
-        System.out.println("Total\t"+formattedString);
-        
+        System.out.println("Tip:\t" + formattedString);
+
+        formattedString = String.format("%.02f", currentOrder.getTotal_price() + currentOrder.getTip());
+        System.out.println("Total\t" + formattedString);
+
         System.out.println("\n1*Confirm*");
         System.out.println("1. Yes");
         System.out.println("2. No");
