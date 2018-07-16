@@ -263,7 +263,7 @@ public class ServiceWrapper {
         boolean isValid = false;
         while (!isValid) {
             if (rfc2822.matcher(time).matches()) {
-                if (Integer.getInteger(time) >= 0 && Integer.getInteger(time) <= 2400) {
+                if (Integer.parseInt(time) >= 0 && Integer.parseInt(time) <= 2400) {
                     isValid = true;
 
                 } else {
@@ -376,7 +376,7 @@ public class ServiceWrapper {
         boolean isValid = false;
         while (!isValid) {
             if (rfc2822.matcher(year).matches()) {
-                if (Integer.getInteger(year) >= 0 && Integer.getInteger(year) <= 99) {
+                if (Integer.parseInt(year) >= 0 && Integer.parseInt(year) <= 99) {
                     isValid = true;
 
                 } else {
@@ -390,7 +390,7 @@ public class ServiceWrapper {
                 year = sc.nextLine();
             }
         }
-        return Integer.getInteger(year);
+        return Integer.parseInt(year);
     }
 
     public int validateDay(String day) {
@@ -398,7 +398,7 @@ public class ServiceWrapper {
         boolean isValid = false;
         while (!isValid) {
             if (rfc2822.matcher(day).matches()) {
-                if (Integer.getInteger(day) >= 0 && Integer.getInteger(day) <= 31) {
+                if (Integer.parseInt(day) >= 0 && Integer.parseInt(day) <= 31) {
                     isValid = true;
 
                 } else {
@@ -412,7 +412,7 @@ public class ServiceWrapper {
                 day = sc.nextLine();
             }
         }
-        return Integer.getInteger(day);
+        return Integer.parseInt(day);
     }
 
     public double calculateTotalPrice(HashMap<String, Integer> itemCount) {
@@ -449,7 +449,7 @@ public class ServiceWrapper {
                 month = sc.nextLine();
             }
         }
-        return Integer.getInteger(month);
+        return Integer.parseInt(month);
     }
 
     public static String padRight(String s, int n) {

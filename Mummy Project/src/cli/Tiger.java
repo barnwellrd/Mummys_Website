@@ -337,7 +337,7 @@ public class Tiger {
                         getLocation();
                         System.out.println("Pick a delivery time.");
                         String newDelivery_timestamp = sw.validateTime(sc.nextLine());
-                        currentOrder.setDelivery_timestamp(Integer.getInteger(newDelivery_timestamp));
+                        currentOrder.setDelivery_timestamp(Integer.parseInt(newDelivery_timestamp));
                         System.out.println("Delivery Time Changed to: " + newDelivery_timestamp);
                     }
                     String newDelivery_method = Integer.toString(input2);
